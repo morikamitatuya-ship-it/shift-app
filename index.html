@@ -39,7 +39,6 @@
         .day-row:last-child { border-bottom: none; padding-bottom: 0; }
         .day-label { font-size: 14px; font-weight: bold; color: #1e293b; display: flex; align-items: center; gap: 6px; }
         .day-label span { background: #002060; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-        
         .setting-sub-row { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
         .setting-sub-label { font-size: 12px; color: #64748b; font-weight: bold; }
         .select-group { display: flex; gap: 8px; }
@@ -61,7 +60,8 @@
         .wb-table td.day-cell { background-color: #002060; color: white; font-weight: bold; font-size: 14px; }
         
         /* 🧲 マグネット */
-        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 3px rgba(0,0,0,0.15); display: block; margin: 4px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 3px rgba(0,0,0,0.15); display: block; margin: 4px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .magnet-tag:active { transform: scale(0.95); background-color: #f1f5f9; }
         .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
         .magnet-tag.education { background: #fef9c3; border: 1px solid #fcd34d; border-bottom: 2px solid #eab308; color: #b45309; }
         
@@ -79,7 +79,6 @@
 <div class="app-container">
     <div class="header"><h1 id="app-page-title">🗓️ 早出表作成</h1></div>
     <div class="content">
-        
         <div id="page-create" class="page active">
             <div class="section-title">勤務を選択してください</div>
             <div class="toggle-container">
@@ -88,93 +87,7 @@
             </div>
             
             <div class="section-title">曜日別の設定（休み・教育枠）</div>
-            <div class="day-settings-container">
-                <div class="day-row">
-                    <div class="day-label"><span>MON</span> 月曜日</div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">休み（2人まで）</div>
-                        <div class="select-group">
-                            <select class="select-box absent-select" data-day="MON" data-index="1"></select>
-                            <select class="select-box absent-select" data-day="MON" data-index="2"></select>
-                        </div>
-                    </div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">教育枠（見習い追加）</div>
-                        <div class="select-group">
-                            <select class="select-box edu-pos" data-day="MON"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-                            <select class="select-box edu-member" data-day="MON"></select>
-                        </div>
-                    </div>
-                </div>
-                <div class="day-row">
-                    <div class="day-label"><span>TUE</span> 火曜日</div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">休み</div>
-                        <div class="select-group">
-                            <select class="select-box absent-select" data-day="TUE" data-index="1"></select>
-                            <select class="select-box absent-select" data-day="TUE" data-index="2"></select>
-                        </div>
-                    </div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">教育枠（見習い追加）</div>
-                        <div class="select-group">
-                            <select class="select-box edu-pos" data-day="TUE"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-                            <select class="select-box edu-member" data-day="TUE"></select>
-                        </div>
-                    </div>
-                </div>
-                <div class="day-row">
-                    <div class="day-label"><span>WED</span> 水曜日</div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">休み</div>
-                        <div class="select-group">
-                            <select class="select-box absent-select" data-day="WED" data-index="1"></select>
-                            <select class="select-box absent-select" data-day="WED" data-index="2"></select>
-                        </div>
-                    </div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">教育枠（見習い追加）</div>
-                        <div class="select-group">
-                            <select class="select-box edu-pos" data-day="WED"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-                            <select class="select-box edu-member" data-day="WED"></select>
-                        </div>
-                    </div>
-                </div>
-                <div class="day-row">
-                    <div class="day-label"><span>THU</span> 木曜日</div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">休み</div>
-                        <div class="select-group">
-                            <select class="select-box absent-select" data-day="THU" data-index="1"></select>
-                            <select class="select-box absent-select" data-day="THU" data-index="2"></select>
-                        </div>
-                    </div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">教育枠（見習い追加）</div>
-                        <div class="select-group">
-                            <select class="select-box edu-pos" data-day="THU"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-                            <select class="select-box edu-member" data-day="THU"></select>
-                        </div>
-                    </div>
-                </div>
-                <div class="day-row">
-                    <div class="day-label"><span>FRI</span> 金曜日</div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">休み</div>
-                        <div class="select-group">
-                            <select class="select-box absent-select" data-day="FRI" data-index="1"></select>
-                            <select class="select-box absent-select" data-day="FRI" data-index="2"></select>
-                        </div>
-                    </div>
-                    <div class="setting-sub-row">
-                        <div class="setting-sub-label">教育枠（見習い追加）</div>
-                        <div class="select-group">
-                            <select class="select-box edu-pos" data-day="FRI"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-                            <select class="select-box edu-member" data-day="FRI"></select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="day-settings-container" id="day-settings-root"></div>
 
             <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
             
@@ -185,10 +98,11 @@
                     <div style="width: 50px;"></div>
                 </div>
                 <table class="wb-table">
-                    <thead><tr id="wb-thead-tr"><th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
+                    <thead><tr id="wb-thead-tr"></tr></thead>
                     <tbody id="wb-tbody"></tbody>
                 </table>
                 <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
+                <p style="font-size: 10px; color: #888; text-align: center; margin-top: 10px;">※マグネットをタップすると別の出勤者に入れ替えられます</p>
             </div>
         </div>
 
@@ -213,7 +127,6 @@
             <div class="section-title" id="skill-page-subtitle">ポジション別スキル設定（1直）</div>
             <div class="skill-container" id="skill-list-container"></div>
         </div>
-
     </div>
     
     <div class="tab-bar">
@@ -226,12 +139,10 @@
 </div>
 
 <script {nonce}>
-    let currentShift = 1;      // 作成画面用の選択直
-    let skillShift = 1;        // スキル画面用の選択直
+    let currentShift = 1;
+    let skillShift = 1;
     let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     const days = ["MON", "TUE", "WED", "THU", "FRI"];
-    
-    // 🌟 データ構造を直（1と2）ごとに分けて管理するよう大改造！
     let memberSkills = {
         "阿部": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
         "久林": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
@@ -248,7 +159,6 @@
         document.getElementById('tab-create').classList.remove('active');
         document.getElementById('tab-member').classList.remove('active');
         document.getElementById('tab-skill').classList.remove('active');
-        
         if (tabName === 'create') {
             document.getElementById('page-create').classList.add('active');
             document.getElementById('tab-create').classList.add('active');
@@ -263,14 +173,37 @@
             document.getElementById('tab-skill').classList.add('active');
             document.getElementById('app-page-title').innerText = '⚙️ スキル管理';
             renderSkillUI();
-        } else {
-            alert(tabName + "画面は現在開発中です！");
-            document.getElementById('page-create').classList.add('active');
-            document.getElementById('tab-create').classList.add('active');
         }
     }
 
-    // 🌟 スキル画面専用の直切り替え関数
+    function renderDaySettings() {
+        const root = document.getElementById('day-settings-root');
+        root.innerHTML = '';
+        const jpDays = ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"];
+        days.forEach((day, i) => {
+            root.innerHTML += `
+                <div class="day-row">
+                    <div class="day-label"><span>${day}</span> ${jpDays[i]}</div>
+                    <div class="setting-sub-row">
+                        <div class="setting-sub-label">休み（2人まで）</div>
+                        <div class="select-group">
+                            <select class="select-box absent-select" data-day="${day}" data-index="1"></select>
+                            <select class="select-box absent-select" data-day="${day}" data-index="2"></select>
+                        </div>
+                    </div>
+                    <div class="setting-sub-row">
+                        <div class="setting-sub-label">教育枠（見習い追加）</div>
+                        <div class="select-group">
+                            <select class="select-box edu-pos" data-day="${day}"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                            <select class="select-box edu-member" data-day="${day}"></select>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        updateMemberUI();
+    }
+
     function selectSkillShift(shift) {
         skillShift = shift;
         document.getElementById('btn-skill-shift1').classList.toggle('active', shift === 1);
@@ -278,212 +211,149 @@
         document.getElementById('skill-page-subtitle').innerText = `ポジション別スキル設定（${shift}直）`;
         renderSkillUI();
     }
-    
-    // 🌟 選択されている直（skillShift）のスキルをチェックボックスに反映
+
     function renderSkillUI() {
         const container = document.getElementById('skill-list-container');
         container.innerHTML = '';
-        
         members.forEach(m => {
-            // 初期データがない場合は安全枠を生成
-            if (!memberSkills[m]) memberSkills[m] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] };
-            if (!memberSkills[m][skillShift]) memberSkills[m][skillShift] = (skillShift === 1) ? ["A", "B", "C", "D"] : ["A", "B", "C"];
-            
-            const currentSkills = memberSkills[m][skillShift];
-            const hasA = currentSkills.includes("A") ? "checked" : "";
-            const hasB = currentSkills.includes("B") ? "checked" : "";
-            const hasC = currentSkills.includes("C") ? "checked" : "";
-            const hasD = currentSkills.includes("D") ? "checked" : "";
-            
-            let checkboxHTML = `
-                <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasA} onchange="toggleSkill('${m}', 'A')"> A</label>
-                <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasB} onchange="toggleSkill('${m}', 'B')"> B</label>
-                <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasC} onchange="toggleSkill('${m}', 'C')"> C</label>
-            `;
-            
-            // 1直の時だけ「D」のチェックボックスを出す
-            if (skillShift === 1) {
-                checkboxHTML += `<label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasD} onchange="toggleSkill('${m}', 'D')"> D</label>`;
-            }
-            
-            container.innerHTML += `
-                <div class="skill-row">
-                    <div class="skill-name">${m}</div>
-                    <div class="skill-checkboxes">${checkboxHTML}</div>
-                </div>
-            `;
+            const currentSkills = memberSkills[m][skillShift] || [];
+            let checkboxHTML = ["A", "B", "C", "D"].map(pos => {
+                if (skillShift === 2 && pos === "D") return "";
+                return `<label class="skill-label"><input type="checkbox" class="skill-checkbox" ${currentSkills.includes(pos) ? "checked" : ""} onchange="toggleSkill('${m}', '${pos}')"> ${pos}</label>`;
+            }).join('');
+            container.innerHTML += `<div class="skill-row"><div class="skill-name">${m}</div><div class="skill-checkboxes">${checkboxHTML}</div></div>`;
         });
     }
-    
-    // 🌟 編集中の直（skillShift）に対してスキル配列を出し入れする
-    function toggleSkill(name, position) {
-        if (!memberSkills[name]) memberSkills[name] = { 1: [], 2: [] };
-        if (!memberSkills[name][skillShift]) memberSkills[name][skillShift] = [];
-        
-        let currentSkills = memberSkills[name][skillShift];
-        if (currentSkills.includes(position)) {
-            memberSkills[name][skillShift] = currentSkills.filter(p => p !== position);
-        } else {
-            memberSkills[name][skillShift].push(position);
-        }
-        document.getElementById('whiteboard').style.display = 'none';
+
+    function toggleSkill(name, pos) {
+        let list = memberSkills[name][skillShift];
+        memberSkills[name][skillShift] = list.includes(pos) ? list.filter(p => p !== pos) : [...list, pos];
     }
-    
+
     function updateMemberUI() {
-        const tagsContainer = document.getElementById('member-tags-container');
-        tagsContainer.innerHTML = '';
-        members.forEach((m, idx) => {
-            tagsContainer.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${idx})">×</button></div>`;
+        const tags = document.getElementById('member-tags-container');
+        if (tags) {
+            tags.innerHTML = '';
+            members.forEach((m, idx) => { tags.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${idx})">×</button></div>`; });
+        }
+        const setSelect = (cls) => document.querySelectorAll(cls).forEach(s => {
+            const val = s.value;
+            s.innerHTML = '<option value="">なし</option>' + members.map(m => `<option value="${m}">${m}</option>`).join('');
+            s.value = members.includes(val) ? val : "";
         });
-
-        const selects = document.querySelectorAll('.absent-select');
-        selects.forEach(select => {
-            const currentVal = select.value;
-            select.innerHTML = '<option value="">なし</option>';
-            members.forEach(m => { select.innerHTML += `<option value="${m}">${m}</option>`; });
-            select.value = members.includes(currentVal) ? currentVal : "";
-        });
-
-        const eduSelects = document.querySelectorAll('.edu-member');
-        eduSelects.forEach(select => {
-            const currentVal = select.value;
-            select.innerHTML = '<option value="">なし</option>';
-            members.forEach(m => { select.innerHTML += `<option value="${m}">${m}</option>`; });
-            select.value = members.includes(currentVal) ? currentVal : "";
-        });
-
+        setSelect('.absent-select');
+        setSelect('.edu-member');
         document.getElementById('wb-member-list').innerText = members.join('・');
     }
-    
+
     function addMember() {
-        const input = document.getElementById('new-member-name');
-        const name = input.value.trim();
+        const name = document.getElementById('new-member-name').value.trim();
         if (name && !members.includes(name)) {
             members.push(name);
-            // 新規メンバーも1直と2直を分けて初期化
             memberSkills[name] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] };
-            input.value = '';
+            document.getElementById('new-member-name').value = '';
             updateMemberUI();
-            document.getElementById('whiteboard').style.display = 'none';
         }
     }
-    
-    function removeMember(index) {
-        if (members.length > 1) {
-            const name = members[index];
-            members.splice(index, 1);
-            delete memberSkills[name];
-            updateMemberUI();
-            document.getElementById('whiteboard').style.display = 'none';
-        }
+
+    function removeMember(idx) {
+        if (members.length > 1) { delete memberSkills[members[idx]]; members.splice(idx, 1); updateMemberUI(); }
     }
-    
+
     function selectShift(shift) {
         currentShift = shift;
         document.getElementById('btn-shift1').classList.toggle('active', shift === 1);
         document.getElementById('btn-shift2').classList.toggle('active', shift === 2);
-        document.getElementById('whiteboard').style.display = 'none';
     }
-    
+
+    // 🌟 マグネットを手動で入れ替える機能
+    function swapMagnet(day, pos, index, currentName) {
+        const select1 = document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value;
+        const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
+        const absentMembers = [select1, select2].filter(m => m !== "");
+        
+        // その日出勤している人の中から選ぶ
+        const activeMembers = members.filter(m => !absentMembers.includes(m) && m !== currentName);
+        
+        if (activeMembers.length === 0) { alert("代わりになれる出勤メンバーがいません。"); return; }
+        
+        const newName = prompt(`${day}の${pos}を、${currentName}から誰に入れ替えますか？\n\n【出勤者】\n${activeMembers.join('、')}`, activeMembers[0]);
+        
+        if (newName && activeMembers.includes(newName)) {
+            // マグネットを書き換える
+            const spanId = `mag-${day}-${pos}-${index}`;
+            const target = document.getElementById(spanId);
+            if (target) {
+                const isEdu = target.innerText.includes('🔰');
+                target.innerText = isEdu ? `🔰 ${newName}` : newName;
+                alert(`${newName}に入れ替えました！`);
+            }
+        } else if (newName) {
+            alert("出勤メンバーの中から正確に名前を入力してください。");
+        }
+    }
+
     function generateSchedule() {
         const tbody = document.getElementById('wb-tbody');
         const theadTr = document.getElementById('wb-thead-tr');
         tbody.innerHTML = '';
         document.getElementById('wb-shift-label').innerText = currentShift + '直';
-        
         const positionNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
         theadTr.innerHTML = '<th class="day-header"></th>' + positionNames.map(p => `<th>${p}</th>`).join('');
-        
-        const mockShift1 = { "MON": [0, 1, 2, 3], "TUE": [1, 3, 5, 2], "WED": [5, 2, 0, 1], "THU": [2, 5, 3, 0], "FRI": [3, 0, 1, 5] };
-        const mockShift2 = { "MON": [3, 2, 4], "TUE": [1, 0, 2], "WED": [4, 3, 0], "THU": [0, 1, 4], "FRI": [2, 1, 3] };
-        const basePattern = currentShift === 1 ? mockShift1 : mockShift2;
+        const basePattern = (currentShift === 1) ? 
+            { "MON": [0,1,2,3], "TUE": [1,3,5,2], "WED": [5,2,0,1], "THU": [2,5,3,0], "FRI": [3,0,1,5] } :
+            { "MON": [3,2,4], "TUE": [1,0,2], "WED": [4,3,0], "THU": [0,1,4], "FRI": [2,1,3] };
         
         days.forEach(day => {
             const tr = document.createElement('tr');
             const tdDay = document.createElement('td');
-            tdDay.className = 'day-cell';
-            tdDay.innerText = day;
-            tr.appendChild(tdDay);
-            
+            tdDay.className = 'day-cell'; tdDay.innerText = day; tr.appendChild(tdDay);
             const select1 = document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value;
             const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
             const absentMembers = [select1, select2].filter(m => m !== "");
             const activeMembers = members.filter(m => !absentMembers.includes(m));
-            
             const eduPos = document.querySelector(`.edu-pos[data-day="${day}"]`).value;
             const eduMember = document.querySelector(`.edu-member[data-day="${day}"]`).value;
-            
-            let assignments = {};
-            positionNames.forEach(pos => { assignments[pos] = []; });
-            
+            let assignments = {}; positionNames.forEach(pos => assignments[pos] = []);
             let normalPool = activeMembers.filter(m => m !== eduMember);
-            let indices = basePattern[day] || [0, 1, 2, 3];
-            
+            let indices = basePattern[day] || [0,1,2,3];
             positionNames.forEach((pos, i) => {
                 if (normalPool.length > 0) {
                     let m = normalPool[indices[i] % normalPool.length];
-                    // 🌟 判定部分：メンバーが「その直（currentShift）のそのポジション」のスキルを持っているかチェック
-                    if (memberSkills[m] && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos)) {
-                        assignments[pos].push({ name: m, isEdu: false });
-                    }
+                    if (memberSkills[m] && memberSkills[m][currentShift].includes(pos)) assignments[pos].push({ name: m, isEdu: false });
                 }
             });
-            
-            // 空きマスの補填
-            let assignedPeople = [];
-            positionNames.forEach(pos => { assignments[pos].forEach(item => assignedPeople.push(item.name)); });
-            
             positionNames.forEach(pos => {
                 if (assignments[pos].length === 0) {
-                    // 🌟 補填のスキル判定も、現在の直（currentShift）ベースで行う
-                    let candidate = normalPool.find(m => !assignedPeople.includes(m) && memberSkills[m] && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
-                    if (!candidate) candidate = normalPool.find(m => memberSkills[m] && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
-                    
-                    if (candidate) {
-                        assignments[pos].push({ name: candidate, isEdu: false });
-                        assignedPeople.push(candidate);
-                    } else {
-                        assignments[pos].push({ name: "（要調整）", isEdu: false });
-                    }
+                    let c = normalPool.find(m => !assignments[pos].some(a => a.name === m) && memberSkills[m][currentShift].includes(pos));
+                    if (!c) c = normalPool.find(m => memberSkills[m][currentShift].includes(pos));
+                    assignments[pos].push({ name: c || "（要調整）", isEdu: false });
                 }
             });
-            
-            // 教育枠の追加
             if (eduPos && eduMember && positionNames.includes(eduPos)) {
-                if (assignments[eduPos].length === 1 && assignments[eduPos][0].name === "（要調整）") {
-                    assignments[eduPos] = [{ name: eduMember, isEdu: true }];
-                } else {
-                    assignments[eduPos].push({ name: eduMember, isEdu: true });
-                }
+                positionNames.forEach(pos => assignments[pos] = assignments[pos].filter(item => item.name !== eduMember));
+                if (assignments[eduPos].length === 1 && assignments[eduPos][0].name === "（要調整）") assignments[eduPos] = [{ name: eduMember, isEdu: true }];
+                else assignments[eduPos].push({ name: eduMember, isEdu: true });
             }
-            
-            // 描画
             positionNames.forEach(pos => {
                 const td = document.createElement('td');
-                assignments[pos].forEach(item => {
+                assignments[pos].forEach((item, idx) => {
                     const span = document.createElement('span');
-                    span.className = 'magnet-tag';
-                    if (item.name === "（要調整）") {
-                        span.className += ' absent';
-                        span.innerText = "（要調整）";
-                    } else if (item.isEdu) {
-                        span.className += ' education';
-                        span.innerText = `🔰 ${item.name}`;
-                    } else {
-                        span.innerText = item.name;
-                    }
+                    span.id = `mag-${day}-${pos}-${idx}`;
+                    span.className = 'magnet-tag' + (item.name === "（要調整）" ? ' absent' : (item.isEdu ? ' education' : ''));
+                    span.innerText = item.isEdu ? `🔰 ${item.name}` : item.name;
+                    // タップイベントを追加
+                    span.onclick = () => swapMagnet(day, pos, idx, item.name);
                     td.appendChild(span);
                 });
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
         });
-        
         document.getElementById('whiteboard').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
-    
-    updateMemberUI();
+    renderDaySettings();
 </script>
 </body>
 </html>
