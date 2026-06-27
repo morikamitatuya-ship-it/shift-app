@@ -7,9 +7,8 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
         
-        /* 🏎️ 全体の背景にGRヤリスの画像をガチッと固定 */
         body { 
-            background-image: url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop'); /* 仮のスポーツカー画像です。お好きな画像URLに変更可能です */
+            background-image: url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -27,10 +26,9 @@
             flex-direction: column; 
             position: relative; 
             min-height: 100vh; 
-            padding-bottom: 80px; /* タブバー用の余白 */
+            padding-bottom: 80px;
         }
 
-        /* 📋 共通ヘッダー（ホーム以外で表示） */
         .header { 
             height: 60px; 
             display: none; 
@@ -47,7 +45,7 @@
         .header h1 { font-size: 18px; font-weight: bold; text-align: center; color: #fff; letter-spacing: 1px; }
         .content { flex: 1; padding: 20px; }
         
-        /* 🏠 ホーム画面専用スタイル */
+        /* 🏠 ホーム画面 */
         #page-home {
             padding: 40px 24px;
             display: flex;
@@ -61,7 +59,7 @@
         .home-title {
             font-size: 38px;
             font-weight: 900;
-            font-style: italic; /* 斜体でスピード感を演出 */
+            font-style: italic;
             letter-spacing: 2px;
             color: #fff;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5);
@@ -73,18 +71,17 @@
             font-weight: bold;
         }
         
-        /* 🕹️ お手本通りのGR風メニューボタン */
         .menu-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
         .menu-item {
-            background: rgba(26, 26, 26, 0.65); /* 半透明の黒 */
-            backdrop-filter: blur(12px); /* すりガラス効果 */
+            background: rgba(26, 26, 26, 0.65);
+            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-left: 4px solid #e60012; /* ✨ 左端のGRレッドライン */
+            border-left: 4px solid #e60012;
             border-radius: 8px;
             padding: 18px 20px;
             display: flex;
@@ -109,7 +106,7 @@
             font-size: 24px;
             width: 40px;
             height: 40px;
-            background: rgba(230, 0, 18, 0.15); /* うっすら赤背景 */
+            background: rgba(230, 0, 18, 0.15);
             border-radius: 6px;
             display: flex;
             align-items: center;
@@ -135,7 +132,7 @@
             font-weight: bold;
         }
 
-        /* 🗓️ 各種コンテンツカード（ガラススタイルで統一） */
+        /* 🗓️ コンテンツエリア */
         .glass-panel {
             background: rgba(20, 20, 20, 0.85);
             backdrop-filter: blur(10px);
@@ -151,12 +148,17 @@
         .toggle-btn { flex: 1; padding: 14px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 15px; font-weight: bold; color: #bbb; cursor: pointer; text-align: center; }
         .toggle-btn.active { border: 2px solid #e60012; color: #fff; background: rgba(230, 0, 12, 0.1); padding: 13px; }
         
+        /* ⚙️ 教育枠表示スイッチの復活 */
+        .show-edu-container { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; font-weight: bold; cursor: pointer; user-select: none; }
+        .show-edu-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #e60012; }
+
         /* 曜日別設定の入力エリア */
         .day-row { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px; margin-bottom: 14px; }
         .day-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .day-label { font-size: 14px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 6px; }
         .day-label span { background: #e60012; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 900; }
         .setting-sub-row { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+        .setting-sub-row.edu-row { display: none; } /* 初期状態は非表示 */
         .setting-sub-label { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: bold; }
         .select-group { display: flex; gap: 8px; }
         .select-box { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); font-size: 14px; background: #222; color: #fff; font-weight: bold; }
@@ -165,8 +167,8 @@
         
         .submit-btn { width: 100%; background: #e60012; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(230,0,12,0.4); margin-bottom: 20px;}
         
-        /* 🏁 ホワイトボード（GRレーシング風仕様） */
-        .whiteboard-container { display: none; background: #fff; border: 8px solid #222; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 20px rgba(0,0,0,0.5); margin-top: 25px; color: #333; }
+        /* 🏁 ホワイトボード（配置を上にするため調整） */
+        .whiteboard-container { display: none; background: #fff; border: 8px solid #222; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 25px; color: #333; }
         .wb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #222; }
         .wb-badge { border: 2px solid #222; padding: 4px 12px; font-weight: bold; font-size: 16px; border-radius: 4px; background: #222; color: #fff; }
         .wb-title { font-size: 20px; font-weight: 900; letter-spacing: 2px; text-align: center; flex: 1; color: #222; font-style: italic; }
@@ -183,7 +185,7 @@
         .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #222; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
         .wb-footer-title { background: #222; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
 
-        /* 👥 メンバー管理・⚙️ スキル管理用スタイル */
+        /* 👥 メンバー・⚙️ スキル管理 */
         .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
         .member-tag-item { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; color: #fff; }
         .member-delete-btn { color: #ef4444; cursor: pointer; font-size: 16px; font-weight: bold; border: none; background: none; }
@@ -197,7 +199,7 @@
         .skill-label { font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .skill-checkbox { width: 18px; height: 18px; accent-color: #e60012; }
 
-        /* 🗺️ ボトムタブバー（グラススタイル） */
+        /* 🗺️ ボトムタブバー */
         .tab-bar { 
             position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; 
             background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -256,17 +258,6 @@
                     </div>
                     <div class="menu-arrow">＞</div>
                 </div>
-                
-                <div class="menu-item" onclick="alert('履歴機能は準備中です！')">
-                    <div class="menu-main-info">
-                        <div class="menu-icon-box">📄</div>
-                        <div class="menu-text-group">
-                            <span class="menu-title-text">履歴</span>
-                            <span class="menu-sub-text">過去の早出表を確認</span>
-                        </div>
-                    </div>
-                    <div class="menu-arrow">＞</div>
-                </div>
             </div>
         </div>
 
@@ -279,13 +270,6 @@
                 </div>
             </div>
             
-            <div class="glass-panel">
-                <div class="section-title">曜日別の設定（休み・教育枠）</div>
-                <div id="day-settings-root"></div>
-            </div>
-
-            <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
-            
             <div class="whiteboard-container" id="whiteboard">
                 <div class="wb-header">
                     <div class="wb-badge" id="wb-shift-label">1直</div>
@@ -297,6 +281,18 @@
                     <tbody id="wb-tbody"></tbody>
                 </table>
                 <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
+            </div>
+
+            <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
+
+            <label class="show-edu-container">
+                <input type="checkbox" class="show-edu-checkbox" id="toggle-edu-view" onchange="toggleEduVisibility()">
+                🔰 教育枠（見習い追加欄）を表示する
+            </label>
+            
+            <div class="glass-panel">
+                <div class="section-title">曜日別の設定（休み欄）</div>
+                <div id="day-settings-root"></div>
             </div>
         </div>
 
@@ -362,7 +358,6 @@
         localStorage.setItem("hayade_skills", JSON.stringify(memberSkills));
     }
     
-    // 🗺️ 画面のタブ切り替えとヘッダー表示の制御
     function switchTab(tabName) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
@@ -372,9 +367,9 @@
         if (tabName === 'home') {
             document.getElementById('page-home').classList.add('active');
             document.getElementById('tab-home').classList.add('active');
-            header.style.display = 'none'; // ホームのときは上のヘッダーを隠す
+            header.style.display = 'none';
         } else {
-            header.style.display = 'flex'; // ホーム以外はヘッダーを表示
+            header.style.display = 'flex';
             document.getElementById(`page-${tabName}`).classList.add('active');
             document.getElementById(`tab-${tabName}`).classList.add('active');
             
@@ -383,6 +378,13 @@
             if (tabName === 'skill') { document.getElementById('app-page-title').innerText = '⚙️ スキル管理'; renderSkillUI(); }
         }
         window.scrollTo(0, 0);
+    }
+
+    // 教育枠表示スイッチの動作
+    function toggleEduVisibility() {
+        const isChecked = document.getElementById('toggle-edu-view').checked;
+        const eduRows = document.querySelectorAll('.setting-sub-row.edu-row');
+        eduRows.forEach(row => { row.style.display = isChecked ? 'flex' : 'none'; });
     }
 
     function renderDaySettings() {
@@ -401,7 +403,7 @@
                             <select class="select-box absent-select" data-day="${day}" data-index="2"></select>
                         </div>
                     </div>
-                    <div class="setting-sub-row">
+                    <div class="setting-sub-row edu-row">
                         <div class="setting-sub-label">教育枠（見習い追加欄）</div>
                         <div class="select-group">
                             <select class="select-box edu-pos" data-day="${day}"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
@@ -525,8 +527,9 @@
             const absentMembers = [select1, select2].filter(m => m !== "");
             const activeMembers = members.filter(m => !absentMembers.includes(m));
             
-            const eduPos = document.querySelector(`.edu-pos[data-day="${day}"]`).value;
-            const eduMember = document.querySelector(`.edu-member[data-day="${day}"]`).value;
+            const isEduVisible = document.getElementById('toggle-edu-view').checked;
+            const eduPos = isEduVisible ? document.querySelector(`.edu-pos[data-day="${day}"]`).value : "";
+            const eduMember = isEduVisible ? document.querySelector(`.edu-member[data-day="${day}"]`).value : "";
             
             let assignments = {}; positionNames.forEach(pos => assignments[pos] = []);
             let normalPool = activeMembers.filter(m => m !== eduMember);
@@ -564,8 +567,12 @@
             });
             tbody.appendChild(tr);
         });
+        
+        // ホワイトボードを表示
         document.getElementById('whiteboard').style.display = 'block';
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        
+        // 🌟 改善点：自動スクロールを廃止し、視線を上に誘導
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     renderDaySettings();
