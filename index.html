@@ -12,9 +12,10 @@
         .header h1 { font-size: 18px; font-weight: bold; flex-grow: 1; text-align: center; }
         .content { flex: 1; padding: 20px; padding-bottom: 100px; }
         .section-title { font-size: 15px; color: #555; margin-bottom: 12px; font-weight: bold; }
-        .toggle-container { display: flex; gap: 10px; margin-bottom: 24px; }
+        .toggle-container { display: flex; gap: 10px; margin-bottom: 16px; }
         .toggle-btn { flex: 1; padding: 14px; border: 1px solid #dcdcdc; background: #fff; border-radius: 8px; font-size: 15px; font-weight: bold; color: #444; cursor: pointer; text-align: center; }
         .toggle-btn.active { border: 2px solid #0066fe; color: #0066fe; padding: 13px; }
+        .select-box { width: 100%; padding: 14px; border-radius: 8px; border: 2px solid #0066fe; font-size: 16px; margin-bottom: 24px; display: none; background-color: #fff; font-weight: bold; color: #333; -webkit-appearance: select; }
         .status-card { background: #fff; border: 1px solid #eef2f5; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
         .circle-icon { width: 60px; height: 60px; border: 3px solid #0066fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0066fe; font-size: 24px; margin-bottom: 12px; font-weight: bold; }
         .status-title { font-size: 20px; font-weight: bold; color: #0066fe; margin-bottom: 6px; }
@@ -51,6 +52,16 @@
             <button class="toggle-btn active" id="btn-no-vacation" onclick="selectVacation(false)">休みなし</button>
             <button class="toggle-btn" id="btn-has-vacation" onclick="selectVacation(true)">休みあり</button>
         </div>
+
+        <select class="select-box" id="absent-member-select" onchange="changeAbsentMember()">
+            <option value="阿部">阿部 を休みにする</option>
+            <option value="久林">久林 を休みにする</option>
+            <option value="森上">森上 を休みにする</option>
+            <option value="岡">岡 を休みにする</option>
+            <option value="瑠衣">瑠衣 を休みにする</option>
+            <option value="西村" selected>西村 を休みにする</option>
+        </select>
+
         <div class="status-card">
             <div class="circle-icon" id="status-icon-box">✓</div>
             <div class="status-title" id="status-text">休みなし</div>
@@ -79,36 +90,79 @@
     </div>
 </div>
 <script>
-    let currentShift = 1; let isVacation = false;
+    let currentShift = 1; let isVacation = false; let absentMember = "西村";
     const members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"]; const days = ["MON", "TUE", "WED", "THU", "FRI"];
+    
     function selectShift(shift) {
         currentShift = shift;
         document.getElementById('btn-shift1').classList.toggle('active', shift === 1);
         document.getElementById('btn-shift2').classList.toggle('active', shift === 2);
         document.getElementById('whiteboard').style.display = 'none';
     }
+    
     function selectVacation(hasVacation) {
         isVacation = hasVacation;
-        const btnNo = document.getElementById('btn-no-vacation'); const btnHas = document.getElementById('btn-has-vacation');
-        const statusText = document.getElementById('status-text'); const statusSubtext = document.getElementById('status-subtext');
-        const iconBox = document.getElementById('status-icon-box');
+        const btnNo = document.getElementById('btn-no-vacation');
+        const btnHas = document.getElementById('btn-has-vacation');
+        const selectBox = document.getElementById('absent-member-select');
         document.getElementById('whiteboard').style.display = 'none';
+        
         if (hasVacation) {
-            btnNo.classList.remove('active'); btnHas.classList.add('active');
-            statusText.innerText = '休みあり'; statusText.style.color = '#ff4d4f'; statusSubtext.innerText = '西村が本日休みです（デモ用設定）';
-            iconBox.style.color = '#ff4d4f'; iconBox.style.borderColor = '#ff4d4f'; iconBox.innerText = '！';
+            btnNo.classList.remove('active');
+            btnHas.classList.add('active');
+            selectBox.style.display = 'block';
         } else {
-            btnNo.classList.add('active'); btnHas.classList.remove('active');
-            statusText.innerText = '休みなし'; statusText.style.color = '#0066fe'; statusSubtext.innerText = '全員が勤務可能です';
-            iconBox.style.color = '#0066fe'; iconBox.style.borderColor = '#0066fe'; iconBox.innerText = '✓';
+            btnNo.classList.add('active');
+            btnHas.classList.remove('active');
+            selectBox.style.display = 'none';
+        }
+        updateStatusCard();
+    }
+
+    function changeAbsentMember() {
+        absentMember = document.getElementById('absent-member-select').value;
+        document.getElementById('whiteboard').style.display = 'none';
+        updateStatusCard();
+    }
+
+    function updateStatusCard() {
+        const statusText = document.getElementById('status-text');
+        const statusSubtext = document.getElementById('status-subtext');
+        const iconBox = document.getElementById('status-icon-box');
+        if (isVacation) {
+            statusText.innerText = '休みあり';
+            statusText.style.color = '#ff4d4f';
+            statusSubtext.innerText = absentMember + ' が本日休みです';
+            iconBox.style.color = '#ff4d4f';
+            iconBox.style.borderColor = '#ff4d4f';
+            iconBox.innerText = '！';
+        } else {
+            statusText.innerText = '休みなし';
+            statusText.style.color = '#0066fe';
+            statusSubtext.innerText = '全員が勤務可能です';
+            iconBox.style.color = '#0066fe';
+            iconBox.style.borderColor = '#0066fe';
+            iconBox.innerText = '✓';
         }
     }
+    
     function generateSchedule() {
-        const tbody = document.getElementById('wb-tbody'); const theadTr = document.getElementById('wb-thead-tr'); const shiftLabel = document.getElementById('wb-shift-label');
-        tbody.innerHTML = ''; shiftLabel.innerText = currentShift + '直';
-        if (currentShift === 2) { theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th>'; }
-        else { theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th>'; }
-        let activeMembers = [...members]; if (isVacation) { activeMembers = activeMembers.filter(m => m !== "西村"); }
+        const tbody = document.getElementById('wb-tbody');
+        const theadTr = document.getElementById('wb-thead-tr');
+        const shiftLabel = document.getElementById('wb-shift-label');
+        tbody.innerHTML = '';
+        shiftLabel.innerText = currentShift + '直';
+        
+        if (currentShift === 2) {
+            theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th>';
+        } else {
+            theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th>';
+        }
+        
+        let activeMembers = [...members]; 
+        if (isVacation) { activeMembers = activeMembers.filter(m => m !== absentMember); }
+        document.getElementById('wb-member-list').innerText = activeMembers.join('・');
+
         const mockShift1 = {
             "MON": ["岡", "森上", "久林", "阿部"], "TUE": ["森上", "阿部", "西村", "久林"],
             "WED": ["西村", "久林", "岡", "森上"], "THU": ["久林", "西村", "阿部", "岡"], "FRI": ["阿部", "岡", "森上", "西村"]
@@ -118,14 +172,26 @@
             "THU": ["岡", "森上", "瑠衣"], "FRI": ["久林", "森上", "阿部"]
         };
         const scheduleData = currentShift === 1 ? mockShift1 : mockShift2;
+        
         days.forEach(day => {
-            const tr = document.createElement('tr'); const tdDay = document.createElement('td');
-            tdDay.className = 'day-cell'; tdDay.innerText = day; tr.appendChild(tdDay);
-            let slots = scheduleData[day];
-            if (isVacation && currentShift === 1) { slots = slots.map(m => m === "西村" ? activeMembers[Math.floor(Math.random() * activeMembers.length)] : m); }
+            const tr = document.createElement('tr');
+            const tdDay = document.createElement('td');
+            tdDay.className = 'day-cell';
+            tdDay.innerText = day;
+            tr.appendChild(tdDay);
+            let slots = [...scheduleData[day]];
+            
+            if (isVacation) { 
+                slots = slots.map(m => m === absentMember ? activeMembers[Math.floor(Math.random() * activeMembers.length)] : m); 
+            }
+            
             slots.forEach(member => {
-                const td = document.createElement('td'); const span = document.createElement('span');
-                span.className = 'magnet-tag'; span.innerText = member; td.appendChild(span); tr.appendChild(td);
+                const td = document.createElement('td');
+                const span = document.createElement('span');
+                span.className = 'magnet-tag';
+                span.innerText = member;
+                td.appendChild(span);
+                tr.appendChild(td);
             });
             tbody.appendChild(tr);
         });
