@@ -16,7 +16,7 @@
         .toggle-btn { flex: 1; padding: 14px; border: 1px solid #dcdcdc; background: #fff; border-radius: 8px; font-size: 15px; font-weight: bold; color: #444; cursor: pointer; text-align: center; }
         .toggle-btn.active { border: 2px solid #0066fe; color: #0066fe; padding: 13px; }
         
-        /* メンバー管理のスタイル */
+        /* メンバー管理 */
         .member-manage-container { background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0; margin-bottom: 24px; }
         .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
         .member-tag-item { background: #fff; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
@@ -25,7 +25,7 @@
         .member-input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; font-weight: bold; }
         .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
 
-        /* スキル管理のスタイル */
+        /* スキル管理 */
         .skill-container { background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fcd34d; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
         .skill-row { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px 14px; border-radius: 8px; border: 1px solid #fcd34d; }
         .skill-name { font-weight: bold; font-size: 15px; min-width: 70px; }
@@ -33,7 +33,7 @@
         .skill-label { font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 4px; cursor: pointer; }
         .skill-checkbox { width: 18px; height: 18px; cursor: pointer; }
 
-        /* 曜日別設定の枠 */
+        /* 曜日別設定 */
         .day-settings-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .day-row { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 12px; }
         .day-row:last-child { border-bottom: none; padding-bottom: 0; }
@@ -49,7 +49,7 @@
         
         .submit-btn { width: 100%; background: #0066fe; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
         
-        /* 📋 ホワイトボード画面のスタイル */
+        /* ホワイトボード */
         .whiteboard-container { display: none; background: #fff; border: 12px solid #7f8c8d; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.15); margin-top: 25px; }
         .wb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #333; }
         .wb-badge { border: 2px solid #333; padding: 4px 12px; font-weight: bold; font-size: 18px; border-radius: 4px; }
@@ -60,21 +60,17 @@
         .wb-table th.day-header { width: 55px; }
         .wb-table td.day-cell { background-color: #002060; color: white; font-weight: bold; font-size: 14px; }
         
-        /* 🧲 マグネットのデザイン（1人1枚で独立） */
+        /* 🧲 マグネット（1人1枚） */
         .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 3px rgba(0,0,0,0.15); display: block; margin: 4px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
-        /* 🔰 教育枠用マグネット（ほんのり黄色で初心者マークつき） */
         .magnet-tag.education { background: #fef9c3; border: 1px solid #fcd34d; border-bottom: 2px solid #eab308; color: #b45309; }
         
         .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #333; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
         .wb-footer-title { background: #002060; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
         
-        /* タブバー用 */
         .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; border-top: 1px solid #eef2f5; display: flex; justify-content: space-around; align-items: center; background: #fff; padding-bottom: 5px; z-index: 100; }
         .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; cursor: pointer; flex: 1; height: 100%; justify-content: center; }
         .tab-item.active { color: #0066fe; font-weight: bold; }
-        
-        /* 画面切り替え用 */
         .page { display: none; }
         .page.active { display: block; }
     </style>
@@ -93,6 +89,7 @@
             
             <div class="section-title">曜日別の設定（休み・教育枠）</div>
             <div class="day-settings-container">
+                <!-- MON -->
                 <div class="day-row">
                     <div class="day-label"><span>MON</span> 月曜日</div>
                     <div class="setting-sub-row">
@@ -110,7 +107,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- TUE -->
                 <div class="day-row">
                     <div class="day-label"><span>TUE</span> 火曜日</div>
                     <div class="setting-sub-row">
@@ -128,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- WED -->
                 <div class="day-row">
                     <div class="day-label"><span>WED</span> 水曜日</div>
                     <div class="setting-sub-row">
@@ -146,7 +143,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- THU -->
                 <div class="day-row">
                     <div class="day-label"><span>THU</span> 木曜日</div>
                     <div class="setting-sub-row">
@@ -164,7 +161,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- FRI -->
                 <div class="day-row">
                     <div class="day-label"><span>FRI</span> 金曜日</div>
                     <div class="setting-sub-row">
@@ -200,6 +197,7 @@
             </div>
         </div>
 
+        <!-- 👥 メンバー管理 -->
         <div id="page-member" class="page">
             <div class="section-title">現在のメンバー（タップで削除）</div>
             <div class="member-manage-container">
@@ -212,6 +210,7 @@
             </div>
         </div>
 
+        <!-- ⚙️ スキル管理 -->
         <div id="page-skill" class="page">
             <div class="section-title">ポジション別スキル設定</div>
             <div class="skill-container" id="skill-list-container"></div>
@@ -219,6 +218,7 @@
 
     </div>
     
+    <!-- タブバー -->
     <div class="tab-bar">
         <div class="tab-item" onclick="switchTab('home')">🏠 ホーム</div>
         <div class="tab-item active" id="tab-create" onclick="switchTab('create')">🗓️ 作成</div>
@@ -261,7 +261,7 @@
             document.getElementById('app-page-title').innerText = '⚙️ スキル管理';
             renderSkillUI();
         } else {
-            alert(tabName + "画面は現在開発中です！作成・メンバー・スキルを押してね。");
+            alert(tabName + "画面は現在開発中です！");
             document.getElementById('page-create').classList.add('active');
             document.getElementById('tab-create').classList.add('active');
         }
@@ -307,7 +307,6 @@
             tagsContainer.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${idx})">×</button></div>`;
         });
 
-        // 休み選択肢の更新
         const selects = document.querySelectorAll('.absent-select');
         selects.forEach(select => {
             const currentVal = select.value;
@@ -316,7 +315,6 @@
             select.value = members.includes(currentVal) ? currentVal : "";
         });
 
-        // 教育メンバー選択肢の更新
         const eduSelects = document.querySelectorAll('.edu-member');
         eduSelects.forEach(select => {
             const currentVal = select.value;
@@ -347,8 +345,6 @@
             delete memberSkills[name];
             updateMemberUI();
             document.getElementById('whiteboard').style.display = 'none';
-        } else {
-            alert("メンバーを全員いなくすることはできません。");
         }
     }
     
@@ -357,34 +353,19 @@
         document.getElementById('btn-shift1').classList.toggle('active', shift === 1);
         document.getElementById('btn-shift2').classList.toggle('active', shift === 2);
         document.getElementById('whiteboard').style.display = 'none';
-        
-        const eduPosSelects = document.querySelectorAll('.edu-pos');
-        eduPosSelects.forEach(select => {
-            if (shift === 2 && select.value === 'D') select.value = '';
-        });
     }
     
     function generateSchedule() {
         const tbody = document.getElementById('wb-tbody');
         const theadTr = document.getElementById('wb-thead-tr');
-        const shiftLabel = document.getElementById('wb-shift-label');
         tbody.innerHTML = '';
-        shiftLabel.innerText = currentShift + '直';
+        document.getElementById('wb-shift-label').innerText = currentShift + '直';
         
         const positionNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
+        theadTr.innerHTML = '<th class="day-header"></th>' + positionNames.map(p => `<th>${p}</th>`).join('');
         
-        if (currentShift === 2) {
-            theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th>';
-        } else {
-            theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th>';
-        }
-        
-        const mockShift1 = {
-            "MON": [0, 1, 2, 3], "TUE": [1, 3, 5, 2], "WED": [5, 2, 0, 1], "THU": [2, 5, 3, 0], "FRI": [3, 0, 1, 5]
-        };
-        const mockShift2 = {
-            "MON": [3, 2, 4], "TUE": [1, 0, 2], "WED": [4, 3, 0], "THU": [0, 1, 4], "FRI": [2, 1, 3]
-        };
+        const mockShift1 = { "MON": [0, 1, 2, 3], "TUE": [1, 3, 5, 2], "WED": [5, 2, 0, 1], "THU": [2, 5, 3, 0], "FRI": [3, 0, 1, 5] };
+        const mockShift2 = { "MON": [3, 2, 4], "TUE": [1, 0, 2], "WED": [4, 3, 0], "THU": [0, 1, 4], "FRI": [2, 1, 3] };
         const basePattern = currentShift === 1 ? mockShift1 : mockShift2;
         
         days.forEach(day => {
@@ -397,98 +378,73 @@
             const select1 = document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value;
             const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
             const absentMembers = [select1, select2].filter(m => m !== "");
+            const activeMembers = members.filter(m => !absentMembers.includes(m));
             
-            let activeMembers = members.filter(m => !absentMembers.includes(m));
-            
-            // 各ポジションの配置用（名前と教育フラグを保持するオブジェクトの配列に！）
-            let assignments = {};
-            positionNames.forEach(pos => { assignments[pos] = []; });
-            
-            // 1. 通常のローテーション配置
-            let indices = basePattern[day] || [0, 1, 2, 3];
-            positionNames.forEach((pos, i) => {
-                let m = members[indices[i] % members.length] || members[0];
-                if (activeMembers.includes(m) && memberSkills[m] && memberSkills[m].includes(pos)) {
-                    assignments[pos].push({ name: m, isEdu: false });
-                }
-            });
-            
-            let assignedPeople = [];
-            positionNames.forEach(pos => { 
-                assignments[pos].forEach(item => assignedPeople.push(item.name)); 
-            });
-            
-            // 隙間埋めロジック
-            positionNames.forEach(pos => {
-                if (assignments[pos].length === 0) {
-                    let candidate = activeMembers.find(m => !assignedPeople.includes(m) && memberSkills[m] && memberSkills[m].includes(pos));
-                    if (!candidate) {
-                        candidate = activeMembers.find(m => memberSkills[m] && memberSkills[m].includes(pos));
-                    }
-                    if (candidate) {
-                        assignments[pos].push({ name: candidate, isEdu: false });
-                        if (!assignedPeople.includes(candidate)) assignedPeople.push(candidate);
-                    } else {
-                        assignments[pos].push({ name: "（要調整）", isEdu: false });
-                    }
-                }
-            });
-            
-            // 🌟 2. 教育枠（見習い）の追加
             const eduPos = document.querySelector(`.edu-pos[data-day="${day}"]`).value;
             const eduMember = document.querySelector(`.edu-member[data-day="${day}"]`).value;
             
-            if (eduPos && eduMember && positionNames.includes(eduPos)) {
-                // 他のポジションから見習いを外す
-                positionNames.forEach(pos => {
-                    assignments[pos] = assignments[pos].filter(item => item.name !== eduMember);
-                    if (assignments[pos].length === 0) {
+            let assignments = {};
+            positionNames.forEach(pos => { assignments[pos] = []; });
+            
+            // 1. まずは「見習いとなる人」を除外したメンバーで通常配置を決める（見習いが先輩枠を奪わないように）
+            let normalPool = activeMembers.filter(m => m !== eduMember);
+            let indices = basePattern[day] || [0, 1, 2, 3];
+            
+            positionNames.forEach((pos, i) => {
+                if (normalPool.length > 0) {
+                    let m = normalPool[indices[i] % normalPool.length];
+                    if (memberSkills[m] && memberSkills[m].includes(pos)) {
+                        assignments[pos].push({ name: m, isEdu: false });
+                    }
+                }
+            });
+            
+            // 空きマスの補填
+            let assignedPeople = [];
+            positionNames.forEach(pos => { assignments[pos].forEach(item => assignedPeople.push(item.name)); });
+            
+            positionNames.forEach(pos => {
+                if (assignments[pos].length === 0) {
+                    let candidate = normalPool.find(m => !assignedPeople.includes(m) && memberSkills[m] && memberSkills[m].includes(pos));
+                    if (!candidate) candidate = normalPool.find(m => memberSkills[m] && memberSkills[m].includes(pos));
+                    if (candidate) {
+                        assignments[pos].push({ name: candidate, isEdu: false });
+                        assignedPeople.push(candidate);
+                    } else {
+                        // もし通常メンバーで埋まらなければ、見習い以外から「要調整」にする
                         assignments[pos].push({ name: "（要調整）", isEdu: false });
                     }
-                });
-                
-                // 「要調整」だけのマスなら上書き、先輩がいるならその下に追加
+                }
+            });
+            
+            // 🌟 2. 【大修正】教育枠（見習い）を「追加」して重ねて貼る！
+            if (eduPos && eduMember && positionNames.includes(eduPos)) {
+                // 「要調整」のマスに入った場合は、要調整を消して見習いを入れる
                 if (assignments[eduPos].length === 1 && assignments[eduPos][0].name === "（要調整）") {
                     assignments[eduPos] = [{ name: eduMember, isEdu: true }];
                 } else {
+                    // 先輩がすでにいる場合は、その下に2枚目として追加する
                     assignments[eduPos].push({ name: eduMember, isEdu: true });
                 }
             }
             
-            // 🛠️ 画面への描画ロジック（1人1枚のマグネットにする！）
+            // 描画
             positionNames.forEach(pos => {
                 const td = document.createElement('td');
-                
-                // 「要調整」の不要な重複を綺麗にする
-                if (assignments[pos].length > 1) {
-                    assignments[pos] = assignments[pos].filter(item => item.name !== "（要調整）");
-                }
-                
                 assignments[pos].forEach(item => {
                     const span = document.createElement('span');
                     span.className = 'magnet-tag';
-                    
                     if (item.name === "（要調整）") {
                         span.className += ' absent';
                         span.innerText = "（要調整）";
                     } else if (item.isEdu) {
-                        // 🔰 教育枠専用のデザインマグネットにする
                         span.className += ' education';
                         span.innerText = `🔰 ${item.name}`;
                     } else {
                         span.innerText = item.name;
                     }
-                    
                     td.appendChild(span);
                 });
-                
-                if (td.children.length === 0) {
-                    const span = document.createElement('span');
-                    span.className = 'magnet-tag absent';
-                    span.innerText = "（空き）";
-                    td.appendChild(span);
-                }
-                
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
