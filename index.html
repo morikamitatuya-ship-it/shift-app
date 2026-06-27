@@ -16,6 +16,10 @@
         .toggle-btn { flex: 1; padding: 14px; border: 1px solid #dcdcdc; background: #fff; border-radius: 8px; font-size: 15px; font-weight: bold; color: #444; cursor: pointer; text-align: center; }
         .toggle-btn.active { border: 2px solid #0066fe; color: #0066fe; padding: 13px; }
         
+        /* 教育枠の表示・非表示スイッチ */
+        .show-edu-container { display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; font-weight: bold; cursor: pointer; user-select: none; }
+        .show-edu-checkbox { width: 18px; height: 18px; cursor: pointer; }
+
         /* メンバー管理 */
         .member-manage-container { background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0; margin-bottom: 24px; }
         .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
@@ -40,6 +44,7 @@
         .day-label { font-size: 14px; font-weight: bold; color: #1e293b; display: flex; align-items: center; gap: 6px; }
         .day-label span { background: #002060; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
         .setting-sub-row { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+        .setting-sub-row.edu-row { display: none; } /* デフォルトは非表示 */
         .setting-sub-label { font-size: 12px; color: #64748b; font-weight: bold; }
         .select-group { display: flex; gap: 8px; }
         .select-box { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; background-color: #fff; font-weight: bold; color: #333; -webkit-appearance: select; }
@@ -86,7 +91,14 @@
                 <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
             </div>
             
-            <div class="section-title">曜日別の設定（休み・教育枠）</div>
+            <div class="section-title">曜日別の設定（休み）</div>
+            
+            <!-- 🌟 教育枠を一括で出し入れするスイッチ -->
+            <label class="show-edu-container">
+                <input type="checkbox" class="show-edu-checkbox" id="toggle-edu-view" onchange="toggleEduVisibility()">
+                🔰 教育枠（見習い追加欄）を表示する
+            </label>
+
             <div class="day-settings-container" id="day-settings-root"></div>
 
             <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
@@ -176,6 +188,15 @@
         }
     }
 
+    // 🌟 教育枠の表示切り替え
+    function toggleEduVisibility() {
+        const isChecked = document.getElementById('toggle-edu-view').checked;
+        const eduRows = document.querySelectorAll('.setting-sub-row.edu-row');
+        eduRows.forEach(row => {
+            row.style.display = isChecked ? 'flex' : 'none';
+        });
+    }
+
     function renderDaySettings() {
         const root = document.getElementById('day-settings-root');
         root.innerHTML = '';
@@ -191,7 +212,8 @@
                             <select class="select-box absent-select" data-day="${day}" data-index="2"></select>
                         </div>
                     </div>
-                    <div class="setting-sub-row">
+                    <!-- 🌟 classに edu-row を追加して制御可能に -->
+                    <div class="setting-sub-row edu-row">
                         <div class="setting-sub-label">教育枠（見習い追加）</div>
                         <div class="select-group">
                             <select class="select-box edu-pos" data-day="${day}"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
@@ -202,6 +224,7 @@
             `;
         });
         updateMemberUI();
+        toggleEduVisibility(); // 初期状態の表示を反映
     }
 
     function selectSkillShift(shift) {
@@ -266,21 +289,16 @@
         document.getElementById('btn-shift2').classList.toggle('active', shift === 2);
     }
 
-    // 🌟 マグネットを手動で入れ替える機能
     function swapMagnet(day, pos, index, currentName) {
         const select1 = document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value;
         const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
         const absentMembers = [select1, select2].filter(m => m !== "");
-        
-        // その日出勤している人の中から選ぶ
         const activeMembers = members.filter(m => !absentMembers.includes(m) && m !== currentName);
         
         if (activeMembers.length === 0) { alert("代わりになれる出勤メンバーがいません。"); return; }
-        
         const newName = prompt(`${day}の${pos}を、${currentName}から誰に入れ替えますか？\n\n【出勤者】\n${activeMembers.join('、')}`, activeMembers[0]);
         
         if (newName && activeMembers.includes(newName)) {
-            // マグネットを書き換える
             const spanId = `mag-${day}-${pos}-${index}`;
             const target = document.getElementById(spanId);
             if (target) {
@@ -312,8 +330,12 @@
             const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
             const absentMembers = [select1, select2].filter(m => m !== "");
             const activeMembers = members.filter(m => !absentMembers.includes(m));
-            const eduPos = document.querySelector(`.edu-pos[data-day="${day}"]`).value;
-            const eduMember = document.querySelector(`.edu-member[data-day="${day}"]`).value;
+            
+            // 表示されているかどうかにかかわらず、データがあれば取得
+            const isEduVisible = document.getElementById('toggle-edu-view').checked;
+            const eduPos = isEduVisible ? document.querySelector(`.edu-pos[data-day="${day}"]`).value : "";
+            const eduMember = isEduVisible ? document.querySelector(`.edu-member[data-day="${day}"]`).value : "";
+            
             let assignments = {}; positionNames.forEach(pos => assignments[pos] = []);
             let normalPool = activeMembers.filter(m => m !== eduMember);
             let indices = basePattern[day] || [0,1,2,3];
@@ -342,7 +364,6 @@
                     span.id = `mag-${day}-${pos}-${idx}`;
                     span.className = 'magnet-tag' + (item.name === "（要調整）" ? ' absent' : (item.isEdu ? ' education' : ''));
                     span.innerText = item.isEdu ? `🔰 ${item.name}` : item.name;
-                    // タップイベントを追加
                     span.onclick = () => swapMagnet(day, pos, idx, item.name);
                     td.appendChild(span);
                 });
