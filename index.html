@@ -16,6 +16,15 @@
         .toggle-btn { flex: 1; padding: 14px; border: 1px solid #dcdcdc; background: #fff; border-radius: 8px; font-size: 15px; font-weight: bold; color: #444; cursor: pointer; text-align: center; }
         .toggle-btn.active { border: 2px solid #0066fe; color: #0066fe; padding: 13px; }
         
+        /* メンバー管理のスタイル */
+        .member-manage-container { background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0; margin-bottom: 24px; }
+        .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .member-tag-item { background: #fff; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+        .member-delete-btn { color: #ef4444; cursor: pointer; font-size: 14px; font-weight: bold; border: none; background: none; }
+        .member-input-group { display: flex; gap: 8px; }
+        .member-input { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; font-weight: bold; }
+        .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 16px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
+
         /* 曜日別設定の枠 */
         .day-settings-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .day-row { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 12px; }
@@ -37,6 +46,8 @@
         .wb-table td.day-cell { background-color: #002060; color: white; font-weight: bold; font-size: 14px; }
         .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 0; font-weight: bold; font-size: 14px; box-shadow: 1px 2px 4px rgba(0,0,0,0.15); display: block; margin: 2px auto; width: 90%; color: #000; border-bottom: 2px solid #b3b3b3; }
         .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
+        .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #333; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
+        .wb-footer-title { background: #002060; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
         .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; border-top: 1px solid #eef2f5; display: flex; justify-content: space-around; align-items: center; background: #fff; padding-bottom: 5px; z-index: 100; }
         .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; }
         .tab-item.active { color: #0066fe; }
@@ -46,6 +57,16 @@
 <div class="app-container">
     <div class="header"><h1>🗓️ 早出表作成</h1></div>
     <div class="content">
+        
+        <div class="section-title">👥 メンバーの追加・削除</div>
+        <div class="member-manage-container">
+            <div class="member-list-tags" id="member-tags-container"></div>
+            <div class="member-input-group">
+                <input type="text" class="member-input" id="new-member-name" placeholder="名前を入力">
+                <button class="member-add-btn" onclick="addMember()">追加</button>
+            </div>
+        </div>
+
         <div class="section-title">勤務を選択してください</div>
         <div class="toggle-container">
             <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
@@ -54,41 +75,11 @@
         
         <div class="section-title">曜日ごとの休み設定（各曜日2人まで）</div>
         <div class="day-settings-container">
-            <div class="day-row">
-                <div class="day-label"><span>MON</span> 月曜日</div>
-                <div class="select-group">
-                    <select class="select-box absent-select" data-day="MON" data-index="1"></select>
-                    <select class="select-box absent-select" data-day="MON" data-index="2"></select>
-                </div>
-            </div>
-            <div class="day-row">
-                <div class="day-label"><span>TUE</span> 火曜日</div>
-                <div class="select-group">
-                    <select class="select-box absent-select" data-day="TUE" data-index="1"></select>
-                    <select class="select-box absent-select" data-day="TUE" data-index="2"></select>
-                </div>
-            </div>
-            <div class="day-row">
-                <div class="day-label"><span>WED</span> 水曜日</div>
-                <div class="select-group">
-                    <select class="select-box absent-select" data-day="WED" data-index="1"></select>
-                    <select class="select-box absent-select" data-day="WED" data-index="2"></select>
-                </div>
-            </div>
-            <div class="day-row">
-                <div class="day-label"><span>THU</span> 木曜日</div>
-                <div class="select-group">
-                    <select class="select-box absent-select" data-day="THU" data-index="1"></select>
-                    <select class="select-box absent-select" data-day="THU" data-index="2"></select>
-                </div>
-            </div>
-            <div class="day-row">
-                <div class="day-label"><span>FRI</span> 金曜日</div>
-                <div class="select-group">
-                    <select class="select-box absent-select" data-day="FRI" data-index="1"></select>
-                    <select class="select-box absent-select" data-day="FRI" data-index="2"></select>
-                </div>
-            </div>
+            <div class="day-row"><div class="day-label"><span>MON</span> 月曜日</div><div class="select-group"><select class="select-box absent-select" data-day="MON" data-index="1"></select><select class="select-box absent-select" data-day="MON" data-index="2"></select></div></div>
+            <div class="day-row"><div class="day-label"><span>TUE</span> 火曜日</div><div class="select-group"><select class="select-box absent-select" data-day="TUE" data-index="1"></select><select class="select-box absent-select" data-day="TUE" data-index="2"></select></div></div>
+            <div class="day-row"><div class="day-label"><span>WED</span> 水曜日</div><div class="select-group"><select class="select-box absent-select" data-day="WED" data-index="1"></select><select class="select-box absent-select" data-day="WED" data-index="2"></select></div></div>
+            <div class="day-row"><div class="day-label"><span>THU</span> 木曜日</div><div class="select-group"><select class="select-box absent-select" data-day="THU" data-index="1"></select><select class="select-box absent-select" data-day="THU" data-index="2"></select></div></div>
+            <div class="day-row"><div class="day-label"><span>FRI</span> 金曜日</div><div class="select-group"><select class="select-box absent-select" data-day="FRI" data-index="1"></select><select class="select-box absent-select" data-day="FRI" data-index="2"></select></div></div>
         </div>
 
         <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
@@ -103,6 +94,7 @@
                 <thead><tr id="wb-thead-tr"><th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
                 <tbody id="wb-tbody"></tbody>
             </table>
+            <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
         </div>
     </div>
     <div class="tab-bar">
@@ -116,18 +108,60 @@
 
 <script>
     let currentShift = 1;
-    const members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
+    // 初期のメンバーリスト
+    let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     const days = ["MON", "TUE", "WED", "THU", "FRI"];
     
-    // セレクトボックスの初期化
-    function initSelectBoxes() {
+    // メンバー管理画面とセレクトボックスを同時に更新する
+    function updateMemberUI() {
+        // 1. タグ一覧の更新
+        const tagsContainer = document.getElementById('member-tags-container');
+        tagsContainer.innerHTML = '';
+        members.forEach((m, idx) => {
+            tagsContainer.innerHTML += `
+                <div class="member-tag-item">
+                    ${m}
+                    <button class="member-delete-btn" onclick="removeMember(${idx})">×</button>
+                </div>
+            `;
+        });
+
+        // 2. 休み選択セレクトボックスの更新（選んでいた値をキープする）
         const selects = document.querySelectorAll('.absent-select');
         selects.forEach(select => {
+            const currentVal = select.value;
             select.innerHTML = '<option value="">なし</option>';
             members.forEach(m => {
                 select.innerHTML += `<option value="${m}">${m}</option>`;
             });
+            select.value = members.includes(currentVal) ? currentVal : "";
         });
+        
+        // 3. ホワイトボードの下部メンバー一覧を更新
+        document.getElementById('wb-member-list').innerText = members.join('・');
+    }
+    
+    // メンバーを追加する
+    function addMember() {
+        const input = document.getElementById('new-member-name');
+        const name = input.value.trim();
+        if (name && !members.includes(name)) {
+            members.push(name);
+            input.value = '';
+            updateMemberUI();
+            document.getElementById('whiteboard').style.display = 'none';
+        }
+    }
+    
+    // メンバーを削除する
+    function removeMember(index) {
+        if (members.length > 1) {
+            members.splice(index, 1);
+            updateMemberUI();
+            document.getElementById('whiteboard').style.display = 'none';
+        } else {
+            alert("メンバーを全員いなくすることはできません。");
+        }
     }
     
     function selectShift(shift) {
@@ -150,16 +184,14 @@
             theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th>';
         }
         
-        // 基本のシフトマスターデータ
+        // シフト割り当ての基準テンプレート（メンバーが変わっても動くように調整）
         const mockShift1 = {
-            "MON": ["岡", "森上", "久林", "阿部"], "TUE": ["森上", "阿部", "西村", "久林"],
-            "WED": ["西村", "久林", "岡", "森上"], "THU": ["久林", "西村", "阿部", "岡"], "FRI": ["阿部", "岡", "森上", "西村"]
+            "MON": [0, 1, 2, 3], "TUE": [1, 3, 5, 2], "WED": [5, 2, 0, 1], "THU": [2, 5, 3, 0], "FRI": [3, 0, 1, 5]
         };
         const mockShift2 = {
-            "MON": ["阿部", "久林", "瑠衣"], "TUE": ["森上", "岡", "久林"], "WED": ["瑠衣", "阿部", "岡"],
-            "THU": ["岡", "森上", "瑠衣"], "FRI": ["久林", "森上", "阿部"]
+            "MON": [3, 2, 4], "TUE": [1, 0, 2], "WED": [4, 3, 0], "THU": [0, 1, 4], "FRI": [2, 1, 3]
         };
-        const scheduleData = currentShift === 1 ? mockShift1 : mockShift2;
+        const basePattern = currentShift === 1 ? mockShift1 : mockShift2;
         
         days.forEach(day => {
             const tr = document.createElement('tr');
@@ -176,11 +208,18 @@
             // 出勤可能なメンバー
             let activeMembers = members.filter(m => !absentMembers.includes(m));
             
-            let slots = [...scheduleData[day]];
-            if (currentShift === 2 && slots.length > 3) slots = slots.slice(0, 3);
-            if (currentShift === 1 && slots.length > 4) slots = slots.slice(0, 4);
+            // パターンから名前を割り当て
+            let indices = basePattern[day];
+            let slots = [];
             
-            // 休みメンバーの穴埋め処理
+            const requiredCount = currentShift === 1 ? 4 : 3;
+            
+            for(let i=0; i<requiredCount; i++) {
+                let memberName = members[indices[i] % members.length] || members[0];
+                slots.push(memberName);
+            }
+            
+            // 休みメンバーの穴埋め
             slots = slots.map(m => {
                 if (absentMembers.includes(m)) {
                     if (activeMembers.length > 0) {
@@ -208,12 +247,19 @@
             tbody.appendChild(tr);
         });
         
+        // 結果に反映された出勤メンバーリストを表示
+        let currentActive = members.filter(m => {
+            let allSelects = Array.from(document.querySelectorAll('.absent-select')).map(s => s.value);
+            return true; // ここでは全体の登録メンバーを表示
+        });
+        document.getElementById('wb-member-list').innerText = currentActive.join('・');
+        
         document.getElementById('whiteboard').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
     
-    // 最初にセレクトボックスを動かす
-    initSelectBoxes();
+    // 初期UI起動
+    updateMemberUI();
 </script>
 </body>
 </html>
