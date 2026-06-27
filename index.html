@@ -3,102 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>早出表作成システム</title>
+    <title>HAYADE - 早出表作成アプリ</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
-        body { background-color: #f5f7fa; color: #333; display: flex; justify-content: center; padding: 20px 0; }
-        .app-container { width: 100%; max-width: 500px; background: #fff; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; border-radius: 12px; overflow: hidden; min-height: 90vh; }
-        .header { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid #eef2f5; }
-        .header h1 { font-size: 18px; font-weight: bold; flex-grow: 1; text-align: center; }
-        .content { flex: 1; padding: 20px; padding-bottom: 100px; }
-        .section-title { font-size: 15px; color: #555; margin-bottom: 12px; font-weight: bold; }
-        .toggle-container { display: flex; gap: 10px; margin-bottom: 24px; }
-        .toggle-btn { flex: 1; padding: 14px; border: 1px solid #dcdcdc; background: #fff; border-radius: 8px; font-size: 15px; font-weight: bold; color: #444; cursor: pointer; text-align: center; }
-        .toggle-btn.active { border: 2px solid #0066fe; color: #0066fe; padding: 13px; }
         
-        /* 教育枠の表示・非表示スイッチ */
-        .show-edu-container { display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; font-weight: bold; cursor: pointer; user-select: none; }
-        .show-edu-checkbox { width: 18px; height: 18px; cursor: pointer; }
+        /* 🏎️ 全体の背景にGRヤリスの画像をガチッと固定 */
+        body { 
+            background-image: url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop'); /* 仮のスポーツカー画像です。お好きな画像URLに変更可能です */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh;
+            background-color: #0b0b0b;
+        }
 
-        /* メンバー管理 */
-        .member-manage-container { background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0; margin-bottom: 24px; }
+        .app-container { 
+            width: 100%; 
+            max-width: 500px; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+            min-height: 100vh; 
+            padding-bottom: 80px; /* タブバー用の余白 */
+        }
+
+        /* 📋 共通ヘッダー（ホーム以外で表示） */
+        .header { 
+            height: 60px; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0 20px; 
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+        .header h1 { font-size: 18px; font-weight: bold; text-align: center; color: #fff; letter-spacing: 1px; }
+        .content { flex: 1; padding: 20px; }
+        
+        /* 🏠 ホーム画面専用スタイル */
+        #page-home {
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .home-brand {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .home-title {
+            font-size: 38px;
+            font-weight: 900;
+            font-style: italic; /* 斜体でスピード感を演出 */
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .home-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        
+        /* 🕹️ お手本通りのGR風メニューボタン */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .menu-item {
+            background: rgba(26, 26, 26, 0.65); /* 半透明の黒 */
+            backdrop-filter: blur(12px); /* すりガラス効果 */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 4px solid #e60012; /* ✨ 左端のGRレッドライン */
+            border-radius: 8px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .menu-item:active {
+            transform: scale(0.98);
+            background: rgba(40, 40, 40, 0.8);
+        }
+        .menu-main-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .menu-icon-box {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            background: rgba(230, 0, 18, 0.15); /* うっすら赤背景 */
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .menu-title-text {
+            font-size: 17px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .menu-sub-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .menu-arrow {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* 🗓️ 各種コンテンツカード（ガラススタイルで統一） */
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        .section-title { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 12px; font-weight: bold; }
+
+        .toggle-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .toggle-btn { flex: 1; padding: 14px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 15px; font-weight: bold; color: #bbb; cursor: pointer; text-align: center; }
+        .toggle-btn.active { border: 2px solid #e60012; color: #fff; background: rgba(230, 0, 12, 0.1); padding: 13px; }
+        
+        /* 曜日別設定の入力エリア */
+        .day-row { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px; margin-bottom: 14px; }
+        .day-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .day-label { font-size: 14px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 6px; }
+        .day-label span { background: #e60012; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 900; }
+        .setting-sub-row { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+        .setting-sub-label { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: bold; }
+        .select-group { display: flex; gap: 8px; }
+        .select-box { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); font-size: 14px; background: #222; color: #fff; font-weight: bold; }
+        .select-box.edu-pos { flex: 0 0 75px; text-align: center; background-color: rgba(230,0,12,0.1); border-color: #e60012; }
+        .select-box.edu-member { background-color: rgba(230,0,12,0.1); border-color: #e60012; }
+        
+        .submit-btn { width: 100%; background: #e60012; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(230,0,12,0.4); margin-bottom: 20px;}
+        
+        /* 🏁 ホワイトボード（GRレーシング風仕様） */
+        .whiteboard-container { display: none; background: #fff; border: 8px solid #222; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 20px rgba(0,0,0,0.5); margin-top: 25px; color: #333; }
+        .wb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #222; }
+        .wb-badge { border: 2px solid #222; padding: 4px 12px; font-weight: bold; font-size: 16px; border-radius: 4px; background: #222; color: #fff; }
+        .wb-title { font-size: 20px; font-weight: 900; letter-spacing: 2px; text-align: center; flex: 1; color: #222; font-style: italic; }
+        .wb-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .wb-table th, .wb-table td { border: 1px solid #bdc3c7; text-align: center; padding: 8px 2px; vertical-align: middle; }
+        .wb-table th { background-color: #222; color: white; font-size: 14px; font-weight: bold; height: 35px; }
+        .wb-table th.day-header { width: 55px; background-color: #e60012; }
+        .wb-table td.day-cell { background-color: #e60012; color: white; font-weight: bold; font-size: 14px; }
+        
+        /* マグネット */
+        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 3px rgba(0,0,0,0.15); display: block; margin: 4px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+        .magnet-tag.absent { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
+        .magnet-tag.education { background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; }
+        .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #222; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
+        .wb-footer-title { background: #222; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
+
+        /* 👥 メンバー管理・⚙️ スキル管理用スタイル */
         .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .member-tag-item { background: #fff; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .member-delete-btn { color: #ef4444; cursor: pointer; font-size: 16px; font-weight: bold; border: none; background: none; padding: 0 2px; }
+        .member-tag-item { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; color: #fff; }
+        .member-delete-btn { color: #ef4444; cursor: pointer; font-size: 16px; font-weight: bold; border: none; background: none; }
         .member-input-group { display: flex; gap: 8px; margin-top: 15px; }
-        .member-input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; font-weight: bold; }
+        .member-input { flex: 1; padding: 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 15px; font-weight: bold; background: #222; color: #fff; }
         .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
 
-        /* スキル管理 */
-        .skill-container { background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fcd34d; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
-        .skill-row { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px 14px; border-radius: 8px; border: 1px solid #fcd34d; }
+        .skill-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #fff; margin-bottom: 8px; }
         .skill-name { font-weight: bold; font-size: 15px; min-width: 70px; }
         .skill-checkboxes { display: flex; gap: 12px; }
-        .skill-label { font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 4px; cursor: pointer; }
-        .skill-checkbox { width: 18px; height: 18px; cursor: pointer; }
+        .skill-label { font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .skill-checkbox { width: 18px; height: 18px; accent-color: #e60012; }
 
-        /* 曜日別設定 */
-        .day-settings-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .day-row { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 12px; }
-        .day-row:last-child { border-bottom: none; padding-bottom: 0; }
-        .day-label { font-size: 14px; font-weight: bold; color: #1e293b; display: flex; align-items: center; gap: 6px; }
-        .day-label span { background: #002060; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-        .setting-sub-row { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
-        .setting-sub-row.edu-row { display: none; }
-        .setting-sub-label { font-size: 12px; color: #64748b; font-weight: bold; }
-        .select-group { display: flex; gap: 8px; }
-        .select-box { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; background-color: #fff; font-weight: bold; color: #333; -webkit-appearance: select; }
-        .select-box.edu-pos { flex: 0 0 70px; text-align: center; background-color: #fef9c3; border-color: #fcd34d; }
-        .select-box.edu-member { background-color: #fef9c3; border-color: #fcd34d; }
+        /* 🗺️ ボトムタブバー（グラススタイル） */
+        .tab-bar { 
+            position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; 
+            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-around; align-items: center; padding-bottom: 5px; z-index: 100; 
+        }
+        .tab-item { display: flex; flex-direction: column; align-items: center; color: rgba(255,255,255,0.4); font-size: 11px; gap: 4px; cursor: pointer; flex: 1; height: 100%; justify-content: center; font-weight: bold; }
+        .tab-item.active { color: #e60012; }
         
-        .submit-btn { width: 100%; background: #0066fe; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
-        
-        /* ホワイトボード */
-        .whiteboard-container { display: none; background: #fff; border: 12px solid #7f8c8d; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.15); margin-top: 25px; }
-        .wb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #333; }
-        .wb-badge { border: 2px solid #333; padding: 4px 12px; font-weight: bold; font-size: 18px; border-radius: 4px; }
-        .wb-title { font-size: 22px; font-weight: 900; letter-spacing: 2px; text-align: center; flex: 1; }
-        .wb-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .wb-table th, .wb-table td { border: 1px solid #bdc3c7; text-align: center; padding: 6px 2px; vertical-align: middle; }
-        .wb-table th { background-color: #002060; color: white; font-size: 14px; font-weight: bold; height: 35px; }
-        .wb-table th.day-header { width: 55px; }
-        .wb-table td.day-cell { background-color: #002060; color: white; font-weight: bold; font-size: 14px; }
-        
-        /* 🧲 マグネット */
-        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 3px rgba(0,0,0,0.15); display: block; margin: 4px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .magnet-tag:active { transform: scale(0.95); background-color: #f1f5f9; }
-        .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
-        .magnet-tag.education { background: #fef9c3; border: 1px solid #fcd34d; border-bottom: 2px solid #eab308; color: #b45309; }
-        
-        .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #333; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
-        .wb-footer-title { background: #002060; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
-
-        .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; border-top: 1px solid #eef2f5; display: flex; justify-content: space-around; align-items: center; background: #fff; padding-bottom: 5px; z-index: 100; }
-        .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; cursor: pointer; flex: 1; height: 100%; justify-content: center; }
-        .tab-item.active { color: #0066fe; font-weight: bold; }
         .page { display: none; }
         .page.active { display: block; }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <div class="header"><h1 id="app-page-title">🗓️ 早出表作成</h1></div>
+    
+    <div class="header" id="app-header"><h1 id="app-page-title">🗓️ 早出表作成</h1></div>
+    
     <div class="content">
-        <div id="page-create" class="page active">
-            <div class="section-title">勤務を選択してください</div>
-            <div class="toggle-container">
-                <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
-                <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
+        
+        <div id="page-home" class="page active">
+            <div class="home-brand">
+                <div class="home-title">HAYADE</div>
+                <div class="home-subtitle">早出表作成アプリ</div>
             </div>
             
-            <div class="section-title">曜日別設定</div>
-            
-            <label class="show-edu-container">
-                <input type="checkbox" class="show-edu-checkbox" id="toggle-edu-view" onchange="toggleEduVisibility()">
-                🔰 教育枠（見習い追加欄）を表示する
-            </label>
+            <div class="menu-list">
+                <div class="menu-item" onclick="switchTab('create')">
+                    <div class="menu-main-info">
+                        <div class="menu-icon-box">📅</div>
+                        <div class="menu-text-group">
+                            <span class="menu-title-text">早出表を作成</span>
+                            <span class="menu-sub-text">1直・2直の早出表を作成します</span>
+                        </div>
+                    </div>
+                    <div class="menu-arrow">＞</div>
+                </div>
+                
+                <div class="menu-item" onclick="switchTab('member')">
+                    <div class="menu-main-info">
+                        <div class="menu-icon-box">👥</div>
+                        <div class="menu-text-group">
+                            <span class="menu-title-text">メンバー管理</span>
+                            <span class="menu-sub-text">メンバーの追加・編集・削除</span>
+                        </div>
+                    </div>
+                    <div class="menu-arrow">＞</div>
+                </div>
+                
+                <div class="menu-item" onclick="switchTab('skill')">
+                    <div class="menu-main-info">
+                        <div class="menu-icon-box">🎓</div>
+                        <div class="menu-text-group">
+                            <span class="menu-title-text">スキル管理</span>
+                            <span class="menu-sub-text">メンバーごとの担当スキルを設定</span>
+                        </div>
+                    </div>
+                    <div class="menu-arrow">＞</div>
+                </div>
+                
+                <div class="menu-item" onclick="alert('履歴機能は準備中です！')">
+                    <div class="menu-main-info">
+                        <div class="menu-icon-box">📄</div>
+                        <div class="menu-text-group">
+                            <span class="menu-title-text">履歴</span>
+                            <span class="menu-sub-text">過去の早出表を確認</span>
+                        </div>
+                    </div>
+                    <div class="menu-arrow">＞</div>
+                </div>
+            </div>
+        </div>
 
-            <div class="day-settings-container" id="day-settings-root"></div>
+        <div id="page-create" class="page">
+            <div class="glass-panel">
+                <div class="section-title">勤務を選択してください</div>
+                <div class="toggle-container">
+                    <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
+                    <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
+                </div>
+            </div>
+            
+            <div class="glass-panel">
+                <div class="section-title">曜日別の設定（休み・教育枠）</div>
+                <div id="day-settings-root"></div>
+            </div>
 
             <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
             
@@ -113,15 +297,15 @@
                     <tbody id="wb-tbody"></tbody>
                 </table>
                 <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
-                <p style="font-size: 10px; color: #888; text-align: center; margin-top: 10px;">※マグネットをタップすると別の出勤者に入れ替えられます</p>
             </div>
         </div>
 
         <div id="page-member" class="page">
-            <div class="section-title">現在のメンバー（タップで削除）</div>
-            <div class="member-manage-container">
+            <div class="glass-panel">
+                <div class="section-title">現在のメンバー（タップで削除）</div>
                 <div class="member-list-tags" id="member-tags-container"></div>
-                <div class="section-title" style="margin-top: 15px; margin-bottom: 5px;">新しいメンバーを追加</div>
+                
+                <div class="section-title" style="margin-top: 20px;">新しいメンバーを追加</div>
                 <div class="member-input-group">
                     <input type="text" class="member-input" id="new-member-name" placeholder="名前を入力">
                     <button class="member-add-btn" onclick="addMember()">追加</button>
@@ -130,22 +314,25 @@
         </div>
 
         <div id="page-skill" class="page">
-            <div class="section-title">設定する勤務（直）を選択</div>
-            <div class="toggle-container">
-                <button class="toggle-btn active" id="btn-skill-shift1" onclick="selectSkillShift(1)">1直（A～D）のスキル</button>
-                <button class="toggle-btn" id="btn-skill-shift2" onclick="selectSkillShift(2)">2直（A～C）のスキル</button>
+            <div class="glass-panel">
+                <div class="section-title">設定する勤務（直）を選択</div>
+                <div class="toggle-container">
+                    <button class="toggle-btn active" id="btn-skill-shift1" onclick="selectSkillShift(1)">1直のスキル</button>
+                    <button class="toggle-btn" id="btn-skill-shift2" onclick="selectSkillShift(2)">2直のスキル</button>
+                </div>
             </div>
-            <div class="section-title" id="skill-page-subtitle">ポジション別スキル設定（1直）</div>
-            <div class="skill-container" id="skill-list-container"></div>
+            <div class="glass-panel">
+                <div class="section-title" id="skill-page-subtitle">ポジション別スキル設定（1直）</div>
+                <div id="skill-list-container"></div>
+            </div>
         </div>
     </div>
     
     <div class="tab-bar">
-        <div class="tab-item" onclick="switchTab('home')">🏠 ホーム</div>
-        <div class="tab-item active" id="tab-create" onclick="switchTab('create')">🗓️ 作成</div>
-        <div class="tab-item" id="tab-member" onclick="switchTab('member')">👥 メンバー</div>
-        <div class="tab-item" id="tab-skill" onclick="switchTab('skill')">⚙️ スキル</div>
-        <div class="tab-item" onclick="switchTab('history')">🕒 履歴</div>
+        <div class="tab-item active" id="tab-home" onclick="switchTab('home')">🏠<br>ホーム</div>
+        <div class="tab-item" id="tab-create" onclick="switchTab('create')">🗓️<br>作成</div>
+        <div class="tab-item" id="tab-member" onclick="switchTab('member')">👥<br>メンバー</div>
+        <div class="tab-item" id="tab-skill" onclick="switchTab('skill')">⚙️<br>スキル</div>
     </div>
 </div>
 
@@ -175,34 +362,27 @@
         localStorage.setItem("hayade_skills", JSON.stringify(memberSkills));
     }
     
+    // 🗺️ 画面のタブ切り替えとヘッダー表示の制御
     function switchTab(tabName) {
-        document.getElementById('page-create').classList.remove('active');
-        document.getElementById('page-member').classList.remove('active');
-        document.getElementById('page-skill').classList.remove('active');
-        document.getElementById('tab-create').classList.remove('active');
-        document.getElementById('tab-member').classList.remove('active');
-        document.getElementById('tab-skill').classList.remove('active');
-        if (tabName === 'create') {
-            document.getElementById('page-create').classList.add('active');
-            document.getElementById('tab-create').classList.add('active');
-            document.getElementById('app-page-title').innerText = '🗓️ 早出表作成';
-        } else if (tabName === 'member') {
-            document.getElementById('page-member').classList.add('active');
-            document.getElementById('tab-member').classList.add('active');
-            document.getElementById('app-page-title').innerText = '👥 メンバー管理';
-            updateMemberUI();
-        } else if (tabName === 'skill') {
-            document.getElementById('page-skill').classList.add('active');
-            document.getElementById('tab-skill').classList.add('active');
-            document.getElementById('app-page-title').innerText = '⚙️ スキル管理';
-            renderSkillUI();
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        
+        const header = document.getElementById('app-header');
+        
+        if (tabName === 'home') {
+            document.getElementById('page-home').classList.add('active');
+            document.getElementById('tab-home').classList.add('active');
+            header.style.display = 'none'; // ホームのときは上のヘッダーを隠す
+        } else {
+            header.style.display = 'flex'; // ホーム以外はヘッダーを表示
+            document.getElementById(`page-${tabName}`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            
+            if (tabName === 'create') document.getElementById('app-page-title').innerText = '🗓️ 早出表作成';
+            if (tabName === 'member') { document.getElementById('app-page-title').innerText = '👥 メンバー管理'; updateMemberUI(); }
+            if (tabName === 'skill') { document.getElementById('app-page-title').innerText = '⚙️ スキル管理'; renderSkillUI(); }
         }
-    }
-
-    function toggleEduVisibility() {
-        const isChecked = document.getElementById('toggle-edu-view').checked;
-        const eduRows = document.querySelectorAll('.setting-sub-row.edu-row');
-        eduRows.forEach(row => { row.style.display = isChecked ? 'flex' : 'none'; });
+        window.scrollTo(0, 0);
     }
 
     function renderDaySettings() {
@@ -221,8 +401,8 @@
                             <select class="select-box absent-select" data-day="${day}" data-index="2"></select>
                         </div>
                     </div>
-                    <div class="setting-sub-row edu-row">
-                        <div class="setting-sub-label">教育枠（見習い追加）</div>
+                    <div class="setting-sub-row">
+                        <div class="setting-sub-label">教育枠（見習い追加欄）</div>
                         <div class="select-group">
                             <select class="select-box edu-pos" data-day="${day}"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
                             <select class="select-box edu-member" data-day="${day}"></select>
@@ -232,7 +412,6 @@
             `;
         });
         updateMemberUI();
-        toggleEduVisibility();
     }
 
     function selectSkillShift(shift) {
@@ -310,7 +489,7 @@
         const absentMembers = [select1, select2].filter(m => m !== "");
         const activeMembers = members.filter(m => !absentMembers.includes(m) && m !== currentName);
         
-        if (activeMembers.length === 0) { alert("代わりになれる出勤メンバーがいません。"); return; }
+        if (activeMembers.length === 0) { alert("代わりになれるメンバーがいません。"); return; }
         const newName = prompt(`${day}の${pos}を、${currentName}から誰に入れ替えますか？\n\n【出勤者】\n${activeMembers.join('、')}`, activeMembers[0]);
         
         if (newName && activeMembers.includes(newName)) {
@@ -319,10 +498,7 @@
             if (target) {
                 const isEdu = target.innerText.includes('🔰');
                 target.innerText = isEdu ? `🔰 ${newName}` : newName;
-                alert(`${newName}に入れ替えました！`);
             }
-        } else if (newName) {
-            alert("出勤メンバーの中から正確に名前を入力してください。");
         }
     }
 
@@ -334,6 +510,7 @@
         document.getElementById('wb-shift-label').innerText = currentShift + '直';
         const positionNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
         theadTr.innerHTML = '<th class="day-header"></th>' + positionNames.map(p => `<th>${p}</th>`).join('');
+        
         const basePattern = (currentShift === 1) ? 
             { "MON": [0,1,2,3], "TUE": [1,3,5,2], "WED": [5,2,0,1], "THU": [2,5,3,0], "FRI": [3,0,1,5] } :
             { "MON": [3,2,4], "TUE": [1,0,2], "WED": [4,3,0], "THU": [0,1,4], "FRI": [2,1,3] };
@@ -342,18 +519,19 @@
             const tr = document.createElement('tr');
             const tdDay = document.createElement('td');
             tdDay.className = 'day-cell'; tdDay.innerText = day; tr.appendChild(tdDay);
+            
             const select1 = document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value;
             const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
             const absentMembers = [select1, select2].filter(m => m !== "");
             const activeMembers = members.filter(m => !absentMembers.includes(m));
             
-            const isEduVisible = document.getElementById('toggle-edu-view').checked;
-            const eduPos = isEduVisible ? document.querySelector(`.edu-pos[data-day="${day}"]`).value : "";
-            const eduMember = isEduVisible ? document.querySelector(`.edu-member[data-day="${day}"]`).value : "";
+            const eduPos = document.querySelector(`.edu-pos[data-day="${day}"]`).value;
+            const eduMember = document.querySelector(`.edu-member[data-day="${day}"]`).value;
             
             let assignments = {}; positionNames.forEach(pos => assignments[pos] = []);
             let normalPool = activeMembers.filter(m => m !== eduMember);
             let indices = basePattern[day] || [0,1,2,3];
+            
             positionNames.forEach((pos, i) => {
                 if (normalPool.length > 0) {
                     let m = normalPool[indices[i] % normalPool.length];
@@ -365,21 +543,19 @@
             positionNames.forEach(pos => {
                 if (assignments[pos].length === 0) {
                     let c = normalPool.find(m => !assignments[pos].some(a => a.name === m) && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
-                    if (!c) c = normalPool.find(m => memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
-                    assignments[pos].push({ name: c || "（要調整）", isEdu: false });
+                    assignments[pos].push({ name: c || "調整要", isEdu: false });
                 }
             });
             if (eduPos && eduMember && positionNames.includes(eduPos)) {
                 positionNames.forEach(pos => assignments[pos] = assignments[pos].filter(item => item.name !== eduMember));
-                if (assignments[eduPos].length === 1 && assignments[eduPos][0].name === "（要調整）") assignments[eduPos] = [{ name: eduMember, isEdu: true }];
-                else assignments[eduPos].push({ name: eduMember, isEdu: true });
+                assignments[eduPos].push({ name: eduMember, isEdu: true });
             }
             positionNames.forEach(pos => {
                 const td = document.createElement('td');
                 assignments[pos].forEach((item, idx) => {
                     const span = document.createElement('span');
                     span.id = `mag-${day}-${pos}-${idx}`;
-                    span.className = 'magnet-tag' + (item.name === "（要調整）" ? ' absent' : (item.isEdu ? ' education' : ''));
+                    span.className = 'magnet-tag' + (item.isEdu ? ' education' : '');
                     span.innerText = item.isEdu ? `🔰 ${item.name}` : item.name;
                     span.onclick = () => swapMagnet(day, pos, idx, item.name);
                     td.appendChild(span);
@@ -391,6 +567,7 @@
         document.getElementById('whiteboard').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
+
     renderDaySettings();
 </script>
 </body>
