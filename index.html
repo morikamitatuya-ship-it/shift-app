@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>早出表作成システム</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
         body { background-color: #f5f7fa; color: #333; display: flex; justify-content: center; padding: 20px 0; }
         .app-container { width: 100%; max-width: 500px; background: #fff; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; border-radius: 12px; overflow: hidden; min-height: 90vh; }
         .header { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid #eef2f5; }
-        .header i { color: #0066fe; font-size: 20px; }
-        .header h1 { font-size: 18px; font-weight: bold; flex-grow: 1; text-align: center; margin-right: 20px; }
+        .header h1 { font-size: 18px; font-weight: bold; flex-grow: 1; text-align: center; }
         .content { flex: 1; padding: 20px; padding-bottom: 100px; }
         .section-title { font-size: 15px; color: #555; margin-bottom: 12px; font-weight: bold; }
         .toggle-container { display: flex; gap: 10px; margin-bottom: 24px; }
         .toggle-btn { flex: 1; padding: 14px; border: 1px solid #dcdcdc; background: #fff; border-radius: 8px; font-size: 15px; font-weight: bold; color: #444; cursor: pointer; text-align: center; }
         .toggle-btn.active { border: 2px solid #0066fe; color: #0066fe; padding: 13px; }
         .status-card { background: #fff; border: 1px solid #eef2f5; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
-        .circle-icon { width: 60px; height: 60px; border: 3px solid #0066fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0066fe; font-size: 24px; margin-bottom: 12px; }
+        .circle-icon { width: 60px; height: 60px; border: 3px solid #0066fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0066fe; font-size: 24px; margin-bottom: 12px; font-weight: bold; }
         .status-title { font-size: 20px; font-weight: bold; color: #0066fe; margin-bottom: 6px; }
         .status-desc { font-size: 13px; color: #666; }
         .submit-btn { width: 100%; background: #0066fe; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
@@ -37,12 +35,11 @@
         .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; border-top: 1px solid #eef2f5; display: flex; justify-content: space-around; align-items: center; background: #fff; padding-bottom: 5px; z-index: 100; }
         .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; }
         .tab-item.active { color: #0066fe; }
-        .tab-item i { font-size: 20px; }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <div class="header"><i class="fa-solid fa-chevron-left"></i><h1>早出表作成</h1></div>
+    <div class="header"><h1>🗓️ 早出表作成</h1></div>
     <div class="content">
         <div class="section-title">勤務を選択してください</div>
         <div class="toggle-container">
@@ -51,15 +48,15 @@
         </div>
         <div class="section-title">休みを入力してください</div>
         <div class="toggle-container">
-            <button class="toggle-btn active" id="btn-no-vacation" onclick="selectVacation(false)"><i class="fa-solid fa-circle-check" style="margin-right: 5px;"></i>休みなし</button>
+            <button class="toggle-btn active" id="btn-no-vacation" onclick="selectVacation(false)">値 休みなし</button>
             <button class="toggle-btn" id="btn-has-vacation" onclick="selectVacation(true)">休みあり</button>
         </div>
         <div class="status-card">
-            <div class="circle-icon" id="status-icon-box"><i class="fa-solid fa-check" id="status-icon"></i></div>
+            <div class="circle-icon" id="status-icon-box">✓</div>
             <div class="status-title" id="status-text">休みなし</div>
             <div class="status-desc" id="status-subtext">全員が勤務可能です</div>
         </div>
-        <button class="submit-btn" onclick="generateSchedule()"><i class="fa-solid fa-calendar-days"></i> 早出表を作成する</button>
+        <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
         <div class="whiteboard-container" id="whiteboard">
             <div class="wb-header">
                 <div class="wb-badge" id="wb-shift-label">1直</div>
@@ -74,11 +71,11 @@
         </div>
     </div>
     <div class="tab-bar">
-        <div class="tab-item"><i class="fa-solid fa-house"></i>ホーム</div>
-        <div class="tab-item active"><i class="fa-solid fa-calendar-days"></i>早出表作成</div>
-        <div class="tab-item"><i class="fa-solid fa-users"></i>メンバー管理</div>
-        <div class="tab-item"><i class="fa-solid fa-gear"></i>スキル管理</div>
-        <div class="tab-item"><i class="fa-solid fa-clock"></i>履歴</div>
+        <div class="tab-item">🏠 ホーム</div>
+        <div class="tab-item active">🗓️ 作成</div>
+        <div class="tab-item">👥 メンバー</div>
+        <div class="tab-item">⚙️ スキル</div>
+        <div class="tab-item">🕒 履歴</div>
     </div>
 </div>
 <script>
@@ -94,16 +91,16 @@
         isVacation = hasVacation;
         const btnNo = document.getElementById('btn-no-vacation'); const btnHas = document.getElementById('btn-has-vacation');
         const statusText = document.getElementById('status-text'); const statusSubtext = document.getElementById('status-subtext');
-        const iconBox = document.getElementById('status-icon-box'); const icon = document.getElementById('status-icon');
+        const iconBox = document.getElementById('status-icon-box');
         document.getElementById('whiteboard').style.display = 'none';
         if (hasVacation) {
             btnNo.classList.remove('active'); btnNo.innerHTML = '休みなし'; btnHas.classList.add('active');
             statusText.innerText = '休みあり'; statusText.style.color = '#ff4d4f'; statusSubtext.innerText = '西村が本日休みです（デモ用設定）';
-            iconBox.style.color = '#ff4d4f'; iconBox.style.borderColor = '#ff4d4f'; icon.className = 'fa-solid fa-exclamation';
+            iconBox.style.color = '#ff4d4f'; iconBox.style.borderColor = '#ff4d4f'; iconBox.innerText = '！';
         } else {
-            btnNo.classList.add('active'); btnNo.innerHTML = '<i class="fa-solid fa-circle-check" style="margin-right: 5px;"></i>休みなし'; btnHas.classList.remove('active');
+            btnNo.classList.add('active'); btnNo.innerHTML = '値 休みなし'; btnHas.classList.remove('active');
             statusText.innerText = '休みなし'; statusText.style.color = '#0066fe'; statusSubtext.innerText = '全員が勤務可能です';
-            iconBox.style.color = '#0066fe'; iconBox.style.borderColor = '#0066fe'; icon.className = 'fa-solid fa-check';
+            iconBox.style.color = '#0066fe'; iconBox.style.borderColor = '#0066fe'; iconBox.innerText = '✓';
         }
     }
     function generateSchedule() {
