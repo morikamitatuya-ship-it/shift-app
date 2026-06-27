@@ -12,14 +12,19 @@
         .header h1 { font-size: 18px; font-weight: bold; flex-grow: 1; text-align: center; }
         .content { flex: 1; padding: 20px; padding-bottom: 100px; }
         .section-title { font-size: 15px; color: #555; margin-bottom: 12px; font-weight: bold; }
-        .toggle-container { display: flex; gap: 10px; margin-bottom: 16px; }
+        .toggle-container { display: flex; gap: 10px; margin-bottom: 24px; }
         .toggle-btn { flex: 1; padding: 14px; border: 1px solid #dcdcdc; background: #fff; border-radius: 8px; font-size: 15px; font-weight: bold; color: #444; cursor: pointer; text-align: center; }
         .toggle-btn.active { border: 2px solid #0066fe; color: #0066fe; padding: 13px; }
-        .select-box { width: 100%; padding: 14px; border-radius: 8px; border: 2px solid #0066fe; font-size: 16px; margin-bottom: 24px; display: none; background-color: #fff; font-weight: bold; color: #333; -webkit-appearance: select; }
-        .status-card { background: #fff; border: 1px solid #eef2f5; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
-        .circle-icon { width: 60px; height: 60px; border: 3px solid #0066fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0066fe; font-size: 24px; margin-bottom: 12px; font-weight: bold; }
-        .status-title { font-size: 20px; font-weight: bold; color: #0066fe; margin-bottom: 6px; }
-        .status-desc { font-size: 13px; color: #666; }
+        
+        /* 曜日別設定の枠 */
+        .day-settings-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .day-row { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 12px; }
+        .day-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .day-label { font-size: 14px; font-weight: bold; color: #1e293b; display: flex; align-items: center; gap: 6px; }
+        .day-label span { background: #002060; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+        .select-group { display: flex; gap: 8px; }
+        .select-box { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; background-color: #fff; font-weight: bold; color: #333; -webkit-appearance: select; }
+        
         .submit-btn { width: 100%; background: #0066fe; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
         .whiteboard-container { display: none; background: #fff; border: 12px solid #7f8c8d; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.15); margin-top: 25px; }
         .wb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #333; }
@@ -31,8 +36,7 @@
         .wb-table th.day-header { width: 55px; }
         .wb-table td.day-cell { background-color: #002060; color: white; font-weight: bold; font-size: 14px; }
         .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 0; font-weight: bold; font-size: 14px; box-shadow: 1px 2px 4px rgba(0,0,0,0.15); display: block; margin: 2px auto; width: 90%; color: #000; border-bottom: 2px solid #b3b3b3; }
-        .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #333; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
-        .wb-footer-title { background: #002060; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
+        .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
         .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; border-top: 1px solid #eef2f5; display: flex; justify-content: space-around; align-items: center; background: #fff; padding-bottom: 5px; z-index: 100; }
         .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; }
         .tab-item.active { color: #0066fe; }
@@ -47,27 +51,48 @@
             <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
             <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
         </div>
-        <div class="section-title">休みを入力してください</div>
-        <div class="toggle-container">
-            <button class="toggle-btn active" id="btn-no-vacation" onclick="selectVacation(false)">休みなし</button>
-            <button class="toggle-btn" id="btn-has-vacation" onclick="selectVacation(true)">休みあり</button>
+        
+        <div class="section-title">曜日ごとの休み設定（各曜日2人まで）</div>
+        <div class="day-settings-container">
+            <div class="day-row">
+                <div class="day-label"><span>MON</span> 月曜日</div>
+                <div class="select-group">
+                    <select class="select-box absent-select" data-day="MON" data-index="1"></select>
+                    <select class="select-box absent-select" data-day="MON" data-index="2"></select>
+                </div>
+            </div>
+            <div class="day-row">
+                <div class="day-label"><span>TUE</span> 火曜日</div>
+                <div class="select-group">
+                    <select class="select-box absent-select" data-day="TUE" data-index="1"></select>
+                    <select class="select-box absent-select" data-day="TUE" data-index="2"></select>
+                </div>
+            </div>
+            <div class="day-row">
+                <div class="day-label"><span>WED</span> 水曜日</div>
+                <div class="select-group">
+                    <select class="select-box absent-select" data-day="WED" data-index="1"></select>
+                    <select class="select-box absent-select" data-day="WED" data-index="2"></select>
+                </div>
+            </div>
+            <div class="day-row">
+                <div class="day-label"><span>THU</span> 木曜日</div>
+                <div class="select-group">
+                    <select class="select-box absent-select" data-day="THU" data-index="1"></select>
+                    <select class="select-box absent-select" data-day="THU" data-index="2"></select>
+                </div>
+            </div>
+            <div class="day-row">
+                <div class="day-label"><span>FRI</span> 金曜日</div>
+                <div class="select-group">
+                    <select class="select-box absent-select" data-day="FRI" data-index="1"></select>
+                    <select class="select-box absent-select" data-day="FRI" data-index="2"></select>
+                </div>
+            </div>
         </div>
 
-        <select class="select-box" id="absent-member-select" onchange="changeAbsentMember()">
-            <option value="阿部">阿部 を休みにする</option>
-            <option value="久林">久林 を休みにする</option>
-            <option value="森上">森上 を休みにする</option>
-            <option value="岡">岡 を休みにする</option>
-            <option value="瑠衣">瑠衣 を休みにする</option>
-            <option value="西村" selected>西村 を休みにする</option>
-        </select>
-
-        <div class="status-card">
-            <div class="circle-icon" id="status-icon-box">✓</div>
-            <div class="status-title" id="status-text">休みなし</div>
-            <div class="status-desc" id="status-subtext">全員が勤務可能です</div>
-        </div>
         <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
+        
         <div class="whiteboard-container" id="whiteboard">
             <div class="wb-header">
                 <div class="wb-badge" id="wb-shift-label">1直</div>
@@ -78,7 +103,6 @@
                 <thead><tr id="wb-thead-tr"><th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
                 <tbody id="wb-tbody"></tbody>
             </table>
-            <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list">阿部・久林・森上・岡・瑠衣・西村</span></div>
         </div>
     </div>
     <div class="tab-bar">
@@ -89,61 +113,28 @@
         <div class="tab-item">🕒 履歴</div>
     </div>
 </div>
+
 <script>
-    let currentShift = 1; let isVacation = false; let absentMember = "西村";
-    const members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"]; const days = ["MON", "TUE", "WED", "THU", "FRI"];
+    let currentShift = 1;
+    const members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
+    const days = ["MON", "TUE", "WED", "THU", "FRI"];
+    
+    // セレクトボックスの初期化
+    function initSelectBoxes() {
+        const selects = document.querySelectorAll('.absent-select');
+        selects.forEach(select => {
+            select.innerHTML = '<option value="">なし</option>';
+            members.forEach(m => {
+                select.innerHTML += `<option value="${m}">${m}</option>`;
+            });
+        });
+    }
     
     function selectShift(shift) {
         currentShift = shift;
         document.getElementById('btn-shift1').classList.toggle('active', shift === 1);
         document.getElementById('btn-shift2').classList.toggle('active', shift === 2);
         document.getElementById('whiteboard').style.display = 'none';
-    }
-    
-    function selectVacation(hasVacation) {
-        isVacation = hasVacation;
-        const btnNo = document.getElementById('btn-no-vacation');
-        const btnHas = document.getElementById('btn-has-vacation');
-        const selectBox = document.getElementById('absent-member-select');
-        document.getElementById('whiteboard').style.display = 'none';
-        
-        if (hasVacation) {
-            btnNo.classList.remove('active');
-            btnHas.classList.add('active');
-            selectBox.style.display = 'block';
-        } else {
-            btnNo.classList.add('active');
-            btnHas.classList.remove('active');
-            selectBox.style.display = 'none';
-        }
-        updateStatusCard();
-    }
-
-    function changeAbsentMember() {
-        absentMember = document.getElementById('absent-member-select').value;
-        document.getElementById('whiteboard').style.display = 'none';
-        updateStatusCard();
-    }
-
-    function updateStatusCard() {
-        const statusText = document.getElementById('status-text');
-        const statusSubtext = document.getElementById('status-subtext');
-        const iconBox = document.getElementById('status-icon-box');
-        if (isVacation) {
-            statusText.innerText = '休みあり';
-            statusText.style.color = '#ff4d4f';
-            statusSubtext.innerText = absentMember + ' が本日休みです';
-            iconBox.style.color = '#ff4d4f';
-            iconBox.style.borderColor = '#ff4d4f';
-            iconBox.innerText = '！';
-        } else {
-            statusText.innerText = '休みなし';
-            statusText.style.color = '#0066fe';
-            statusSubtext.innerText = '全員が勤務可能です';
-            iconBox.style.color = '#0066fe';
-            iconBox.style.borderColor = '#0066fe';
-            iconBox.innerText = '✓';
-        }
     }
     
     function generateSchedule() {
@@ -159,10 +150,7 @@
             theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th>';
         }
         
-        let activeMembers = [...members]; 
-        if (isVacation) { activeMembers = activeMembers.filter(m => m !== absentMember); }
-        document.getElementById('wb-member-list').innerText = activeMembers.join('・');
-
+        // 基本のシフトマスターデータ
         const mockShift1 = {
             "MON": ["岡", "森上", "久林", "阿部"], "TUE": ["森上", "阿部", "西村", "久林"],
             "WED": ["西村", "久林", "岡", "森上"], "THU": ["久林", "西村", "阿部", "岡"], "FRI": ["阿部", "岡", "森上", "西村"]
@@ -179,25 +167,53 @@
             tdDay.className = 'day-cell';
             tdDay.innerText = day;
             tr.appendChild(tdDay);
-            let slots = [...scheduleData[day]];
             
-            if (isVacation) { 
-                slots = slots.map(m => m === absentMember ? activeMembers[Math.floor(Math.random() * activeMembers.length)] : m); 
-            }
+            // その曜日の休みメンバーを取得
+            const select1 = document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value;
+            const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
+            const absentMembers = [select1, select2].filter(m => m !== "");
+            
+            // 出勤可能なメンバー
+            let activeMembers = members.filter(m => !absentMembers.includes(m));
+            
+            let slots = [...scheduleData[day]];
+            if (currentShift === 2 && slots.length > 3) slots = slots.slice(0, 3);
+            if (currentShift === 1 && slots.length > 4) slots = slots.slice(0, 4);
+            
+            // 休みメンバーの穴埋め処理
+            slots = slots.map(m => {
+                if (absentMembers.includes(m)) {
+                    if (activeMembers.length > 0) {
+                        const nextAvailable = activeMembers.find(avail => !slots.includes(avail));
+                        if (nextAvailable) {
+                            return nextAvailable;
+                        } else {
+                            return activeMembers[Math.floor(Math.random() * activeMembers.length)];
+                        }
+                    }
+                    return "（休み）";
+                }
+                return m;
+            });
             
             slots.forEach(member => {
                 const td = document.createElement('td');
                 const span = document.createElement('span');
                 span.className = 'magnet-tag';
+                if (member === "（休み）") span.className += ' absent';
                 span.innerText = member;
                 td.appendChild(span);
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
         });
+        
         document.getElementById('whiteboard').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
+    
+    // 最初にセレクトボックスを動かす
+    initSelectBoxes();
 </script>
 </body>
 </html>
