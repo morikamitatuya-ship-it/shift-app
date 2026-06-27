@@ -60,7 +60,7 @@
         .wb-table th.day-header { width: 55px; }
         .wb-table td.day-cell { background-color: #002060; color: white; font-weight: bold; font-size: 14px; }
         
-        /* 🧲 マグネット（1人1枚） */
+        /* 🧲 マグネット */
         .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 3px rgba(0,0,0,0.15); display: block; margin: 4px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
         .magnet-tag.education { background: #fef9c3; border: 1px solid #fcd34d; border-bottom: 2px solid #eab308; color: #b45309; }
@@ -89,7 +89,6 @@
             
             <div class="section-title">曜日別の設定（休み・教育枠）</div>
             <div class="day-settings-container">
-                <!-- MON -->
                 <div class="day-row">
                     <div class="day-label"><span>MON</span> 月曜日</div>
                     <div class="setting-sub-row">
@@ -107,7 +106,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- TUE -->
                 <div class="day-row">
                     <div class="day-label"><span>TUE</span> 火曜日</div>
                     <div class="setting-sub-row">
@@ -125,7 +123,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- WED -->
                 <div class="day-row">
                     <div class="day-label"><span>WED</span> 水曜日</div>
                     <div class="setting-sub-row">
@@ -143,7 +140,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- THU -->
                 <div class="day-row">
                     <div class="day-label"><span>THU</span> 木曜日</div>
                     <div class="setting-sub-row">
@@ -161,7 +157,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- FRI -->
                 <div class="day-row">
                     <div class="day-label"><span>FRI</span> 金曜日</div>
                     <div class="setting-sub-row">
@@ -197,7 +192,6 @@
             </div>
         </div>
 
-        <!-- 👥 メンバー管理 -->
         <div id="page-member" class="page">
             <div class="section-title">現在のメンバー（タップで削除）</div>
             <div class="member-manage-container">
@@ -210,15 +204,18 @@
             </div>
         </div>
 
-        <!-- ⚙️ スキル管理 -->
         <div id="page-skill" class="page">
-            <div class="section-title">ポジション別スキル設定</div>
+            <div class="section-title">設定する勤務（直）を選択</div>
+            <div class="toggle-container">
+                <button class="toggle-btn active" id="btn-skill-shift1" onclick="selectSkillShift(1)">1直（A～D）のスキル</button>
+                <button class="toggle-btn" id="btn-skill-shift2" onclick="selectSkillShift(2)">2直（A～C）のスキル</button>
+            </div>
+            <div class="section-title" id="skill-page-subtitle">ポジション別スキル設定（1直）</div>
             <div class="skill-container" id="skill-list-container"></div>
         </div>
 
     </div>
     
-    <!-- タブバー -->
     <div class="tab-bar">
         <div class="tab-item" onclick="switchTab('home')">🏠 ホーム</div>
         <div class="tab-item active" id="tab-create" onclick="switchTab('create')">🗓️ 作成</div>
@@ -229,13 +226,19 @@
 </div>
 
 <script {nonce}>
-    let currentShift = 1;
+    let currentShift = 1;      // 作成画面用の選択直
+    let skillShift = 1;        // スキル画面用の選択直
     let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     const days = ["MON", "TUE", "WED", "THU", "FRI"];
     
+    // 🌟 データ構造を直（1と2）ごとに分けて管理するよう大改造！
     let memberSkills = {
-        "阿部": ["A", "B", "C", "D"], "久林": ["A", "B", "C", "D"], "森上": ["A", "B", "C", "D"],
-        "岡": ["A", "B", "C", "D"], "瑠衣": ["A", "B", "C", "D"], "西村": ["A", "B", "C", "D"]
+        "阿部": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
+        "久林": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
+        "森上": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
+        "岡":   { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
+        "瑠衣": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
+        "西村": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] }
     };
     
     function switchTab(tabName) {
@@ -266,36 +269,62 @@
             document.getElementById('tab-create').classList.add('active');
         }
     }
+
+    // 🌟 スキル画面専用の直切り替え関数
+    function selectSkillShift(shift) {
+        skillShift = shift;
+        document.getElementById('btn-skill-shift1').classList.toggle('active', shift === 1);
+        document.getElementById('btn-skill-shift2').classList.toggle('active', shift === 2);
+        document.getElementById('skill-page-subtitle').innerText = `ポジション別スキル設定（${shift}直）`;
+        renderSkillUI();
+    }
     
+    // 🌟 選択されている直（skillShift）のスキルをチェックボックスに反映
     function renderSkillUI() {
         const container = document.getElementById('skill-list-container');
         container.innerHTML = '';
+        
         members.forEach(m => {
-            if (!memberSkills[m]) memberSkills[m] = ["A", "B", "C", "D"];
-            const hasA = memberSkills[m].includes("A") ? "checked" : "";
-            const hasB = memberSkills[m].includes("B") ? "checked" : "";
-            const hasC = memberSkills[m].includes("C") ? "checked" : "";
-            const hasD = memberSkills[m].includes("D") ? "checked" : "";
+            // 初期データがない場合は安全枠を生成
+            if (!memberSkills[m]) memberSkills[m] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] };
+            if (!memberSkills[m][skillShift]) memberSkills[m][skillShift] = (skillShift === 1) ? ["A", "B", "C", "D"] : ["A", "B", "C"];
+            
+            const currentSkills = memberSkills[m][skillShift];
+            const hasA = currentSkills.includes("A") ? "checked" : "";
+            const hasB = currentSkills.includes("B") ? "checked" : "";
+            const hasC = currentSkills.includes("C") ? "checked" : "";
+            const hasD = currentSkills.includes("D") ? "checked" : "";
+            
+            let checkboxHTML = `
+                <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasA} onchange="toggleSkill('${m}', 'A')"> A</label>
+                <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasB} onchange="toggleSkill('${m}', 'B')"> B</label>
+                <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasC} onchange="toggleSkill('${m}', 'C')"> C</label>
+            `;
+            
+            // 1直の時だけ「D」のチェックボックスを出す
+            if (skillShift === 1) {
+                checkboxHTML += `<label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasD} onchange="toggleSkill('${m}', 'D')"> D</label>`;
+            }
+            
             container.innerHTML += `
                 <div class="skill-row">
                     <div class="skill-name">${m}</div>
-                    <div class="skill-checkboxes">
-                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasA} onchange="toggleSkill('${m}', 'A')"> A</label>
-                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasB} onchange="toggleSkill('${m}', 'B')"> B</label>
-                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasC} onchange="toggleSkill('${m}', 'C')"> C</label>
-                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasD} onchange="toggleSkill('${m}', 'D')"> D</label>
-                    </div>
+                    <div class="skill-checkboxes">${checkboxHTML}</div>
                 </div>
             `;
         });
     }
     
+    // 🌟 編集中の直（skillShift）に対してスキル配列を出し入れする
     function toggleSkill(name, position) {
-        if (!memberSkills[name]) memberSkills[name] = [];
-        if (memberSkills[name].includes(position)) {
-            memberSkills[name] = memberSkills[name].filter(p => p !== position);
+        if (!memberSkills[name]) memberSkills[name] = { 1: [], 2: [] };
+        if (!memberSkills[name][skillShift]) memberSkills[name][skillShift] = [];
+        
+        let currentSkills = memberSkills[name][skillShift];
+        if (currentSkills.includes(position)) {
+            memberSkills[name][skillShift] = currentSkills.filter(p => p !== position);
         } else {
-            memberSkills[name].push(position);
+            memberSkills[name][skillShift].push(position);
         }
         document.getElementById('whiteboard').style.display = 'none';
     }
@@ -331,7 +360,8 @@
         const name = input.value.trim();
         if (name && !members.includes(name)) {
             members.push(name);
-            memberSkills[name] = ["A", "B", "C", "D"];
+            // 新規メンバーも1直と2直を分けて初期化
+            memberSkills[name] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] };
             input.value = '';
             updateMemberUI();
             document.getElementById('whiteboard').style.display = 'none';
@@ -386,14 +416,14 @@
             let assignments = {};
             positionNames.forEach(pos => { assignments[pos] = []; });
             
-            // 1. まずは「見習いとなる人」を除外したメンバーで通常配置を決める（見習いが先輩枠を奪わないように）
             let normalPool = activeMembers.filter(m => m !== eduMember);
             let indices = basePattern[day] || [0, 1, 2, 3];
             
             positionNames.forEach((pos, i) => {
                 if (normalPool.length > 0) {
                     let m = normalPool[indices[i] % normalPool.length];
-                    if (memberSkills[m] && memberSkills[m].includes(pos)) {
+                    // 🌟 判定部分：メンバーが「その直（currentShift）のそのポジション」のスキルを持っているかチェック
+                    if (memberSkills[m] && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos)) {
                         assignments[pos].push({ name: m, isEdu: false });
                     }
                 }
@@ -405,25 +435,24 @@
             
             positionNames.forEach(pos => {
                 if (assignments[pos].length === 0) {
-                    let candidate = normalPool.find(m => !assignedPeople.includes(m) && memberSkills[m] && memberSkills[m].includes(pos));
-                    if (!candidate) candidate = normalPool.find(m => memberSkills[m] && memberSkills[m].includes(pos));
+                    // 🌟 補填のスキル判定も、現在の直（currentShift）ベースで行う
+                    let candidate = normalPool.find(m => !assignedPeople.includes(m) && memberSkills[m] && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
+                    if (!candidate) candidate = normalPool.find(m => memberSkills[m] && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
+                    
                     if (candidate) {
                         assignments[pos].push({ name: candidate, isEdu: false });
                         assignedPeople.push(candidate);
                     } else {
-                        // もし通常メンバーで埋まらなければ、見習い以外から「要調整」にする
                         assignments[pos].push({ name: "（要調整）", isEdu: false });
                     }
                 }
             });
             
-            // 🌟 2. 【大修正】教育枠（見習い）を「追加」して重ねて貼る！
+            // 教育枠の追加
             if (eduPos && eduMember && positionNames.includes(eduPos)) {
-                // 「要調整」のマスに入った場合は、要調整を消して見習いを入れる
                 if (assignments[eduPos].length === 1 && assignments[eduPos][0].name === "（要調整）") {
                     assignments[eduPos] = [{ name: eduMember, isEdu: true }];
                 } else {
-                    // 先輩がすでにいる場合は、その下に2枚目として追加する
                     assignments[eduPos].push({ name: eduMember, isEdu: true });
                 }
             }
