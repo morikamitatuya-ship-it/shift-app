@@ -25,6 +25,14 @@
         .member-input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; font-weight: bold; }
         .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
 
+        /* スキル管理のスタイル */
+        .skill-container { background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fde68a; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .skill-row { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px 14px; border-radius: 8px; border: 1px solid #fcd34d; }
+        .skill-name { font-weight: bold; font-size: 15px; min-width: 70px; }
+        .skill-checkboxes { display: flex; gap: 12px; }
+        .skill-label { font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+        .skill-checkbox { width: 18px; height: 18px; cursor: pointer; }
+
         /* 曜日別設定の枠 */
         .day-settings-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .day-row { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 12px; }
@@ -108,13 +116,18 @@
             </div>
         </div>
 
+        <div id="page-skill" class="page">
+            <div class="section-title">ポジション別スキル設定</div>
+            <div class="skill-container" id="skill-list-container"></div>
+        </div>
+
     </div>
     
     <div class="tab-bar">
         <div class="tab-item" onclick="switchTab('home')">🏠 ホーム</div>
         <div class="tab-item active" id="tab-create" onclick="switchTab('create')">🗓️ 作成</div>
         <div class="tab-item" id="tab-member" onclick="switchTab('member')">👥 メンバー</div>
-        <div class="tab-item" onclick="switchTab('skill')">⚙️ スキル</div>
+        <div class="tab-item" id="tab-skill" onclick="switchTab('skill')">⚙️ スキル</div>
         <div class="tab-item" onclick="switchTab('history')">🕒 履歴</div>
     </div>
 </div>
@@ -124,15 +137,26 @@
     let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     const days = ["MON", "TUE", "WED", "THU", "FRI"];
     
+    // スキルデータを保持するオブジェクト（初期は全員A, B, C, Dすべて◯）
+    let memberSkills = {
+        "阿部": ["A", "B", "C", "D"],
+        "久林": ["A", "B", "C", "D"],
+        "森上": ["A", "B", "C", "D"],
+        "岡": ["A", "B", "C", "D"],
+        "瑠衣": ["A", "B", "C", "D"],
+        "西村": ["A", "B", "C", "D"]
+    };
+    
     // 📱 タブを切り替える関数
     function switchTab(tabName) {
-        // 全画面と全タブのactiveをいったん消す
+        // 全画面と全タブの表示をクリア
         document.getElementById('page-create').classList.remove('active');
         document.getElementById('page-member').classList.remove('active');
+        document.getElementById('page-skill').classList.remove('active');
         document.getElementById('tab-create').classList.remove('active');
         document.getElementById('tab-member').classList.remove('active');
+        document.getElementById('tab-skill').classList.remove('active');
         
-        // 選ばれたタブに応じて表示を切り替える
         if (tabName === 'create') {
             document.getElementById('page-create').classList.add('active');
             document.getElementById('tab-create').classList.add('active');
@@ -141,13 +165,61 @@
             document.getElementById('page-member').classList.add('active');
             document.getElementById('tab-member').classList.add('active');
             document.getElementById('app-page-title').innerText = '👥 メンバー管理';
-            updateMemberUI(); // 最新のメンバー一覧を表示
+            updateMemberUI();
+        } else if (tabName === 'skill') {
+            document.getElementById('page-skill').classList.add('active');
+            document.getElementById('tab-skill').classList.add('active');
+            document.getElementById('app-page-title').innerText = '⚙️ スキル管理';
+            renderSkillUI();
         } else {
-            alert(tabName + "画面は現在開発中です！作成かメンバーを押してね。");
-            // 元のタブに戻す
+            alert(tabName + "画面は現在開発中です！作成・メンバー・スキルを押してね。");
             document.getElementById('page-create').classList.add('active');
             document.getElementById('tab-create').classList.add('active');
         }
+    }
+    
+    // スキル管理画面を描画する
+    function renderSkillUI() {
+        const container = document.getElementById('skill-list-container');
+        container.innerHTML = '';
+        
+        members.forEach(m => {
+            // もし新規追加などでスキルデータがなければ初期化
+            if (!memberSkills[m]) {
+                memberSkills[m] = ["A", "B", "C", "D"];
+            }
+            
+            const hasA = memberSkills[m].includes("A") ? "checked" : "";
+            const hasB = memberSkills[m].includes("B") ? "checked" : "";
+            const hasC = memberSkills[m].includes("C") ? "checked" : "";
+            const hasD = memberSkills[m].includes("D") ? "checked" : "";
+            
+            container.innerHTML += `
+                <div class="skill-row">
+                    <div class="skill-name">${m}</div>
+                    <div class="skill-checkboxes">
+                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasA} onchange="toggleSkill('${m}', 'A')"> A</label>
+                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasB} onchange="toggleSkill('${m}', 'B')"> B</label>
+                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasC} onchange="toggleSkill('${m}', 'C')"> C</label>
+                        <label class="skill-label"><input type="checkbox" class="skill-checkbox" ${hasD} onchange="toggleSkill('${m}', 'D')"> D</label>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    
+    // チェックボックスが押されたらデータを書き換える
+    function toggleSkill(name, position) {
+        if (!memberSkills[name]) memberSkills[name] = [];
+        
+        if (memberSkills[name].includes(position)) {
+            // すでにあったら消す（チェックを外す）
+            memberSkills[name] = memberSkills[name].filter(p => p !== position);
+        } else {
+            // なければ足す（チェックを入れる）
+            memberSkills[name].push(position);
+        }
+        document.getElementById('whiteboard').style.display = 'none';
     }
     
     function updateMemberUI() {
@@ -180,6 +252,7 @@
         const name = input.value.trim();
         if (name && !members.includes(name)) {
             members.push(name);
+            memberSkills[name] = ["A", "B", "C", "D"]; // 新メンバーも初期は全ポジOK
             input.value = '';
             updateMemberUI();
             document.getElementById('whiteboard').style.display = 'none';
@@ -188,7 +261,9 @@
     
     function removeMember(index) {
         if (members.length > 1) {
+            const name = members[index];
             members.splice(index, 1);
+            delete memberSkills[name];
             updateMemberUI();
             document.getElementById('whiteboard').style.display = 'none';
         } else {
@@ -209,6 +284,8 @@
         const shiftLabel = document.getElementById('wb-shift-label');
         tbody.innerHTML = '';
         shiftLabel.innerText = currentShift + '直';
+        
+        const positionNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C", "D"];
         
         if (currentShift === 2) {
             theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th>';
@@ -235,6 +312,7 @@
             const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
             const absentMembers = [select1, select2].filter(m => m !== "");
             
+            // 出勤可能メンバー
             let activeMembers = members.filter(m => !absentMembers.includes(m));
             
             let indices = basePattern[day];
@@ -246,17 +324,29 @@
                 slots.push(memberName);
             }
             
-            slots = slots.map(m => {
-                if (absentMembers.includes(m)) {
-                    if (activeMembers.length > 0) {
-                        const nextAvailable = activeMembers.find(avail => !slots.includes(avail));
-                        if (nextAvailable) {
-                            return nextAvailable;
-                        } else {
-                            return activeMembers[Math.floor(Math.random() * activeMembers.length)];
+            // 休み設定の穴埋め ＆ スキル適合チェック
+            slots = slots.map((m, posIndex) => {
+                const currentPos = positionNames[posIndex]; // A, B, C, D のいずれか
+                
+                // もし「本日休み」である、または「そのポジションのスキルがない」場合、穴埋めが必要
+                if (absentMembers.includes(m) || !memberSkills[m] || !memberSkills[m].includes(currentPos)) {
+                    
+                    // 代わりになれる人を探す（本日休みでなく、かつそのポジションのスキルがある人、かつ、まだこの曜日の他のポジに選ばれていない人優先）
+                    const nextAvailable = activeMembers.find(avail => {
+                        const hasSkill = memberSkills[avail] && memberSkills[avail].includes(currentPos);
+                        return hasSkill && !slots.includes(avail);
+                    });
+                    
+                    if (nextAvailable) {
+                        return nextAvailable;
+                    } else {
+                        // 見つからなければ、とりあえずスキルがある出勤可能メンバーからランダム
+                        const skillReadyMembers = activeMembers.filter(avail => memberSkills[avail] && memberSkills[avail].includes(currentPos));
+                        if (skillReadyMembers.length > 0) {
+                            return skillReadyMembers[Math.floor(Math.random() * skillReadyMembers.length)];
                         }
                     }
-                    return "（休み）";
+                    return "（調整要）";
                 }
                 return m;
             });
@@ -265,7 +355,7 @@
                 const td = document.createElement('td');
                 const span = document.createElement('span');
                 span.className = 'magnet-tag';
-                if (member === "（休み）") span.className += ' absent';
+                if (member === "（調整要）") span.className += ' absent';
                 span.innerText = member;
                 td.appendChild(span);
                 tr.appendChild(td);
@@ -273,12 +363,10 @@
             tbody.appendChild(tr);
         });
         
-        document.getElementById('wb-member-list').innerText = members.join('・');
         document.getElementById('whiteboard').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
     
-    // 初期セットアップ
     updateMemberUI();
 </script>
 </body>
