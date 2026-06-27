@@ -19,11 +19,11 @@
         /* メンバー管理のスタイル */
         .member-manage-container { background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0; margin-bottom: 24px; }
         .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .member-tag-item { background: #fff; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-        .member-delete-btn { color: #ef4444; cursor: pointer; font-size: 14px; font-weight: bold; border: none; background: none; }
-        .member-input-group { display: flex; gap: 8px; }
-        .member-input { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; font-weight: bold; }
-        .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 16px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .member-tag-item { background: #fff; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .member-delete-btn { color: #ef4444; cursor: pointer; font-size: 16px; font-weight: bold; border: none; background: none; padding: 0 2px; }
+        .member-input-group { display: flex; gap: 8px; margin-top: 15px; }
+        .member-input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; font-weight: bold; }
+        .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
 
         /* 曜日別設定の枠 */
         .day-settings-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
@@ -48,73 +48,109 @@
         .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
         .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #333; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
         .wb-footer-title { background: #002060; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
+        
+        /* タブバー用 */
         .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; border-top: 1px solid #eef2f5; display: flex; justify-content: space-around; align-items: center; background: #fff; padding-bottom: 5px; z-index: 100; }
-        .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; }
-        .tab-item.active { color: #0066fe; }
+        .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; cursor: pointer; flex: 1; height: 100%; justify-content: center; }
+        .tab-item.active { color: #0066fe; font-weight: bold; }
+        
+        /* 画面切り替え用 */
+        .page { display: none; }
+        .page.active { display: block; }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <div class="header"><h1>🗓️ 早出表作成</h1></div>
+    <div class="header"><h1 id="app-page-title">🗓️ 早出表作成</h1></div>
     <div class="content">
         
-        <div class="section-title">👥 メンバーの追加・削除</div>
-        <div class="member-manage-container">
-            <div class="member-list-tags" id="member-tags-container"></div>
-            <div class="member-input-group">
-                <input type="text" class="member-input" id="new-member-name" placeholder="名前を入力">
-                <button class="member-add-btn" onclick="addMember()">追加</button>
+        <div id="page-create" class="page active">
+            <div class="section-title">勤務を選択してください</div>
+            <div class="toggle-container">
+                <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
+                <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
+            </div>
+            
+            <div class="section-title">曜日ごとの休み設定（各曜日2人まで）</div>
+            <div class="day-settings-container">
+                <div class="day-row"><div class="day-label"><span>MON</span> 月曜日</div><div class="select-group"><select class="select-box absent-select" data-day="MON" data-index="1"></select><select class="select-box absent-select" data-day="MON" data-index="2"></select></div></div>
+                <div class="day-row"><div class="day-label"><span>TUE</span> 火曜日</div><div class="select-group"><select class="select-box absent-select" data-day="TUE" data-index="1"></select><select class="select-box absent-select" data-day="TUE" data-index="2"></select></div></div>
+                <div class="day-row"><div class="day-label"><span>WED</span> 水曜日</div><div class="select-group"><select class="select-box absent-select" data-day="WED" data-index="1"></select><select class="select-box absent-select" data-day="WED" data-index="2"></select></div></div>
+                <div class="day-row"><div class="day-label"><span>THU</span> 木曜日</div><div class="select-group"><select class="select-box absent-select" data-day="THU" data-index="1"></select><select class="select-box absent-select" data-day="THU" data-index="2"></select></div></div>
+                <div class="day-row"><div class="day-label"><span>FRI</span> 金曜日</div><div class="select-group"><select class="select-box absent-select" data-day="FRI" data-index="1"></select><select class="select-box absent-select" data-day="FRI" data-index="2"></select></div></div>
+            </div>
+
+            <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
+            
+            <div class="whiteboard-container" id="whiteboard">
+                <div class="wb-header">
+                    <div class="wb-badge" id="wb-shift-label">1直</div>
+                    <div class="wb-title">WEEKLY SCHEDULE</div>
+                    <div style="width: 50px;"></div>
+                </div>
+                <table class="wb-table">
+                    <thead><tr id="wb-thead-tr"><th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
+                    <tbody id="wb-tbody"></tbody>
+                </table>
+                <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
             </div>
         </div>
 
-        <div class="section-title">勤務を選択してください</div>
-        <div class="toggle-container">
-            <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
-            <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
-        </div>
-        
-        <div class="section-title">曜日ごとの休み設定（各曜日2人まで）</div>
-        <div class="day-settings-container">
-            <div class="day-row"><div class="day-label"><span>MON</span> 月曜日</div><div class="select-group"><select class="select-box absent-select" data-day="MON" data-index="1"></select><select class="select-box absent-select" data-day="MON" data-index="2"></select></div></div>
-            <div class="day-row"><div class="day-label"><span>TUE</span> 火曜日</div><div class="select-group"><select class="select-box absent-select" data-day="TUE" data-index="1"></select><select class="select-box absent-select" data-day="TUE" data-index="2"></select></div></div>
-            <div class="day-row"><div class="day-label"><span>WED</span> 水曜日</div><div class="select-group"><select class="select-box absent-select" data-day="WED" data-index="1"></select><select class="select-box absent-select" data-day="WED" data-index="2"></select></div></div>
-            <div class="day-row"><div class="day-label"><span>THU</span> 木曜日</div><div class="select-group"><select class="select-box absent-select" data-day="THU" data-index="1"></select><select class="select-box absent-select" data-day="THU" data-index="2"></select></div></div>
-            <div class="day-row"><div class="day-label"><span>FRI</span> 金曜日</div><div class="select-group"><select class="select-box absent-select" data-day="FRI" data-index="1"></select><select class="select-box absent-select" data-day="FRI" data-index="2"></select></div></div>
+        <div id="page-member" class="page">
+            <div class="section-title">現在のメンバー（タップで削除）</div>
+            <div class="member-manage-container">
+                <div class="member-list-tags" id="member-tags-container"></div>
+                <div class="section-title" style="margin-top: 15px; margin-bottom: 5px;">新しいメンバーを追加</div>
+                <div class="member-input-group">
+                    <input type="text" class="member-input" id="new-member-name" placeholder="名前を入力">
+                    <button class="member-add-btn" onclick="addMember()">追加</button>
+                </div>
+            </div>
         </div>
 
-        <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
-        
-        <div class="whiteboard-container" id="whiteboard">
-            <div class="wb-header">
-                <div class="wb-badge" id="wb-shift-label">1直</div>
-                <div class="wb-title">WEEKLY SCHEDULE</div>
-                <div style="width: 50px;"></div>
-            </div>
-            <table class="wb-table">
-                <thead><tr id="wb-thead-tr"><th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
-                <tbody id="wb-tbody"></tbody>
-            </table>
-            <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
-        </div>
     </div>
+    
     <div class="tab-bar">
-        <div class="tab-item">🏠 ホーム</div>
-        <div class="tab-item active">🗓️ 作成</div>
-        <div class="tab-item">👥 メンバー</div>
-        <div class="tab-item">⚙️ スキル</div>
-        <div class="tab-item">🕒 履歴</div>
+        <div class="tab-item" onclick="switchTab('home')">🏠 ホーム</div>
+        <div class="tab-item active" id="tab-create" onclick="switchTab('create')">🗓️ 作成</div>
+        <div class="tab-item" id="tab-member" onclick="switchTab('member')">👥 メンバー</div>
+        <div class="tab-item" onclick="switchTab('skill')">⚙️ スキル</div>
+        <div class="tab-item" onclick="switchTab('history')">🕒 履歴</div>
     </div>
 </div>
 
 <script>
     let currentShift = 1;
-    // 初期のメンバーリスト
     let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     const days = ["MON", "TUE", "WED", "THU", "FRI"];
     
-    // メンバー管理画面とセレクトボックスを同時に更新する
+    // 📱 タブを切り替える関数
+    function switchTab(tabName) {
+        // 全画面と全タブのactiveをいったん消す
+        document.getElementById('page-create').classList.remove('active');
+        document.getElementById('page-member').classList.remove('active');
+        document.getElementById('tab-create').classList.remove('active');
+        document.getElementById('tab-member').classList.remove('active');
+        
+        // 選ばれたタブに応じて表示を切り替える
+        if (tabName === 'create') {
+            document.getElementById('page-create').classList.add('active');
+            document.getElementById('tab-create').classList.add('active');
+            document.getElementById('app-page-title').innerText = '🗓️ 早出表作成';
+        } else if (tabName === 'member') {
+            document.getElementById('page-member').classList.add('active');
+            document.getElementById('tab-member').classList.add('active');
+            document.getElementById('app-page-title').innerText = '👥 メンバー管理';
+            updateMemberUI(); // 最新のメンバー一覧を表示
+        } else {
+            alert(tabName + "画面は現在開発中です！作成かメンバーを押してね。");
+            // 元のタブに戻す
+            document.getElementById('page-create').classList.add('active');
+            document.getElementById('tab-create').classList.add('active');
+        }
+    }
+    
     function updateMemberUI() {
-        // 1. タグ一覧の更新
         const tagsContainer = document.getElementById('member-tags-container');
         tagsContainer.innerHTML = '';
         members.forEach((m, idx) => {
@@ -126,7 +162,6 @@
             `;
         });
 
-        // 2. 休み選択セレクトボックスの更新（選んでいた値をキープする）
         const selects = document.querySelectorAll('.absent-select');
         selects.forEach(select => {
             const currentVal = select.value;
@@ -137,11 +172,9 @@
             select.value = members.includes(currentVal) ? currentVal : "";
         });
         
-        // 3. ホワイトボードの下部メンバー一覧を更新
         document.getElementById('wb-member-list').innerText = members.join('・');
     }
     
-    // メンバーを追加する
     function addMember() {
         const input = document.getElementById('new-member-name');
         const name = input.value.trim();
@@ -153,7 +186,6 @@
         }
     }
     
-    // メンバーを削除する
     function removeMember(index) {
         if (members.length > 1) {
             members.splice(index, 1);
@@ -184,7 +216,6 @@
             theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th><th>D</th>';
         }
         
-        // シフト割り当ての基準テンプレート（メンバーが変わっても動くように調整）
         const mockShift1 = {
             "MON": [0, 1, 2, 3], "TUE": [1, 3, 5, 2], "WED": [5, 2, 0, 1], "THU": [2, 5, 3, 0], "FRI": [3, 0, 1, 5]
         };
@@ -200,18 +231,14 @@
             tdDay.innerText = day;
             tr.appendChild(tdDay);
             
-            // その曜日の休みメンバーを取得
             const select1 = document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value;
             const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
             const absentMembers = [select1, select2].filter(m => m !== "");
             
-            // 出勤可能なメンバー
             let activeMembers = members.filter(m => !absentMembers.includes(m));
             
-            // パターンから名前を割り当て
             let indices = basePattern[day];
             let slots = [];
-            
             const requiredCount = currentShift === 1 ? 4 : 3;
             
             for(let i=0; i<requiredCount; i++) {
@@ -219,7 +246,6 @@
                 slots.push(memberName);
             }
             
-            // 休みメンバーの穴埋め
             slots = slots.map(m => {
                 if (absentMembers.includes(m)) {
                     if (activeMembers.length > 0) {
@@ -247,18 +273,12 @@
             tbody.appendChild(tr);
         });
         
-        // 結果に反映された出勤メンバーリストを表示
-        let currentActive = members.filter(m => {
-            let allSelects = Array.from(document.querySelectorAll('.absent-select')).map(s => s.value);
-            return true; // ここでは全体の登録メンバーを表示
-        });
-        document.getElementById('wb-member-list').innerText = currentActive.join('・');
-        
+        document.getElementById('wb-member-list').innerText = members.join('・');
         document.getElementById('whiteboard').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
     
-    // 初期UI起動
+    // 初期セットアップ
     updateMemberUI();
 </script>
 </body>
