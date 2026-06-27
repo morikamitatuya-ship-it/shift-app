@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>早出表作成システム</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
         body { background-color: #f5f7fa; color: #333; display: flex; justify-content: center; padding: 20px 0; }
@@ -44,7 +45,7 @@
         .day-label { font-size: 14px; font-weight: bold; color: #1e293b; display: flex; align-items: center; gap: 6px; }
         .day-label span { background: #002060; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
         .setting-sub-row { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
-        .setting-sub-row.edu-row { display: none; } /* デフォルトは非表示 */
+        .setting-sub-row.edu-row { display: none; }
         .setting-sub-label { font-size: 12px; color: #64748b; font-weight: bold; }
         .select-group { display: flex; gap: 8px; }
         .select-box { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; background-color: #fff; font-weight: bold; color: #333; -webkit-appearance: select; }
@@ -73,6 +74,10 @@
         .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #333; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
         .wb-footer-title { background: #002060; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
         
+        /* 画像保存ボタンのスタイル */
+        .save-img-btn { width: 100%; background: #22c55e; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .save-img-btn:active { transform: scale(0.98); background: #16a34a; }
+
         .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; height: 70px; border-top: 1px solid #eef2f5; display: flex; justify-content: space-around; align-items: center; background: #fff; padding-bottom: 5px; z-index: 100; }
         .tab-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 11px; gap: 4px; cursor: pointer; flex: 1; height: 100%; justify-content: center; }
         .tab-item.active { color: #0066fe; font-weight: bold; }
@@ -91,9 +96,8 @@
                 <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
             </div>
             
-            <div class="section-title">曜日別の設定（休み）</div>
+            <div class="section-title">曜日別設定</div>
             
-            <!-- 🌟 教育枠を一括で出し入れするスイッチ -->
             <label class="show-edu-container">
                 <input type="checkbox" class="show-edu-checkbox" id="toggle-edu-view" onchange="toggleEduVisibility()">
                 🔰 教育枠（見習い追加欄）を表示する
@@ -104,16 +108,19 @@
             <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
             
             <div class="whiteboard-container" id="whiteboard">
-                <div class="wb-header">
-                    <div class="wb-badge" id="wb-shift-label">1直</div>
-                    <div class="wb-title">WEEKLY SCHEDULE</div>
-                    <div style="width: 50px;"></div>
+                <div id="capture-area" style="background: #fff; padding: 5px;">
+                    <div class="wb-header">
+                        <div class="wb-badge" id="wb-shift-label">1直</div>
+                        <div class="wb-title">WEEKLY SCHEDULE</div>
+                        <div style="width: 50px;"></div>
+                    </div>
+                    <table class="wb-table">
+                        <thead><tr id="wb-thead-tr"></tr></thead>
+                        <tbody id="wb-tbody"></tbody>
+                    </table>
+                    <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
                 </div>
-                <table class="wb-table">
-                    <thead><tr id="wb-thead-tr"></tr></thead>
-                    <tbody id="wb-tbody"></tbody>
-                </table>
-                <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
+                <button class="save-img-btn" onclick="saveAsImage()">📸 この表を画像として保存</button>
                 <p style="font-size: 10px; color: #888; text-align: center; margin-top: 10px;">※マグネットをタップすると別の出勤者に入れ替えられます</p>
             </div>
         </div>
@@ -153,8 +160,9 @@
 <script {nonce}>
     let currentShift = 1;
     let skillShift = 1;
+    
+    // 🌟 データの保存と読み込み（LocalStorage）
     let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
-    const days = ["MON", "TUE", "WED", "THU", "FRI"];
     let memberSkills = {
         "阿部": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
         "久林": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
@@ -163,6 +171,19 @@
         "瑠衣": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] },
         "西村": { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] }
     };
+
+    // ブラウザにデータが残っていれば自動で上書き
+    if (localStorage.getItem("hayade_members")) {
+        members = JSON.parse(localStorage.getItem("hayade_members"));
+    }
+    if (localStorage.getItem("hayade_skills")) {
+        memberSkills = JSON.parse(localStorage.getItem("hayade_skills"));
+    }
+
+    function saveToStorage() {
+        localStorage.setItem("hayade_members", JSON.stringify(members));
+        localStorage.setItem("hayade_skills", JSON.stringify(memberSkills));
+    }
     
     function switchTab(tabName) {
         document.getElementById('page-create').classList.remove('active');
@@ -188,18 +209,16 @@
         }
     }
 
-    // 🌟 教育枠の表示切り替え
     function toggleEduVisibility() {
         const isChecked = document.getElementById('toggle-edu-view').checked;
         const eduRows = document.querySelectorAll('.setting-sub-row.edu-row');
-        eduRows.forEach(row => {
-            row.style.display = isChecked ? 'flex' : 'none';
-        });
+        eduRows.forEach(row => { row.style.display = isChecked ? 'flex' : 'none'; });
     }
 
     function renderDaySettings() {
         const root = document.getElementById('day-settings-root');
         root.innerHTML = '';
+        const days = ["MON", "TUE", "WED", "THU", "FRI"];
         const jpDays = ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"];
         days.forEach((day, i) => {
             root.innerHTML += `
@@ -212,7 +231,6 @@
                             <select class="select-box absent-select" data-day="${day}" data-index="2"></select>
                         </div>
                     </div>
-                    <!-- 🌟 classに edu-row を追加して制御可能に -->
                     <div class="setting-sub-row edu-row">
                         <div class="setting-sub-label">教育枠（見習い追加）</div>
                         <div class="select-group">
@@ -224,7 +242,7 @@
             `;
         });
         updateMemberUI();
-        toggleEduVisibility(); // 初期状態の表示を反映
+        toggleEduVisibility();
     }
 
     function selectSkillShift(shift) {
@@ -249,8 +267,9 @@
     }
 
     function toggleSkill(name, pos) {
-        let list = memberSkills[name][skillShift];
+        let list = memberSkills[name][skillShift] || [];
         memberSkills[name][skillShift] = list.includes(pos) ? list.filter(p => p !== pos) : [...list, pos];
+        saveToStorage(); // 🌟 変更を自動保存
     }
 
     function updateMemberUI() {
@@ -276,11 +295,17 @@
             memberSkills[name] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] };
             document.getElementById('new-member-name').value = '';
             updateMemberUI();
+            saveToStorage(); // 🌟 追加を自動保存
         }
     }
 
     function removeMember(idx) {
-        if (members.length > 1) { delete memberSkills[members[idx]]; members.splice(idx, 1); updateMemberUI(); }
+        if (members.length > 1) {
+            delete memberSkills[members[idx]];
+            members.splice(idx, 1);
+            updateMemberUI();
+            saveToStorage(); // 🌟 削除を自動保存
+        }
     }
 
     function selectShift(shift) {
@@ -311,9 +336,22 @@
         }
     }
 
+    // 🌟 ホワイトボードの画像化とダウンロード処理
+    function saveAsImage() {
+        const target = document.getElementById('capture-area');
+        // ボタン類を省いた純粋なスケジュール部分のみ撮影します
+        html2canvas(target, { scale: 2, useCORS: true }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `${currentShift}直_早出スケジュール.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
     function generateSchedule() {
         const tbody = document.getElementById('wb-tbody');
         const theadTr = document.getElementById('wb-thead-tr');
+        const days = ["MON", "TUE", "WED", "THU", "FRI"];
         tbody.innerHTML = '';
         document.getElementById('wb-shift-label').innerText = currentShift + '直';
         const positionNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
@@ -331,7 +369,6 @@
             const absentMembers = [select1, select2].filter(m => m !== "");
             const activeMembers = members.filter(m => !absentMembers.includes(m));
             
-            // 表示されているかどうかにかかわらず、データがあれば取得
             const isEduVisible = document.getElementById('toggle-edu-view').checked;
             const eduPos = isEduVisible ? document.querySelector(`.edu-pos[data-day="${day}"]`).value : "";
             const eduMember = isEduVisible ? document.querySelector(`.edu-member[data-day="${day}"]`).value : "";
@@ -342,13 +379,15 @@
             positionNames.forEach((pos, i) => {
                 if (normalPool.length > 0) {
                     let m = normalPool[indices[i] % normalPool.length];
-                    if (memberSkills[m] && memberSkills[m][currentShift].includes(pos)) assignments[pos].push({ name: m, isEdu: false });
+                    if (memberSkills[m] && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos)) {
+                        assignments[pos].push({ name: m, isEdu: false });
+                    }
                 }
             });
             positionNames.forEach(pos => {
                 if (assignments[pos].length === 0) {
-                    let c = normalPool.find(m => !assignments[pos].some(a => a.name === m) && memberSkills[m][currentShift].includes(pos));
-                    if (!c) c = normalPool.find(m => memberSkills[m][currentShift].includes(pos));
+                    let c = normalPool.find(m => !assignments[pos].some(a => a.name === m) && memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
+                    if (!c) c = normalPool.find(m => memberSkills[m][currentShift] && memberSkills[m][currentShift].includes(pos));
                     assignments[pos].push({ name: c || "（要調整）", isEdu: false });
                 }
             });
