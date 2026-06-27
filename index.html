@@ -26,7 +26,7 @@
         .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
 
         /* スキル管理のスタイル */
-        .skill-container { background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fde68a; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .skill-container { background: #fef3c7; padding: 16px; border-radius: 12px; border: 1px solid #fcd34d; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
         .skill-row { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px 14px; border-radius: 8px; border: 1px solid #fcd34d; }
         .skill-name { font-weight: bold; font-size: 15px; min-width: 70px; }
         .skill-checkboxes { display: flex; gap: 12px; }
@@ -52,7 +52,7 @@
         .wb-table th { background-color: #002060; color: white; font-size: 14px; font-weight: bold; height: 35px; }
         .wb-table th.day-header { width: 55px; }
         .wb-table td.day-cell { background-color: #002060; color: white; font-weight: bold; font-size: 14px; }
-        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 0; font-weight: bold; font-size: 14px; box-shadow: 1px 2px 4px rgba(0,0,0,0.15); display: block; margin: 2px auto; width: 90%; color: #000; border-bottom: 2px solid #b3b3b3; }
+        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 4px rgba(0,0,0,0.15); display: block; margin: 2px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; white-space: normal; word-break: break-all; }
         .magnet-tag.absent { background: #fee2e2; color: #ef4444; border: 1px dashed #fca5a5; border-bottom: 2px solid #fca5a5; }
         .wb-footer { margin-top: 15px; padding-top: 8px; border-top: 2px solid #333; font-size: 12px; font-weight: bold; display: flex; align-items: center; }
         .wb-footer-title { background: #002060; color: white; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
@@ -72,6 +72,7 @@
     <div class="header"><h1 id="app-page-title">🗓️ 早出表作成</h1></div>
     <div class="content">
         
+        <!-- 📄 作成画面 -->
         <div id="page-create" class="page active">
             <div class="section-title">勤務を選択してください</div>
             <div class="toggle-container">
@@ -104,6 +105,7 @@
             </div>
         </div>
 
+        <!-- 👥 メンバー管理画面 -->
         <div id="page-member" class="page">
             <div class="section-title">現在のメンバー（タップで削除）</div>
             <div class="member-manage-container">
@@ -116,6 +118,7 @@
             </div>
         </div>
 
+        <!-- ⚙️ スキル管理画面 -->
         <div id="page-skill" class="page">
             <div class="section-title">ポジション別スキル設定</div>
             <div class="skill-container" id="skill-list-container"></div>
@@ -123,6 +126,7 @@
 
     </div>
     
+    <!-- 📌 タブバー -->
     <div class="tab-bar">
         <div class="tab-item" onclick="switchTab('home')">🏠 ホーム</div>
         <div class="tab-item active" id="tab-create" onclick="switchTab('create')">🗓️ 作成</div>
@@ -137,19 +141,12 @@
     let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     const days = ["MON", "TUE", "WED", "THU", "FRI"];
     
-    // スキルデータを保持するオブジェクト（初期は全員A, B, C, Dすべて◯）
     let memberSkills = {
-        "阿部": ["A", "B", "C", "D"],
-        "久林": ["A", "B", "C", "D"],
-        "森上": ["A", "B", "C", "D"],
-        "岡": ["A", "B", "C", "D"],
-        "瑠衣": ["A", "B", "C", "D"],
-        "西村": ["A", "B", "C", "D"]
+        "阿部": ["A", "B", "C", "D"], "久林": ["A", "B", "C", "D"], "森上": ["A", "B", "C", "D"],
+        "岡": ["A", "B", "C", "D"], "瑠衣": ["A", "B", "C", "D"], "西村": ["A", "B", "C", "D"]
     };
     
-    // 📱 タブを切り替える関数
     function switchTab(tabName) {
-        // 全画面と全タブの表示をクリア
         document.getElementById('page-create').classList.remove('active');
         document.getElementById('page-member').classList.remove('active');
         document.getElementById('page-skill').classList.remove('active');
@@ -178,22 +175,15 @@
         }
     }
     
-    // スキル管理画面を描画する
     function renderSkillUI() {
         const container = document.getElementById('skill-list-container');
         container.innerHTML = '';
-        
         members.forEach(m => {
-            // もし新規追加などでスキルデータがなければ初期化
-            if (!memberSkills[m]) {
-                memberSkills[m] = ["A", "B", "C", "D"];
-            }
-            
+            if (!memberSkills[m]) memberSkills[m] = ["A", "B", "C", "D"];
             const hasA = memberSkills[m].includes("A") ? "checked" : "";
             const hasB = memberSkills[m].includes("B") ? "checked" : "";
             const hasC = memberSkills[m].includes("C") ? "checked" : "";
             const hasD = memberSkills[m].includes("D") ? "checked" : "";
-            
             container.innerHTML += `
                 <div class="skill-row">
                     <div class="skill-name">${m}</div>
@@ -208,15 +198,11 @@
         });
     }
     
-    // チェックボックスが押されたらデータを書き換える
     function toggleSkill(name, position) {
         if (!memberSkills[name]) memberSkills[name] = [];
-        
         if (memberSkills[name].includes(position)) {
-            // すでにあったら消す（チェックを外す）
             memberSkills[name] = memberSkills[name].filter(p => p !== position);
         } else {
-            // なければ足す（チェックを入れる）
             memberSkills[name].push(position);
         }
         document.getElementById('whiteboard').style.display = 'none';
@@ -226,24 +212,16 @@
         const tagsContainer = document.getElementById('member-tags-container');
         tagsContainer.innerHTML = '';
         members.forEach((m, idx) => {
-            tagsContainer.innerHTML += `
-                <div class="member-tag-item">
-                    ${m}
-                    <button class="member-delete-btn" onclick="removeMember(${idx})">×</button>
-                </div>
-            `;
+            tagsContainer.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${idx})">×</button></div>`;
         });
 
         const selects = document.querySelectorAll('.absent-select');
         selects.forEach(select => {
             const currentVal = select.value;
             select.innerHTML = '<option value="">なし</option>';
-            members.forEach(m => {
-                select.innerHTML += `<option value="${m}">${m}</option>`;
-            });
+            members.forEach(m => { select.innerHTML += `<option value="${m}">${m}</option>`; });
             select.value = members.includes(currentVal) ? currentVal : "";
         });
-        
         document.getElementById('wb-member-list').innerText = members.join('・');
     }
     
@@ -252,7 +230,7 @@
         const name = input.value.trim();
         if (name && !members.includes(name)) {
             members.push(name);
-            memberSkills[name] = ["A", "B", "C", "D"]; // 新メンバーも初期は全ポジOK
+            memberSkills[name] = ["A", "B", "C", "D"];
             input.value = '';
             updateMemberUI();
             document.getElementById('whiteboard').style.display = 'none';
@@ -285,7 +263,8 @@
         tbody.innerHTML = '';
         shiftLabel.innerText = currentShift + '直';
         
-        const positionNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C", "D"];
+        const positionNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
+        const requiredCount = positionNames.length;
         
         if (currentShift === 2) {
             theadTr.innerHTML = '<th class="day-header"></th><th>A</th><th>B</th><th>C</th>';
@@ -312,51 +291,70 @@
             const select2 = document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value;
             const absentMembers = [select1, select2].filter(m => m !== "");
             
-            // 出勤可能メンバー
+            // その日に出勤可能な全員
             let activeMembers = members.filter(m => !absentMembers.includes(m));
             
-            let indices = basePattern[day];
-            let slots = [];
-            const requiredCount = currentShift === 1 ? 4 : 3;
+            // 各ポジションごとの配列を用意する
+            let assignments = {};
+            positionNames.forEach(pos => { assignments[pos] = []; });
             
-            for(let i=0; i<requiredCount; i++) {
-                let memberName = members[indices[i] % members.length] || members[0];
-                slots.push(memberName);
-            }
-            
-            // 休み設定の穴埋め ＆ スキル適合チェック
-            slots = slots.map((m, posIndex) => {
-                const currentPos = positionNames[posIndex]; // A, B, C, D のいずれか
-                
-                // もし「本日休み」である、または「そのポジションのスキルがない」場合、穴埋めが必要
-                if (absentMembers.includes(m) || !memberSkills[m] || !memberSkills[m].includes(currentPos)) {
-                    
-                    // 代わりになれる人を探す（本日休みでなく、かつそのポジションのスキルがある人、かつ、まだこの曜日の他のポジに選ばれていない人優先）
-                    const nextAvailable = activeMembers.find(avail => {
-                        const hasSkill = memberSkills[avail] && memberSkills[avail].includes(currentPos);
-                        return hasSkill && !slots.includes(avail);
-                    });
-                    
-                    if (nextAvailable) {
-                        return nextAvailable;
-                    } else {
-                        // 見つからなければ、とりあえずスキルがある出勤可能メンバーからランダム
-                        const skillReadyMembers = activeMembers.filter(avail => memberSkills[avail] && memberSkills[avail].includes(currentPos));
-                        if (skillReadyMembers.length > 0) {
-                            return skillReadyMembers[Math.floor(Math.random() * skillReadyMembers.length)];
-                        }
-                    }
-                    return "（調整要）";
+            // 1. まずベースパターンから各ポジションに最低1名ずつ基礎配置を試みる
+            let indices = basePattern[day] || [0, 1, 2, 3];
+            positionNames.forEach((pos, i) => {
+                let m = members[indices[i] % members.length] || members[0];
+                // 出勤可能かつスキルがあるなら割り当て
+                if (activeMembers.includes(m) && memberSkills[m] && memberSkills[m].includes(pos)) {
+                    assignments[pos].push(m);
                 }
-                return m;
             });
             
-            slots.forEach(member => {
+            // すでにどこかのポジに配置された人を把握
+            let assignedPeople = [];
+            positionNames.forEach(pos => { assignedPeople = assignedPeople.concat(assignments[pos]); });
+            
+            // 2. 空いているマスや、スキルが合わず漏れたマスを埋める
+            positionNames.forEach(pos => {
+                if (assignments[pos].length === 0) {
+                    // まだ配置されていなくて、そのポジができる人を探す
+                    let candidate = activeMembers.find(m => !assignedPeople.includes(m) && memberSkills[m] && memberSkills[m].includes(pos));
+                    if (!candidate) {
+                        // いなければ配置済みから重複を許容して探す
+                        candidate = activeMembers.find(m => memberSkills[m] && memberSkills[m].includes(pos));
+                    }
+                    if (candidate) {
+                        assignments[pos].push(candidate);
+                        if (!assignedPeople.includes(candidate)) assignedPeople.push(candidate);
+                    } else {
+                        assignments[pos].push("（要調整）");
+                    }
+                }
+            });
+            
+            // 再度、配置された人を更新
+            assignedPeople = [];
+            positionNames.forEach(pos => { assignedPeople = assignedPeople.concat(assignments[pos]); });
+            
+            // 🌟 3. ここが新人対応！出勤メンバーで「まだどこにも配置されてない人（余っている新人など）」がいたら、できるポジに重複して追加する
+            let leftOver = activeMembers.filter(m => !assignedPeople.includes(m));
+            leftOver.forEach(extraMember => {
+                // その人が持っているスキルのポジション（Aなど）に2人目として突っ込む
+                let targetPos = positionNames.find(pos => memberSkills[extraMember] && memberSkills[extraMember].includes(pos));
+                if (targetPos) {
+                    assignments[targetPos].push(extraMember);
+                }
+            });
+            
+            // ホワイトボードの横一列（A〜D）を描画
+            positionNames.forEach(pos => {
                 const td = document.createElement('td');
                 const span = document.createElement('span');
                 span.className = 'magnet-tag';
-                if (member === "（調整要）") span.className += ' absent';
-                span.innerText = member;
+                
+                // 2人以上いる場合は「森上・伊達」のように繋ぐ
+                let displayText = assignments[pos].join('・');
+                if (displayText === "（要調整）") span.className += ' absent';
+                
+                span.innerText = displayText || "（空き）";
                 td.appendChild(span);
                 tr.appendChild(td);
             });
