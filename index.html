@@ -4,24 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GR TRACK MANAGER</title>
-    </head>
+    <style>
+        /* ここには元のCSSをすべて貼り付けてください（元の440行あるコードのもの） */
+    </style>
+</head>
 <body>
+    <div class="app-container">
+        </div>
+
 <script>
-    // --- 既存の変数はそのまま ---
+    // 既存の変数
     let currentShift = 1; 
     let members = JSON.parse(localStorage.getItem("gr_members")) || ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     let memberSkills = JSON.parse(localStorage.getItem("gr_skills")) || {};
     members.forEach(m => { if(!memberSkills[m]) memberSkills[m] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] }; });
 
-    // --- ここだけこの「自動編成ロジック」に書き換えてください ---
+    // 【重要】ここを差し替えてください！
     function generateSchedule() {
         const tbody = document.getElementById('wb-tbody'); 
         tbody.innerHTML = '';
         const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
-        
-        // 週内の回数カウント用
-        let weeklyCounts = {}; 
-        members.forEach(m => weeklyCounts[m] = 0);
+        document.getElementById('wb-thead-tr').innerHTML = '<th class="day-header"></th>' + posNames.map(p => `<th>${p}</th>`).join('');
+
+        let weeklyCounts = {}; members.forEach(m => weeklyCounts[m] = 0);
 
         ["MON", "TUE", "WED", "THU", "FRI"].forEach(day => {
             const tr = document.createElement('tr');
@@ -32,14 +37,12 @@
             let assignedToday = []; // 重複を防ぐリスト
 
             posNames.forEach((pos, i) => {
-                // 1. スキルがあり、休みではなく、今日まだ割り当てられていない人を抽出
                 let candidates = members.filter(m => 
                     !absent.includes(m) && 
                     !assignedToday.includes(m) && 
                     memberSkills[m][currentShift]?.includes(pos)
                 );
 
-                // 2. 回数が少ない人を優先
                 candidates.sort((a, b) => weeklyCounts[a] - weeklyCounts[b]);
 
                 let m = candidates[0] || "－";
@@ -49,12 +52,15 @@
                 }
 
                 const td = tr.cells[i+1];
-                td.innerHTML = `<span class="magnet-tag">${m}</span>`;
+                const span = document.createElement('span');
+                span.className = 'magnet-tag'; 
+                span.innerText = m;
+                td.appendChild(span);
             });
         });
         document.getElementById('whiteboard').style.display = 'block';
     }
-    // --- 他の既存関数（addMember等）はそのまま残してください ---
+    // その他の関数（addMember, openModalなど）は、今のコードのまま残してください
 </script>
 </body>
 </html>
