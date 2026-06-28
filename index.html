@@ -112,7 +112,7 @@
     function closeModal(id) { document.getElementById(`modal-${id}`).style.display = 'none'; }
     function closeModalOnOverlay(e) { if(e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; }
     function toggleEduVisibility() { const isChecked = document.getElementById('toggle-edu-view').checked; document.querySelectorAll('.setting-sub-row.edu-row').forEach(row => { row.style.display = isChecked ? 'flex' : 'none'; }); }
-            function generateSchedule() {
+        function generateSchedule() {
         const tbody = document.getElementById('wb-tbody'); tbody.innerHTML = '';
         const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
         document.getElementById('wb-thead-tr').innerHTML = '<th class="day-header"></th>' + posNames.map(p => `<th>${p}</th>`).join('');
@@ -143,8 +143,11 @@
 
                 let candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && prevDayAssignments[pos] !== m && memberSkills[m][currentShift]?.includes(pos));
                 
+                // 【修正：回数が同じならランダムに並べ替える】
                 candidates.sort((a, b) => {
-                    if (weeklyCounts[a] !== weeklyCounts[b]) return weeklyCounts[a] - weeklyCounts[b];
+                    if (weeklyCounts[a] !== weeklyCounts[b]) {
+                        return weeklyCounts[a] - weeklyCounts[b];
+                    }
                     return Math.random() - 0.5;
                 });
 
@@ -161,24 +164,6 @@
         document.getElementById('whiteboard').style.display = 'block';
     }
 
-    let m = candidates[0] || "－";
-                if (m !== "－") { assignedToday.push(m); weeklyCounts[m]++; currentDayAssignments[pos] = m; }
-
-                const span = document.createElement('span');
-                span.id = `mag-${day}-${pos}-0`; span.className = 'magnet-tag'; span.innerText = m;
-                span.onclick = () => swapMagnet(day, pos, 0, m);
-                td.appendChild(span);
-            });
-            prevDayAssignments = currentDayAssignments;
-        });
-        document.getElementById('whiteboard').style.display = 'block';
-    }
-
-            prevDayAssignments = currentDayAssignments;
-        });
-        document.getElementById('whiteboard').style.display = 'block';
-    }
-
     
 
     function renderDaySettings() { const root = document.getElementById('day-settings-root'); root.innerHTML = ''; ["MON", "TUE", "WED", "THU", "FRI"].forEach((day, i) => { root.innerHTML += `<div class="day-row"><div class="day-label"><span>${day}</span> ${["月","火","水","木","金"][i]}曜日</div><div class="setting-sub-row"><div class="setting-sub-label">休み</div><div class="select-group"><select class="select-box absent-select" data-day="${day}" data-index="1"></select><select class="select-box absent-select" data-day="${day}" data-index="2"></select></div></div><div class="setting-sub-row edu-row" id="edu-row-${day}"><div class="setting-sub-label">教育枠</div><div class="select-group"><select class="select-box edu-pos" data-day="${day}"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><select class="select-box edu-member" data-day="${day}"></select></div></div></div>`; }); updateMemberUI(); }
@@ -186,7 +171,7 @@
     function renderSkillUI() { const container = document.getElementById('skill-list-container'); container.innerHTML = ''; members.forEach(m => { let html = ["A", "B", "C", "D"].map(pos => { if(skillShift===2 && pos==="D") return ""; return `<label class="skill-label"><input type="checkbox" class="skill-checkbox" ${memberSkills[m][skillShift].includes(pos)?"checked":""} onchange="toggleSkill('${m}', '${pos}')"> ${pos}</label>`; }).join(''); container.innerHTML += `<div class="skill-row"><div class="skill-name">${m}</div><div class="skill-checkboxes">${html}</div></div>`; }); }
     function toggleSkill(n, p) { let l = memberSkills[n][skillShift]; memberSkills[n][skillShift] = l.includes(p) ? l.filter(x=>x!==p) : [...l, p]; saveToStorage(); }
     function updateMemberUI() { const tags = document.getElementById('member-tags-container'); tags.innerHTML = ''; members.forEach((m, i) => tags.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${i})">×</button></div>`); document.querySelectorAll('.absent-select, .edu-member').forEach(s => { const val = s.value; s.innerHTML = '<option value="">なし</option>' + members.map(m=>`<option value="${m}">${m}</option>`).join(''); s.value = members.includes(val) ? val : ""; }); document.getElementById('wb-member-list').innerText = members.join('・'); }
-    function addMember() { const name = document.getElementById('new-member-name').value.trim(); if(name && !members.includes(name)) { members.push(name); memberSkills[name] = {1:["A","B","C","D"], 2:["A","B","C"]}; document.getElementById('new-member-name').value = ''; updateMemberUI(); saveToStorage(); } }
+    function addMember() { const name = document.getElementById('new-member-name'].value.trim(); if(name && !members.includes(name)) { members.push(name); memberSkills[name] = {1:["A","B","C","D"], 2:["A","B","C"]}; document.getElementById('new-member-name').value = ''; updateMemberUI(); saveToStorage(); } }
     function removeMember(i) { if(members.length > 1) { delete memberSkills[members[i]]; members.splice(i, 1); updateMemberUI(); saveToStorage(); } }
     function selectShift(s) { currentShift = s; document.getElementById('btn-shift1').classList.toggle('active', s===1); document.getElementById('btn-shift2').classList.toggle('active', s===2); document.getElementById('wb-shift-label').innerText = s+"直"; }
     function swapMagnet(day, pos, index, currentName) { const absent = [document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value, document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value]; const candidates = members.filter(m => !absent.includes(m) && m !== currentName); if(candidates.length === 0) return; currentSwapContext = { targetId: `mag-${day}-${pos}-${index}` }; const container = document.getElementById('swap-list-container'); container.innerHTML = candidates.map(m => `<button class="member-tag-item" style="width:100%; justify-content:center;" onclick="executeSwap('${m}')">${m}</button>`).join(''); openModal('swap'); }
