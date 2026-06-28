@@ -6,11 +6,7 @@
     <title>GR TRACK MANAGER</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
-        body { 
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            color: #fff; display: flex; justify-content: center; min-height: 100vh; background-color: #0b0b0b;
-        }
+        body { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; color: #fff; display: flex; justify-content: center; min-height: 100vh; background-color: #0b0b0b; }
         .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; position: relative; padding: 20px 20px 100px 20px; }
         .app-header-fixed { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; margin: -20px -20px 20px -20px; position: sticky; top: 0; z-index: 100; }
         .brand-section { margin: 10px 4px 25px 4px; }
@@ -33,17 +29,13 @@
         .show-edu-container { display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; font-weight: bold; color: #fff; cursor: pointer; }
         .show-edu-checkbox { width: 18px; height: 18px; accent-color: #e60012; cursor: pointer; }
         .day-row { display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px; margin-bottom: 16px; }
-        .day-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .day-label { font-size: 14px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
         .day-label span { background: #e60012; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 900; }
-        .setting-sub-row { display: flex; flex-direction: column; gap: 6px; }
-        .setting-sub-row.edu-row { display: none; margin-top: 4px; }
-        .setting-sub-label { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: bold; }
         .select-group { display: flex; gap: 8px; }
         .select-box { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); font-size: 14px; background: #1a1a1a; color: #fff; font-weight: bold; }
         .select-box.edu-pos { flex: 0 0 70px; text-align: center; background-color: rgba(230,0,12,0.15); border-color: #e60012; }
         .select-box.edu-member { background-color: rgba(230,0,12,0.15); border-color: #e60012; }
-        .whiteboard-container { display: none; background: #fff; border: 6px solid #222; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 25px rgba(0,0,0,0.6); margin-top: 10px; margin-bottom: 25px; color: #333; }
+        .whiteboard-container { display: none; background: #fff; border: 6px solid #222; border-radius: 8px; padding: 10px; box-shadow: 0 4px 25px rgba(0,0,0,0.6); margin-top: 10px; margin-bottom: 25px; color: #333; }
         .wb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #222; }
         .wb-badge { border: 2px solid #222; padding: 3px 10px; font-weight: bold; font-size: 14px; border-radius: 4px; background: #222; color: #fff; }
         .wb-title { font-size: 18px; font-weight: 900; letter-spacing: 2px; text-align: center; flex: 1; color: #222; font-style: italic; }
@@ -56,24 +48,13 @@
         .magnet-tag.education { background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; }
         .wb-footer { margin-top: 12px; padding-top: 8px; border-top: 2px solid #222; font-size: 11px; font-weight: bold; display: flex; align-items: center; }
         .wb-footer-title { background: #222; color: white; padding: 2px 6px; border-radius: 3px; margin-right: 6px; }
-        .tab-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; height: 65px; background: rgba(15, 15, 15, 0.9); backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-around; align-items: center; padding-bottom: 4px; z-index: 100; }
-        .tab-item { display: flex; flex-direction: column; align-items: center; color: rgba(255,255,255,0.4); font-size: 11px; gap: 3px; cursor: pointer; flex: 1; height: 100%; justify-content: center; font-weight: bold; }
-        .tab-item.active { color: #e60012; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 200; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #1c1c1c; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; width: 100%; max-width: 450px; padding: 20px; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .modal-content { background: #1c1c1c; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; width: 100%; max-width: 450px; padding: 20px; color: #fff; }
         .modal-close { background: #444; color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; float: right; margin-top: 15px; }
         .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .member-tag-item { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-        .member-delete-btn { color: #ef4444; border: none; background: none; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .member-input-group { display: flex; gap: 8px; }
-        .member-input { flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: #222; color: #fff; font-weight: bold; }
+        .member-tag-item { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .member-input { flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: #222; color: #fff; }
         .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .skill-scroll-box { max-height: 300px; overflow-y: auto; padding-right: 4px; }
-        .skill-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); padding: 10px 12px; border-radius: 6px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.06); }
-        .skill-name { font-weight: bold; font-size: 14px; }
-        .skill-checkboxes { display: flex; gap: 10px; }
-        .skill-label { font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 4px; cursor: pointer; }
-        .skill-checkbox { width: 16px; height: 16px; accent-color: #e60012; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -84,137 +65,104 @@
         <div class="brand-subtitle">POWERED BY TOYOTA GAZOO Racing STYLE</div>
     </div>
     <div class="menu-list">
-        <div class="menu-item" style="background: rgba(40,40,40,0.4);"><div class="menu-main-info"><div class="menu-icon-box" style="color: #e60012;">📅</div><div class="menu-text-group"><span class="menu-title-text" style="color: #fff;">早出表を作成</span><span class="menu-sub-text">直・休み・教育枠を選んで下で作成</span></div></div></div>
-        <div class="menu-item" style="cursor: pointer;" onclick="openModal('member')"><div class="menu-main-info"><div class="menu-icon-box">👥</div><div class="menu-text-group"><span class="menu-title-text">メンバー管理</span><span class="menu-sub-text">メンバーの追加・削除はこちら</span></div></div><div class="menu-arrow">＞</div></div>
-        <div class="menu-item" style="cursor: pointer;" onclick="openModal('skill')"><div class="menu-main-info"><div class="menu-icon-box">🎓</div><div class="menu-text-group"><span class="menu-title-text">スキル管理</span><span class="menu-sub-text">ポジションごとの対応可否を設定</span></div></div><div class="menu-arrow">＞</div></div>
+        <div class="menu-item" style="cursor: pointer;" onclick="openModal('member')"><div class="menu-main-info"><div class="menu-icon-box">👥</div><div class="menu-text-group"><span class="menu-title-text">メンバー管理</span></div></div></div>
     </div>
     <div class="glass-panel">
-        <div class="section-title">勤務を選択してください</div>
+        <div class="section-title">勤務を選択</div>
         <div class="toggle-container">
-            <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
-            <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
+            <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直</button>
+            <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直</button>
         </div>
     </div>
     <div class="whiteboard-container" id="whiteboard">
-        <div class="wb-header"><div class="wb-badge" id="wb-shift-label">1直</div><div class="wb-title">WEEKLY SCHEDULE</div><div style="width: 45px;"></div></div>
+        <div class="wb-header"><div class="wb-badge" id="wb-shift-label">1直</div><div class="wb-title">WEEKLY SCHEDULE</div></div>
         <table class="wb-table"><thead><tr id="wb-thead-tr"></tr></thead><tbody id="wb-tbody"></tbody></table>
-        <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
     </div>
-    <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
-    <label class="show-edu-container"><input type="checkbox" class="show-edu-checkbox" id="toggle-edu-view" onchange="toggleEduVisibility()"> 🔰 教育枠（見習い追加欄）を表示する</label>
-    <div class="glass-panel"><div class="section-title">曜日別の設定（休み欄）</div><div id="day-settings-root"></div></div>
+    <button class="submit-btn" onclick="generateSchedule()">⚙️ 公平に自動編成する</button>
+    <label class="show-edu-container"><input type="checkbox" id="toggle-edu-view" onchange="toggleEduVisibility()"> 🔰 教育枠を表示</label>
+    <div class="glass-panel"><div class="section-title">休み設定</div><div id="day-settings-root"></div></div>
 </div>
 
 <div class="modal-overlay" id="modal-member" onclick="closeModalOnOverlay(event)">
     <div class="modal-content">
-        <h3 style="margin-bottom: 15px; border-left: 3px solid #e60012; padding-left: 8px;">👥 メンバー管理</h3>
+        <h3>👥 メンバー管理</h3>
         <div class="member-list-tags" id="member-tags-container"></div>
-        <div class="member-input-group"><input type="text" class="member-input" id="new-member-name" placeholder="名前を入力"><button class="member-add-btn" onclick="addMember()">追加</button></div>
+        <div style="display:flex; gap:8px;"><input type="text" class="member-input" id="new-member-name"><button class="member-add-btn" onclick="addMember()">追加</button></div>
         <button class="modal-close" onclick="closeModal('member')">閉じる</button>
-    </div>
-</div>
-
-<div class="modal-overlay" id="modal-skill" onclick="closeModalOnOverlay(event)">
-    <div class="modal-content">
-        <h3 style="margin-bottom: 12px; border-left: 3px solid #e60012; padding-left: 8px;">⚙️ スキル管理</h3>
-        <div class="toggle-container" style="margin-bottom: 12px;"><button class="toggle-btn active" id="btn-skill-shift1" onclick="selectSkillShift(1)" style="padding: 8px;">1直</button><button class="toggle-btn" id="btn-skill-shift2" onclick="selectSkillShift(2)" style="padding: 8px;">2直</button></div>
-        <div class="skill-scroll-box" id="skill-list-container"></div>
-        <button class="modal-close" onclick="closeModal('skill')">閉じる</button>
     </div>
 </div>
 
 <div class="modal-overlay" id="modal-swap" onclick="closeModalOnOverlay(event)">
     <div class="modal-content">
-        <h3 style="margin-bottom: 15px; border-left: 3px solid #e60012; padding-left: 8px;">🔄 メンバーを交代</h3>
-        <div class="section-title">誰に入れ替えますか？</div>
+        <h3>🔄 交代</h3>
         <div class="member-list-tags" id="swap-list-container" style="flex-direction: column;"></div>
         <button class="modal-close" onclick="closeModal('swap')">キャンセル</button>
     </div>
 </div>
 
 <script>
-    let currentShift = 1; let skillShift = 1; let currentSwapContext = {};
-    let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
-    let memberSkills = JSON.parse(localStorage.getItem("gr_skills")) || {};
-    if(localStorage.getItem("gr_members")) members = JSON.parse(localStorage.getItem("gr_members"));
-    members.forEach(m => { if(!memberSkills[m]) memberSkills[m] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] }; });
-
-    function saveToStorage() { localStorage.setItem("gr_members", JSON.stringify(members)); localStorage.setItem("gr_skills", JSON.stringify(memberSkills)); }
-    function openModal(id) { document.getElementById(`modal-${id}`).style.display = 'flex'; if(id==='member') updateMemberUI(); if(id==='skill') renderSkillUI(); }
+    let currentShift = 1; let currentSwapContext = {};
+    let members = JSON.parse(localStorage.getItem("gr_members")) || ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
+    
+    function saveToStorage() { localStorage.setItem("gr_members", JSON.stringify(members)); }
+    function openModal(id) { document.getElementById(`modal-${id}`).style.display = 'flex'; if(id==='member') updateMemberUI(); }
     function closeModal(id) { document.getElementById(`modal-${id}`).style.display = 'none'; }
     function closeModalOnOverlay(e) { if(e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; }
     
-    function toggleEduVisibility() { const isChecked = document.getElementById('toggle-edu-view').checked; document.querySelectorAll('.setting-sub-row.edu-row').forEach(row => { row.style.display = isChecked ? 'flex' : 'none'; }); }
-
     function renderDaySettings() {
         const root = document.getElementById('day-settings-root'); root.innerHTML = '';
-        ["MON", "TUE", "WED", "THU", "FRI"].forEach((day, i) => {
-            root.innerHTML += `<div class="day-row"><div class="day-label"><span>${day}</span> ${["月","火","水","木","金"][i]}曜日</div><div class="setting-sub-row"><div class="setting-sub-label">休み</div><div class="select-group"><select class="select-box absent-select" data-day="${day}" data-index="1"></select><select class="select-box absent-select" data-day="${day}" data-index="2"></select></div></div><div class="setting-sub-row edu-row" id="edu-row-${day}"><div class="setting-sub-label">教育枠</div><div class="select-group"><select class="select-box edu-pos" data-day="${day}"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><select class="select-box edu-member" data-day="${day}"></select></div></div></div>`;
+        ["MON", "TUE", "WED", "THU", "FRI"].forEach(day => {
+            root.innerHTML += `<div class="day-row"><div class="day-label"><span>${day}</span></div><div class="select-group"><select class="select-box absent-select" data-day="${day}"></select><select class="select-box absent-select" data-day="${day}"></select></div><div class="edu-row" id="edu-row-${day}" style="display:none; margin-top:8px;"><div class="select-group"><select class="select-box edu-pos" data-day="${day}"><option value="">教育枠なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><select class="select-box edu-member" data-day="${day}"></select></div></div></div>`;
         });
         updateMemberUI();
     }
 
-    function selectSkillShift(s) { skillShift = s; document.getElementById('btn-skill-shift1').classList.toggle('active', s===1); document.getElementById('btn-skill-shift2').classList.toggle('active', s===2); renderSkillUI(); }
-    function renderSkillUI() {
-        const container = document.getElementById('skill-list-container'); container.innerHTML = '';
-        members.forEach(m => {
-            let html = ["A", "B", "C", "D"].map(pos => {
-                if(skillShift===2 && pos==="C" && false) return ""; // 簡易制御
-                return `<label class="skill-label"><input type="checkbox" class="skill-checkbox" ${memberSkills[m][skillShift].includes(pos)?"checked":""} onchange="toggleSkill('${m}', '${pos}')"> ${pos}</label>`;
-            }).join('');
-            container.innerHTML += `<div class="skill-row"><div class="skill-name">${m}</div><div class="skill-checkboxes">${html}</div></div>`;
-        });
-    }
-    function toggleSkill(n, p) { let l = memberSkills[n][skillShift]; memberSkills[n][skillShift] = l.includes(p) ? l.filter(x=>x!==p) : [...l, p]; saveToStorage(); }
-
     function updateMemberUI() {
         const tags = document.getElementById('member-tags-container'); tags.innerHTML = '';
-        members.forEach((m, i) => tags.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${i})">×</button></div>`);
-        document.querySelectorAll('.absent-select, .edu-member').forEach(s => { const val = s.value; s.innerHTML = '<option value="">なし</option>' + members.map(m=>`<option value="${m}">${m}</option>`).join(''); s.value = members.includes(val) ? val : ""; });
-        document.getElementById('wb-member-list').innerText = members.join('・');
+        members.forEach((m, i) => tags.innerHTML += `<div class="member-tag-item">${m} <span onclick="removeMember(${i})">×</span></div>`);
+        document.querySelectorAll('.absent-select, .edu-member').forEach(s => { const val = s.value; s.innerHTML = '<option value="">なし</option>' + members.map(m=>`<option value="${m}">${m}</option>`).join(''); s.value = val; });
     }
 
-    function addMember() { const name = document.getElementById('new-member-name').value.trim(); if(name && !members.includes(name)) { members.push(name); memberSkills[name] = {1:["A","B","C","D"], 2:["A","B","C"]}; document.getElementById('new-member-name').value = ''; updateMemberUI(); saveToStorage(); } }
-    function removeMember(i) { if(members.length > 1) { delete memberSkills[members[i]]; members.splice(i, 1); updateMemberUI(); saveToStorage(); } }
-
+    function addMember() { const name = document.getElementById('new-member-name').value.trim(); if(name && !members.includes(name)) { members.push(name); document.getElementById('new-member-name').value = ''; updateMemberUI(); saveToStorage(); } }
+    function removeMember(i) { members.splice(i, 1); updateMemberUI(); saveToStorage(); }
     function selectShift(s) { currentShift = s; document.getElementById('btn-shift1').classList.toggle('active', s===1); document.getElementById('btn-shift2').classList.toggle('active', s===2); }
+    function toggleEduVisibility() { const show = document.getElementById('toggle-edu-view').checked; document.querySelectorAll('.edu-row').forEach(r => r.style.display = show ? 'block' : 'none'); }
 
-    function swapMagnet(day, pos, index, currentName) {
-        const absent = [document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value, document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value];
-        const candidates = members.filter(m => !absent.includes(m) && m !== currentName);
-        if(candidates.length === 0) { alert("交代不可"); return; }
-        currentSwapContext = { targetId: `mag-${day}-${pos}-${index}` };
+    function swapMagnet(day, pos, currentName) {
+        const candidates = members.filter(m => m !== currentName);
+        currentSwapContext = { targetId: `mag-${day}-${pos}-0` };
         const container = document.getElementById('swap-list-container');
-        container.innerHTML = candidates.map(m => `<button class="member-tag-item" style="width:100%; justify-content:center;" onclick="executeSwap('${m}')">${m}</button>`).join('');
+        container.innerHTML = candidates.map(m => `<button class="member-tag-item" style="width:100%" onclick="executeSwap('${m}')">${m}</button>`).join('');
         openModal('swap');
     }
     function executeSwap(n) { const target = document.getElementById(currentSwapContext.targetId); if(target) target.innerText = target.innerText.includes('🔰') ? `🔰 ${n}` : n; closeModal('swap'); }
 
     function generateSchedule() {
         const tbody = document.getElementById('wb-tbody'); tbody.innerHTML = '';
-        document.getElementById('wb-thead-tr').innerHTML = '<th class="day-header"></th>' + (currentShift===1 ? "<th>A</th><th>B</th><th>C</th><th>D</th>" : "<th>A</th><th>B</th><th>C</th>");
-        const pattern = currentShift === 1 ? {"MON":[0,1,2,3],"TUE":[1,3,2,0],"WED":[2,0,3,1],"THU":[3,2,0,1],"FRI":[0,2,1,3]} : {"MON":[0,1,2],"TUE":[1,2,0],"WED":[2,0,1],"THU":[0,1,2],"FRI":[1,2,0]};
-        ["MON","TUE","WED","THU","FRI"].forEach(day => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td class="day-cell">${day}</td>` + (currentShift===1 ? "<td></td><td></td><td></td><td></td>" : "<td></td><td></td><td></td>");
+        const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
+        document.getElementById('wb-thead-tr').innerHTML = '<th class="day-header"></th>' + posNames.map(p => `<th>${p}</th>`).join('');
+        
+        let weeklyCounts = {}; members.forEach(m => weeklyCounts[m] = 0);
+
+        ["MON", "TUE", "WED", "THU", "FRI"].forEach(day => {
+            const tr = document.createElement('tr'); tr.innerHTML = `<td class="day-cell">${day}</td>` + posNames.map(() => "<td></td>").join('');
             tbody.appendChild(tr);
-            const posNames = currentShift===1 ? ["A","B","C","D"] : ["A","B","C"];
-            const absent = [document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value, document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value];
-            const active = members.filter(m => !absent.includes(m));
-            const eduP = document.getElementById('toggle-edu-view').checked ? document.querySelector(`.edu-pos[data-day="${day}"]`).value : "";
+            const absent = [document.querySelector(`.absent-select[data-day="${day}"]`).value];
             const eduM = document.getElementById('toggle-edu-view').checked ? document.querySelector(`.edu-member[data-day="${day}"]`).value : "";
-            
+            const eduP = document.getElementById('toggle-edu-view').checked ? document.querySelector(`.edu-pos[data-day="${day}"]`).value : "";
+            let active = members.filter(m => !absent.includes(m) && m !== eduM);
+
             posNames.forEach((pos, i) => {
-                let m = active.filter(x=>x!==eduM)[pattern[day][i] % active.filter(x=>x!==eduM).length];
                 const td = tr.cells[i+1];
-                const span = document.createElement('span');
-                span.id = `mag-${day}-${pos}-0`; span.className = 'magnet-tag'; span.innerText = m;
-                span.onclick = () => swapMagnet(day, pos, 0, m);
-                td.appendChild(span);
-                if(eduP === pos) {
-                    const espan = document.createElement('span');
-                    espan.className = 'magnet-tag education'; espan.innerText = `🔰 ${eduM}`;
-                    td.appendChild(espan);
+                if (eduP === pos && eduM) {
+                    td.innerHTML = `<span class="magnet-tag education">🔰 ${eduM}</span>`;
+                } else {
+                    active.sort((a, b) => weeklyCounts[a] - weeklyCounts[b]);
+                    let m = active[0]; weeklyCounts[m]++;
+                    const span = document.createElement('span');
+                    span.id = `mag-${day}-${pos}-0`; span.className = 'magnet-tag'; span.innerText = m;
+                    span.onclick = () => swapMagnet(day, pos, m);
+                    td.appendChild(span);
                 }
             });
         });
