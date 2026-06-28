@@ -2,172 +2,95 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GR TRACK MANAGER</title>
+    <title>GR TRACK MANAGER - COMPLETE VERSION</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
-        body { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; color: #fff; display: flex; justify-content: center; min-height: 100vh; background-color: #0b0b0b; }
-        .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; position: relative; padding: 20px 20px 100px 20px; }
-        .app-header-fixed { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; margin: -20px -20px 20px -20px; position: sticky; top: 0; z-index: 100; }
-        .brand-section { margin: 10px 4px 25px 4px; }
-        .brand-title { font-size: 32px; font-weight: 900; font-style: italic; letter-spacing: 3px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
-        .brand-subtitle { font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 2px; font-weight: bold; letter-spacing: 1px; }
-        .menu-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 25px; }
-        .menu-item { background: rgba(26, 26, 26, 0.75); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 4px solid #e60012; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-        .menu-main-info { display: flex; align-items: center; gap: 16px; }
-        .menu-icon-box { font-size: 20px; width: 38px; height: 38px; background: rgba(255, 255, 255, 0.08); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .menu-text-group { display: flex; flex-direction: column; gap: 3px; }
-        .menu-title-text { font-size: 16px; font-weight: bold; }
-        .menu-sub-text { font-size: 11px; color: rgba(255, 255, 255, 0.4); }
-        .menu-arrow { color: rgba(255, 255, 255, 0.3); font-size: 16px; font-weight: bold; }
-        .glass-panel { background: rgba(22, 22, 22, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
-        .section-title { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 14px; font-weight: bold; }
-        .toggle-container { display: flex; gap: 12px; }
-        .toggle-btn { flex: 1; padding: 14px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 14px; font-weight: bold; color: #ccc; cursor: pointer; text-align: center; }
-        .toggle-btn.active { border: 2px solid #e60012; color: #fff; background: rgba(230, 0, 12, 0.1); padding: 13px; }
-        .submit-btn { width: 100%; background: #e60012; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 6px 20px rgba(230,0,12,0.4); margin-bottom: 20px; }
-        .show-edu-container { display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; font-weight: bold; color: #fff; cursor: pointer; }
-        .show-edu-checkbox { width: 18px; height: 18px; accent-color: #e60012; cursor: pointer; }
-        .day-row { display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px; margin-bottom: 16px; }
-        .day-label { font-size: 14px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
-        .day-label span { background: #e60012; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 900; }
-        .setting-sub-row { display: flex; flex-direction: column; gap: 6px; }
-        .setting-sub-row.edu-row { display: none; margin-top: 4px; }
-        .setting-sub-label { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: bold; }
-        .select-group { display: flex; gap: 8px; }
-        .select-box { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); font-size: 14px; background: #1a1a1a; color: #fff; font-weight: bold; }
-        .select-box.edu-pos { flex: 0 0 70px; text-align: center; background-color: rgba(230,0,12,0.15); border-color: #e60012; }
-        .select-box.edu-member { background-color: rgba(230,0,12,0.15); border-color: #e60012; }
-        .whiteboard-container { display: none; background: #fff; border: 6px solid #222; border-radius: 8px; padding: 10px; box-shadow: 0 4px 25px rgba(0,0,0,0.6); margin-top: 10px; margin-bottom: 25px; color: #333; }
-        .wb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #222; }
-        .wb-badge { border: 2px solid #222; padding: 3px 10px; font-weight: bold; font-size: 14px; border-radius: 4px; background: #222; color: #fff; }
-        .wb-title { font-size: 18px; font-weight: 900; letter-spacing: 2px; text-align: center; flex: 1; color: #222; font-style: italic; }
-        .wb-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .wb-table th, .wb-table td { border: 1px solid #bdc3c7; text-align: center; padding: 6px 2px; vertical-align: middle; }
-        .wb-table th { background-color: #222; color: white; font-size: 13px; font-weight: bold; height: 32px; }
-        .wb-table th.day-header { width: 50px; background-color: #e60012; }
-        .wb-table td.day-cell { background-color: #e60012; color: white; font-weight: bold; font-size: 13px; }
-        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; font-weight: bold; font-size: 13px; box-shadow: 1px 2px 3px rgba(0,0,0,0.15); display: block; margin: 4px auto; width: 92%; color: #000; border-bottom: 2px solid #b3b3b3; cursor: pointer; }
-        .magnet-tag.education { background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; }
-        .wb-footer { margin-top: 12px; padding-top: 8px; border-top: 2px solid #222; font-size: 11px; font-weight: bold; display: flex; align-items: center; }
-        .wb-footer-title { background: #222; color: white; padding: 2px 6px; border-radius: 3px; margin-right: 6px; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 200; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #1c1c1c; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; width: 100%; max-width: 450px; padding: 20px; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-        .modal-close { background: #444; color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; float: right; margin-top: 15px; }
-        .member-list-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .member-tag-item { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-        .member-delete-btn { color: #ef4444; border: none; background: none; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .member-input-group { display: flex; gap: 8px; }
-        .member-input { flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: #222; color: #fff; font-weight: bold; }
-        .member-add-btn { background: #22c55e; color: white; border: none; padding: 0 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .skill-scroll-box { max-height: 300px; overflow-y: auto; padding-right: 4px; }
-        .skill-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); padding: 10px 12px; border-radius: 6px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.06); }
-        .skill-name { font-weight: bold; font-size: 14px; }
-        .skill-checkboxes { display: flex; gap: 10px; }
-        .skill-label { font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 4px; cursor: pointer; }
-        .skill-checkbox { width: 16px; height: 16px; accent-color: #e60012; cursor: pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background: #0b0b0b; color: #fff; padding: 20px; }
+        .app-container { max-width: 500px; margin: 0 auto; }
+        .glass { background: #1c1c1c; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .wb { background: #fff; color: #000; padding: 10px; border-radius: 5px; margin-top: 15px; width: 100%; border-collapse: collapse; }
+        .wb th, .wb td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        .tag { display: block; background: #eee; padding: 4px; border-radius: 3px; font-weight: bold; margin: 2px; }
+        .tag.edu { background: #fffbeb; border: 1px solid #fbbf24; color: #92400e; }
+        .select { background: #333; color: #fff; padding: 5px; border-radius: 4px; width: 100%; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <div class="app-header-fixed">🗓️ 早出表作成</div>
-    <div class="brand-section">
-        <div class="brand-title">GR TRACK MANAGER</div>
-        <div class="brand-subtitle">POWERED BY TOYOTA GAZOO Racing STYLE</div>
+    <div class="glass">
+        <h3>勤務選択</h3>
+        <button id="b1" onclick="shift=1; renderUI()">1直</button>
+        <button id="b2" onclick="shift=2; renderUI()">2直</button>
     </div>
-    <div class="menu-list">
-        <div class="menu-item" style="background: rgba(40,40,40,0.4);"><div class="menu-main-info"><div class="menu-icon-box" style="color: #e60012;">📅</div><div class="menu-text-group"><span class="menu-title-text" style="color: #fff;">早出表を作成</span><span class="menu-sub-text">直・休み・教育枠を選んで下で作成</span></div></div></div>
-        <div class="menu-item" style="cursor: pointer;" onclick="openModal('member')"><div class="menu-main-info"><div class="menu-icon-box">👥</div><div class="menu-text-group"><span class="menu-title-text">メンバー管理</span><span class="menu-sub-text">メンバーの追加・削除はこちら</span></div></div><div class="menu-arrow">＞</div></div>
-        <div class="menu-item" style="cursor: pointer;" onclick="openModal('skill')"><div class="menu-main-info"><div class="menu-icon-box">🎓</div><div class="menu-text-group"><span class="menu-title-text">スキル管理</span><span class="menu-sub-text">ポジションごとの対応可否を設定</span></div></div><div class="menu-arrow">＞</div></div>
-    </div>
-    <div class="glass-panel">
-        <div class="section-title">勤務を選択してください</div>
-        <div class="toggle-container">
-            <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直（A～D）</button>
-            <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直（A～C）</button>
-        </div>
-    </div>
-    <div class="whiteboard-container" id="whiteboard">
-        <div class="wb-header"><div class="wb-badge" id="wb-shift-label">1直</div><div class="wb-title">WEEKLY SCHEDULE</div><div style="width: 45px;"></div></div>
-        <table class="wb-table"><thead><tr id="wb-thead-tr"></tr></thead><tbody id="wb-tbody"></tbody></table>
-        <div class="wb-footer"><span class="wb-footer-title">メンバー</span><span id="wb-member-list"></span></div>
-    </div>
-    <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
-    <label class="show-edu-container"><input type="checkbox" class="show-edu-checkbox" id="toggle-edu-view" onchange="toggleEduVisibility()"> 🔰 教育枠（見習い追加欄）を表示する</label>
-    <div class="glass-panel"><div class="section-title">曜日別の設定（休み欄）</div><div id="day-settings-root"></div></div>
+
+    <div id="settings-area"></div>
+    <button onclick="generate()" style="width:100%; padding:15px; background:#e60012; color:white; border:none; cursor:pointer;">早出表を作成する</button>
+    <div id="result"></div>
 </div>
 
-<div class="modal-overlay" id="modal-member" onclick="closeModalOnOverlay(event)"><div class="modal-content"><h3>👥 メンバー管理</h3><div class="member-list-tags" id="member-tags-container"></div><div class="member-input-group"><input type="text" class="member-input" id="new-member-name" placeholder="名前を入力"><button class="member-add-btn" onclick="addMember()">追加</button></div><button class="modal-close" onclick="closeModal('member')">閉じる</button></div></div>
-<div class="modal-overlay" id="modal-skill" onclick="closeModalOnOverlay(event)"><div class="modal-content"><h3>⚙️ スキル管理</h3><div class="toggle-container" style="margin-bottom: 12px;"><button class="toggle-btn active" id="btn-skill-shift1" onclick="selectSkillShift(1)">1直</button><button class="toggle-btn" id="btn-skill-shift2" onclick="selectSkillShift(2)">2直</button></div><div class="skill-scroll-box" id="skill-list-container"></div><button class="modal-close" onclick="closeModal('skill')">閉じる</button></div></div>
-<div class="modal-overlay" id="modal-swap" onclick="closeModalOnOverlay(event)"><div class="modal-content"><h3>🔄 メンバーを交代</h3><div id="swap-list-container"></div><button class="modal-close" onclick="closeModal('swap')">閉じる</button></div></div>
-
 <script>
-    let currentShift = 1; let skillShift = 1; let currentSwapContext = {};
-    let members = JSON.parse(localStorage.getItem("gr_members")) || ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
-    let memberSkills = JSON.parse(localStorage.getItem("gr_skills")) || {};
-    members.forEach(m => { if(!memberSkills[m]) memberSkills[m] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] }; });
-
-    function saveToStorage() { localStorage.setItem("gr_members", JSON.stringify(members)); localStorage.setItem("gr_skills", JSON.stringify(memberSkills)); }
-    function openModal(id) { document.getElementById(`modal-${id}`).style.display = 'flex'; if(id==='member') updateMemberUI(); if(id==='skill') renderSkillUI(); }
-    function closeModal(id) { document.getElementById(`modal-${id}`).style.display = 'none'; }
-    function closeModalOnOverlay(e) { if(e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; }
-    function toggleEduVisibility() { const isChecked = document.getElementById('toggle-edu-view').checked; document.querySelectorAll('.setting-sub-row.edu-row').forEach(row => { row.style.display = isChecked ? 'flex' : 'none'; }); }
+    let shift = 1;
+    const members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     
-    function generateSchedule() {
-        const tbody = document.getElementById('wb-tbody'); tbody.innerHTML = '';
-        const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
-        document.getElementById('wb-thead-tr').innerHTML = '<th class="day-header"></th>' + posNames.map(p => `<th>${p}</th>`).join('');
-        document.getElementById('wb-shift-label').innerText = currentShift + "直";
-        
-        let weeklyHistory = {}; members.forEach(m => weeklyHistory[m] = new Set());
-
-        ["MON","TUE","WED","THU","FRI"].forEach(day => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td class="day-cell">${day}</td>` + posNames.map(() => "<td></td>").join('');
-            tbody.appendChild(tr);
-
-            const absent = [document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`)?.value || "", document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`)?.value || ""];
-            const eduP = document.getElementById('toggle-edu-view').checked ? document.querySelector(`.edu-pos[data-day="${day}"]`)?.value : "";
-            const eduM = document.getElementById('toggle-edu-view').checked ? document.querySelector(`.edu-member[data-day="${day}"]`)?.value : "";
-            
-            let assignedToday = [];
-            if(eduM) assignedToday.push(eduM);
-
-            posNames.forEach((pos, i) => {
-                const td = tr.cells[i+1];
-                if (eduP === pos && eduM) {
-                    td.innerHTML = `<span class="magnet-tag education">🔰 ${eduM}</span>`;
-                    weeklyHistory[eduM].add(pos);
-                    return;
-                }
-
-                let candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && !weeklyHistory[m].has(pos) && memberSkills[m][currentShift]?.includes(pos));
-                if(candidates.length === 0) candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && memberSkills[m][currentShift]?.includes(pos));
-                
-                let m = candidates[Math.floor(Math.random() * candidates.length)] || "－";
-                if (m !== "－") { assignedToday.push(m); weeklyHistory[m].add(pos); }
-
-                const span = document.createElement('span');
-                span.id = `mag-${day}-${pos}-0`; span.className = 'magnet-tag'; span.innerText = m;
-                span.onclick = () => swapMagnet(day, pos, 0, m);
-                td.appendChild(span);
-            });
+    // 初期設定エリアの生成
+    function renderUI() {
+        const area = document.getElementById('settings-area');
+        area.innerHTML = `<h4>曜日別設定</h4>`;
+        ["MON","TUE","WED","THU","FRI"].forEach(d => {
+            area.innerHTML += `
+                <div class="glass">
+                    <label>${d}</label>
+                    <select class="select absent" data-day="${d}"><option value="">休みなし</option>${members.map(m=>`<option value="${m}">${m}</option>`).join('')}</select>
+                    <div style="display:flex; gap:5px;">
+                        <select class="select edu-pos" data-day="${d}"><option value="">教育枠</option>
+                        ${(shift===1 ? ["A","B","C","D"] : ["A","B","C"]).map(p=>`<option value="${p}">${p}</option>`).join('')}</select>
+                        <select class="select edu-mem" data-day="${d}"><option value="">対象者</option>${members.map(m=>`<option value="${m}">${m}</option>`).join('')}</select>
+                    </div>
+                </div>`;
         });
-        document.getElementById('whiteboard').style.display = 'block';
     }
 
-    function renderDaySettings() { const root = document.getElementById('day-settings-root'); root.innerHTML = ''; ["MON", "TUE", "WED", "THU", "FRI"].forEach((day, i) => { root.innerHTML += `<div class="day-row"><div class="day-label"><span>${day}</span> ${["月","火","水","木","金"][i]}曜日</div><div class="setting-sub-row"><div class="setting-sub-label">休み</div><div class="select-group"><select class="select-box absent-select" data-day="${day}" data-index="1"></select><select class="select-box absent-select" data-day="${day}" data-index="2"></select></div></div><div class="setting-sub-row edu-row" id="edu-row-${day}"><div class="setting-sub-label">教育枠</div><div class="select-group"><select class="select-box edu-pos" data-day="${day}"><option value="">なし</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><select class="select-box edu-member" data-day="${day}"></select></div></div></div>`; }); updateMemberUI(); }
-    function selectSkillShift(s) { skillShift = s; document.getElementById('btn-skill-shift1').classList.toggle('active', s===1); document.getElementById('btn-skill-shift2').classList.toggle('active', s===2); renderSkillUI(); }
-    function renderSkillUI() { const container = document.getElementById('skill-list-container'); container.innerHTML = ''; members.forEach(m => { let html = ["A", "B", "C", "D"].map(pos => { if(skillShift===2 && pos==="D") return ""; return `<label class="skill-label"><input type="checkbox" class="skill-checkbox" ${memberSkills[m][skillShift].includes(pos)?"checked":""} onchange="toggleSkill('${m}', '${pos}')"> ${pos}</label>`; }).join(''); container.innerHTML += `<div class="skill-row"><div class="skill-name">${m}</div><div class="skill-checkboxes">${html}</div></div>`; }); }
-    function toggleSkill(n, p) { let l = memberSkills[n][skillShift]; memberSkills[n][skillShift] = l.includes(p) ? l.filter(x=>x!==p) : [...l, p]; saveToStorage(); }
-    function updateMemberUI() { const tags = document.getElementById('member-tags-container'); tags.innerHTML = ''; members.forEach((m, i) => tags.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${i})">×</button></div>`); document.querySelectorAll('.absent-select, .edu-member').forEach(s => { const val = s.value; s.innerHTML = '<option value="">なし</option>' + members.map(m=>`<option value="${m}">${m}</option>`).join(''); s.value = members.includes(val) ? val : ""; }); document.getElementById('wb-member-list').innerText = members.join('・'); }
-    function addMember() { const name = document.getElementById('new-member-name').value.trim(); if(name && !members.includes(name)) { members.push(name); memberSkills[name] = {1:["A","B","C","D"], 2:["A","B","C"]}; document.getElementById('new-member-name').value = ''; updateMemberUI(); saveToStorage(); } }
-    function removeMember(i) { if(members.length > 1) { delete memberSkills[members[i]]; members.splice(i, 1); updateMemberUI(); saveToStorage(); } }
-    function selectShift(s) { currentShift = s; document.getElementById('btn-shift1').classList.toggle('active', s===1); document.getElementById('btn-shift2').classList.toggle('active', s===2); document.getElementById('wb-shift-label').innerText = s+"直"; }
-    function swapMagnet(day, pos, index, currentName) { const absent = [document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value, document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value]; const candidates = members.filter(m => !absent.includes(m) && m !== currentName); if(candidates.length === 0) return; currentSwapContext = { targetId: `mag-${day}-${pos}-${index}` }; const container = document.getElementById('swap-list-container'); container.innerHTML = candidates.map(m => `<button class="member-tag-item" style="width:100%; justify-content:center;" onclick="executeSwap('${m}')">${m}</button>`).join(''); openModal('swap'); }
-    function executeSwap(n) { const target = document.getElementById(currentSwapContext.targetId); if(target) target.innerText = target.innerText.includes('🔰') ? `🔰 ${n}` : n; closeModal('swap'); }
-    
-    renderDaySettings();
+    function generate() {
+        const pos = shift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
+        let schedule = {};
+
+        // 1. 通常配置
+        ["MON","TUE","WED","THU","FRI"].forEach(d => {
+            schedule[d] = {};
+            const absent = document.querySelector(`.absent[data-day="${d}"]`).value;
+            let pool = members.filter(m => m !== absent);
+            pos.forEach(p => {
+                let m = pool.splice(Math.floor(Math.random() * pool.length), 1)[0] || "－";
+                schedule[d][p] = m;
+            });
+        });
+
+        // 2. 教育枠（後入れ・スワップ）
+        ["MON","TUE","WED","THU","FRI"].forEach(d => {
+            const ep = document.querySelector(`.edu-pos[data-day="${d}"]`).value;
+            const em = document.querySelector(`.edu-mem[data-day="${d}"]`).value;
+            if(ep && em) {
+                let current = schedule[d][ep];
+                schedule[d][ep] = em;
+                let other = pos.find(p => p !== ep);
+                schedule[d][other] = current;
+            }
+        });
+
+        // 3. 表示
+        let html = `<table class="wb"><tr><th></th>${pos.map(p=>`<th>${p}</th>`).join('')}</tr>`;
+        for(let d in schedule) {
+            html += `<tr><td>${d}</td>` + pos.map(p => {
+                const ep = document.querySelector(`.edu-pos[data-day="${d}"]`).value;
+                const em = document.querySelector(`.edu-mem[data-day="${d}"]`).value;
+                const isEdu = (p === ep && schedule[d][p] === em);
+                return `<td><span class="tag ${isEdu?'edu':''}">${schedule[d][p]}</span></td>`;
+            }).join('') + `</tr>`;
+        }
+        document.getElementById('result').innerHTML = html + `</table>`;
+    }
+
+    renderUI();
 </script>
 </body>
 </html>
