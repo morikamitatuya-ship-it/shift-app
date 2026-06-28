@@ -1,93 +1,29 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GR TRACK MANAGER</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
-        body { 
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            color: #fff; display: flex; justify-content: center; min-height: 100vh; background-color: #0b0b0b;
-        }
-        .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; position: relative; padding: 20px 20px 100px 20px; }
-        .app-header-fixed { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; text-align: center; font-size: 18px; font-weight: bold; margin: -20px -20px 20px -20px; position: sticky; top: 0; z-index: 100; }
-        .brand-section { margin: 10px 4px 25px 4px; }
-        .brand-title { font-size: 32px; font-weight: 900; font-style: italic; letter-spacing: 3px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
-        .menu-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 25px; }
-        .menu-item { background: rgba(26, 26, 26, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 4px solid #e60012; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
-        .glass-panel { background: rgba(22, 22, 22, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 18px; margin-bottom: 20px; }
-        .toggle-container { display: flex; gap: 12px; }
-        .toggle-btn { flex: 1; padding: 14px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); border-radius: 8px; font-weight: bold; color: #ccc; cursor: pointer; text-align: center; }
-        .toggle-btn.active { border: 2px solid #e60012; color: #fff; background: rgba(230, 0, 12, 0.1); }
-        .submit-btn { width: 100%; background: #e60012; color: #fff; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
-        .wb-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .wb-table th, .wb-table td { border: 1px solid #bdc3c7; text-align: center; padding: 6px 2px; }
-        .magnet-tag { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 6px 2px; color: #000; font-weight: bold; font-size: 13px; display: block; margin: 4px auto; width: 92%; cursor: pointer; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; justify-content: center; align-items: center; }
-        .modal-content { background: #1c1c1c; border-radius: 12px; width: 90%; max-width: 400px; padding: 20px; color: #fff; }
-        .swap-item { padding: 12px; background: #333; margin: 6px 0; border-radius: 6px; cursor: pointer; text-align: center; font-weight: bold; }
-    </style>
-</head>
-<body>
-<div class="app-container">
-    <div class="app-header-fixed">🗓️ 早出表作成</div>
-    <div class="brand-section">
-        <div class="brand-title">GR TRACK MANAGER</div>
-    </div>
-    <div class="glass-panel">
-        <div class="toggle-container">
-            <button class="toggle-btn active" id="btn-shift1" onclick="selectShift(1)">1直</button>
-            <button class="toggle-btn" id="btn-shift2" onclick="selectShift(2)">2直</button>
-        </div>
-    </div>
-    <button class="submit-btn" onclick="generateSchedule()">⚙️ 早出表を作成する</button>
-    <div id="whiteboard" style="display:none; background:#fff; padding:10px; border-radius:8px; color:#000;">
-        <table class="wb-table" id="wb-table"></table>
-    </div>
-    <div id="day-settings-root"></div>
-</div>
+// 交代対象を一時保存する変数
+let swapParams = {};
 
-<div class="modal-overlay" id="modal-swap" onclick="this.style.display='none'">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <h3 style="margin-bottom:15px;">誰に入れ替えますか？</h3>
-        <div id="swap-member-list"></div>
-    </div>
-</div>
+// 既存のswapMagnet関数をこの中身に書き換える
+function swapMagnet(day, pos, index, currentName) {
+    // 交代可能な候補リストを作成
+    const candidates = members.filter(m => m !== currentName);
+    
+    // 情報を一時保存
+    swapParams = { day, pos, index };
 
-<script>
-    let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
-    let currentShift = 1;
-    let swapParams = {};
+    // 選択肢をモーダルに生成
+    document.getElementById('swap-member-list').innerHTML = candidates.map(m => `
+        <div class="swap-item" style="padding:12px; background:#333; margin:6px 0; border-radius:6px; cursor:pointer; text-align:center; color:white; font-weight:bold;" onclick="executeSwap('${m}')">${m}</div>
+    `).join('');
 
-    function selectShift(s) { currentShift = s; document.getElementById('btn-shift1').classList.toggle('active', s==1); document.getElementById('btn-shift2').classList.toggle('active', s==2); }
+    // モーダルを表示
+    document.getElementById('modal-swap').style.display = 'flex';
+}
 
-    function generateSchedule() {
-        document.getElementById('whiteboard').style.display = 'block';
-        document.getElementById('wb-table').innerHTML = `
-            <tr><th>MON</th><th>A</th><th>B</th></tr>
-            <tr><td style="background:#e60012; color:white;">MON</td>
-                <td><span class="magnet-tag" onclick="showSwap('月', 'A', 0, '阿部')">阿部</span></td>
-                <td><span class="magnet-tag" onclick="showSwap('月', 'B', 0, '久林')">久林</span></td>
-            </tr>`;
+// 交代を実行する新しい関数
+function executeSwap(newName) {
+    const { day, pos, index } = swapParams;
+    const target = document.getElementById(`mag-${day}-${pos}-${index}`);
+    if (target) {
+        target.innerText = newName;
     }
-
-    function showSwap(day, pos, index, currentName) {
-        swapParams = { day, pos, index };
-        document.getElementById('swap-member-list').innerHTML = members.map(m => `
-            <div class="swap-item" onclick="executeSwap('${m}')">${m}</div>
-        `).join('');
-        document.getElementById('modal-swap').style.display = 'flex';
-    }
-
-    function executeSwap(newName) {
-        const { day, pos, index } = swapParams;
-        // 実際にはここで対象のIDを特定して書き換える
-        alert(newName + " に入れ替えました");
-        document.getElementById('modal-swap').style.display = 'none';
-        generateSchedule();
-    }
-</script>
-</body>
-</html>
+    document.getElementById('modal-swap').style.display = 'none';
+}
