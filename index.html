@@ -131,29 +131,33 @@
             const eduM = document.getElementById('toggle-edu-view').checked ? document.querySelector(`.edu-member[data-day="${day}"]`)?.value : "";
             
             let assignedToday = [];
-            if(eduM) assignedToday.push(eduM);
-
+            
             posNames.forEach((pos, i) => {
                 const td = tr.cells[i+1];
+                let m = "－";
+
+                // 1. まず教育枠を確定
                 if (eduP === pos && eduM) {
-                    td.innerHTML = `<span class="magnet-tag education">🔰 ${eduM}</span>`;
+                    m = eduM;
+                    assignedToday.push(m);
+                    weeklyHistory[m].add(pos);
+                    td.innerHTML = `<span class="magnet-tag education">🔰 ${m}</span>`;
                     return;
                 }
 
-                // 「今日空いている」かつ「今週そのポジションに入っていない」メンバー
-                let candidates = members.filter(m => 
-                    !absent.includes(m) && 
-                    !assignedToday.includes(m) && 
-                    !weeklyHistory[m].has(pos) && 
-                    memberSkills[m][currentShift]?.includes(pos)
+                // 2. 残りの枠をランダム＋重複禁止で埋める
+                let candidates = members.filter(member => 
+                    !absent.includes(member) && 
+                    !assignedToday.includes(member) && 
+                    !weeklyHistory[member].has(pos) && 
+                    memberSkills[member][currentShift]?.includes(pos)
                 );
                 
-                // それでもいない場合は、全メンバーから再選出（※どうしても足りない時のみ）
                 if(candidates.length === 0) {
-                   candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && memberSkills[m][currentShift]?.includes(pos));
+                   candidates = members.filter(member => !absent.includes(member) && !assignedToday.includes(member) && memberSkills[member][currentShift]?.includes(pos));
                 }
 
-                let m = candidates[Math.floor(Math.random() * candidates.length)] || "－";
+                m = candidates[Math.floor(Math.random() * candidates.length)] || "－";
                 
                 if (m !== "－") { 
                     assignedToday.push(m); 
