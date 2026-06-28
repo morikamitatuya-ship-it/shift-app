@@ -3,107 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>早出作成</title>
+    <title>勤務管理システム</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding-bottom: 80px; }
-        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
+        /* 全体の設定：読みやすいゴシック体で統一 */
+        body { font-family: sans-serif; background-color: #f0f0f2; margin: 0; padding-bottom: 70px; color: #333; }
+        .container { max-width: 480px; margin: 0 auto; padding: 15px; }
         
-        .panel { background: #fff; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .title-area { font-weight: bold; margin-bottom: 10px; font-size: 16px; border-left: 4px solid #333; padding-left: 10px; }
-        
-        .flex { display: flex; gap: 10px; }
-        .btn { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; text-align: center; font-weight: bold; background: #fff; }
+        /* カーボン調の硬派なパネル */
+        .panel { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .panel-header { font-weight: bold; border-left: 4px solid #e60012; padding-left: 10px; margin-bottom: 15px; }
+
+        /* ボタン・タブ系 */
+        .tab-menu { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-item { flex: 1; padding: 10px 0; background: #ddd; border-radius: 6px; text-align: center; font-weight: bold; cursor: pointer; }
+        .tab-item.active { background: #333; color: #fff; }
+        .btn-flex { display: flex; gap: 10px; }
+        .btn { flex: 1; padding: 12px; background: #fff; border: 1px solid #999; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .btn.active { background: #333; color: #fff; border-color: #333; }
         
-        .tab-bar { display: flex; gap: 5px; margin-bottom: 10px; }
-        .tab { flex: 1; padding: 10px 0; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-weight: bold; cursor: pointer; }
-        .tab.active { background: #555; color: #fff; }
-        
-        select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; }
-        
-        .generate-btn { width: 100%; padding: 15px; background: #e60012; color: #fff; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background: #eee; }
-        
-        .name-cell { cursor: pointer; background: #fafafa; padding: 8px; margin: 2px; border: 1px solid #ddd; border-radius: 4px; display: block; }
-        .name-cell:hover { background: #f0f0f0; }
+        /* 実行ボタン */
+        .submit-btn { width: 100%; padding: 15px; background: #e60012; color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 10px; }
 
-        /* 入れ替え用リスト（モーダル） */
-        #list-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .list-box { background: #fff; padding: 20px; border-radius: 10px; width: 80%; max-width: 300px; }
+        /* 名前・表系 */
+        .member-chip { display: inline-block; padding: 8px 12px; background: #eef; border: 1px solid #ccd; border-radius: 20px; margin: 3px; cursor: pointer; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 15px; border-radius: 8px; overflow: hidden; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        th { background: #eee; }
+
+        /* 下部ナビゲーション */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; max-width: 480px; display: flex; background: #fff; border-top: 1px solid #ccc; height: 60px; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+        /* モーダル */
+        #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .modal-content { background: #fff; padding: 20px; border-radius: 10px; width: 80%; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="panel">
-        <div class="title-area">勤務選択</div>
-        <div class="flex">
-            <button class="btn active" id="s1" onclick="setShift(1)">1直</button>
-            <button class="btn" id="s2" onclick="setShift(2)">2直</button>
-        </div>
-    </div>
-
-    <div class="panel">
-        <div class="title-area">曜日別設定</div>
-        <div class="tab-bar" id="tabs"></div>
-        <div id="settings-area"></div>
-    </div>
-
-    <button class="generate-btn" onclick="generate()">早出表を作成</button>
-    <div id="result"></div>
+<div class="container" id="app">
+    <!-- メインコンテンツをJSで書き換える -->
+    <div id="content"></div>
 </div>
 
-<div id="list-overlay" onclick="closeList()">
-    <div class="list-box" onclick="event.stopPropagation()">
+<div class="nav-bar">
+    <div class="nav-item" onclick="switchPage('drive')">早出表</div>
+    <div class="nav-item" onclick="switchPage('team')">メンバー</div>
+    <div class="nav-item" onclick="switchPage('skill')">スキル</div>
+</div>
+
+<div id="modal" onclick="document.getElementById('modal').style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <p>誰に入れ替えますか？</p>
-        <div id="swap-list"></div>
+        <div id="member-list"></div>
     </div>
 </div>
 
 <script>
-    let shift = 1;
-    let day = '月';
     let members = ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
-    let scheduleData = {}; 
-    let swapTarget = null;
-
-    function setShift(s) { shift = s; document.getElementById('s1').className = s==1?'btn active':'btn'; document.getElementById('s2').className = s==2?'btn active':'btn'; }
     
-    function initTabs() {
-        const days = ['月', '火', '水', '木', '金'];
-        document.getElementById('tabs').innerHTML = days.map(d => `<div class="tab ${d==day?'active':''}" onclick="day='${d}';initTabs();renderSettings()">${d}</div>`).join('');
+    function switchPage(page) {
+        const content = document.getElementById('content');
+        if(page === 'drive') {
+            content.innerHTML = `
+                <div class="panel">
+                    <div class="panel-header">勤務選択</div>
+                    <div class="btn-flex"><button class="btn active">1直</button><button class="btn">2直</button></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">曜日別設定</div>
+                    <div class="tab-menu"><div class="tab-item active">月</div><div class="tab-item">火</div><div class="tab-item">水</div></div>
+                    <select style="width:100%; padding:10px;"><option>休みメンバーを選択</option></select>
+                    <button class="submit-btn" onclick="renderTable()">早出表を作成</button>
+                </div>
+                <div id="table-area"></div>
+            `;
+        } else if(page === 'team') {
+            content.innerHTML = `<div class="panel"><div class="panel-header">メンバー管理</div>${members.map(m=>`<div class="member-chip">${m}</div>`).join('')}</div>`;
+        } else {
+            content.innerHTML = `<div class="panel"><div class="panel-header">スキル管理</div><p>スキル設定画面</p></div>`;
+        }
     }
 
-    function renderSettings() {
-        document.getElementById('settings-area').innerHTML = `
-            <p>${day}曜日 休み設定</p>
-            <select id="abs1"><option>なし</option>${members.map(m=>`<option>${m}</option>`).join('')}</select>
-            <select id="abs2"><option>なし</option>${members.map(m=>`<option>${m}</option>`).join('')}</select>
+    function renderTable() {
+        document.getElementById('table-area').innerHTML = `
+            <table>
+                <tr><th>月</th><th>A</th><th>B</th></tr>
+                <tr><td></td><td class="member-chip" onclick="showModal()">阿部</td><td class="member-chip">久林</td></tr>
+            </table>
         `;
     }
 
-    function generate() {
-        const table = `<table><thead><tr><th>${day}</th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td></td><td><span class="name-cell" onclick="showList('${day}', 'A', 0)">阿部</span></td><td><span class="name-cell">久林</span></td><td><span class="name-cell">森上</span></td></tr></tbody></table>`;
-        document.getElementById('result').innerHTML = table;
+    function showModal() {
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('member-list').innerHTML = members.map(m => `<div class="member-chip" onclick="alert('${m}に変更しました'); document.getElementById('modal').style.display='none'">${m}</div>`).join('');
     }
 
-    function showList(d, pos, idx) {
-        swapTarget = {d, pos, idx};
-        document.getElementById('swap-list').innerHTML = members.map(m => `<div class="name-cell" onclick="swap('${m}')">${m}</div>`).join('');
-        document.getElementById('list-overlay').style.display = 'flex';
-    }
-
-    function swap(newName) {
-        alert(swapTarget.pos + 'を' + newName + 'に変更しました（仮）');
-        closeList();
-    }
-
-    function closeList() { document.getElementById('list-overlay').style.display = 'none'; }
-
-    initTabs(); renderSettings();
+    switchPage('drive');
 </script>
 </body>
 </html>
