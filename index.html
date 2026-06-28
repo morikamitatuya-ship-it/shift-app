@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GR TRACK MANAGER</title>
+    <title>GR TRACK MANAGER - 完全版</title>
     <style>
-        /* スタイルはそのまま維持 */
+        /* スタイルはそのまま */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
         body { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; color: #fff; display: flex; justify-content: center; min-height: 100vh; background-color: #0b0b0b; }
         .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; position: relative; padding: 20px 20px 100px 20px; }
@@ -146,21 +146,37 @@
             });
         });
         document.getElementById('whiteboard').style.display = 'block';
-        // 新人振り分けボタンを表示
         document.getElementById('newcomer-action-area').innerHTML = `<button class="submit-btn" style="background:#f59e0b; margin-bottom:0;" onclick="applyNewcomers()">🔰 新人を振り分ける</button>`;
     }
 
     function applyNewcomers() {
         const days = ["MON","TUE","WED","THU","FRI"];
+        const posList = currentShift === 1 ? ["A","B","C","D"] : ["A","B","C"];
+
         days.forEach(day => {
             const eduP = document.querySelector(`.edu-pos[data-day="${day}"]`)?.value;
             const eduM = document.querySelector(`.edu-member[data-day="${day}"]`)?.value;
-            if(eduP && eduM) {
+
+            if(eduP && eduM && eduM !== "なし") {
                 const tr = Array.from(document.getElementById('wb-tbody').rows).find(r => r.cells[0].innerText === day);
-                const posIndex = (currentShift === 1 ? ["A","B","C","D"] : ["A","B","C"]).indexOf(eduP);
-                if(tr && posIndex > -1) {
-                    const td = tr.cells[posIndex + 1];
-                    td.innerHTML = `<span class="magnet-tag education">🔰 ${eduM}</span>`;
+                if(!tr) return;
+
+                const posIndex = posList.indexOf(eduP);
+                const targetTd = tr.cells[posIndex + 1];
+                const oldMember = targetTd.innerText.trim();
+
+                targetTd.innerHTML = `<span class="magnet-tag education">🔰 ${eduM}</span>`;
+                targetTd.onclick = () => swapMagnet(day, eduP, 0, eduM);
+
+                if (oldMember !== "－" && oldMember !== eduM) {
+                    let moved = false;
+                    posList.forEach((p, idx) => {
+                        if (!moved && tr.cells[idx + 1].innerText.trim() === "－") {
+                            tr.cells[idx + 1].innerHTML = `<span class="magnet-tag">${oldMember}</span>`;
+                            tr.cells[idx + 1].onclick = () => swapMagnet(day, p, 0, oldMember);
+                            moved = true;
+                        }
+                    });
                 }
             }
         });
