@@ -206,27 +206,40 @@
             let assignedToday = [];
             if(eduM) assignedToday.push(eduM);
 
-                    posNames.forEach((pos, i) => {
+                         posNames.forEach((pos, i) => {
             const td = tr.cells[i+1];
-            td.innerHTML = ''; // 一旦空にする
+            td.innerHTML = ''; 
 
-            // 教育枠が設定されている場合
             if (eduP === pos && eduM) {
-                const espan = document.createElement('span');
-                espan.className = 'magnet-tag education';
-                espan.innerText = `🔰 ${eduM}`;
-                td.appendChild(espan);
+                td.innerHTML = `<span class="magnet-tag education">🔰 ${eduM}</span>`;
                 return;
             }
 
-            // 【ここが重要】スキルがあり、今日まだ仕事をしておらず、休みでもない人を探す
+            // 前日同じ場所だった人を除外する条件を追加
             let candidates = members.filter(m => 
                 !absent.includes(m) && 
                 !assignedToday.includes(m) && 
-                memberSkills[m][currentShift] && 
-                memberSkills[m][currentShift].includes(pos)
+                m !== lastDayAssignments[pos] && 
+                memberSkills[m][currentShift]?.includes(pos)
             );
 
+            candidates.sort((a, b) => weeklyCounts[a] - weeklyCounts[b]);
+
+            let m = candidates[0] || "－";
+            if (m !== "－") {
+                assignedToday.push(m);
+                weeklyCounts[m]++;
+                lastDayAssignments[pos] = m; 
+            }
+
+            const span = document.createElement('span');
+            span.id = `mag-${day}-${pos}-0`;
+            span.className = 'magnet-tag';
+            span.innerText = m;
+            span.onclick = () => swapMagnet(day, pos, 0, m);
+            td.appendChild(span);
+        });
+   
             // 【ここが重要】週内の担当回数が一番少ない人を優先する
             candidates.sort((a, b) => weeklyCounts[a] - weeklyCounts[b]);
 
