@@ -112,7 +112,7 @@
     function closeModal(id) { document.getElementById(`modal-${id}`).style.display = 'none'; }
     function closeModalOnOverlay(e) { if(e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; }
     function toggleEduVisibility() { const isChecked = document.getElementById('toggle-edu-view').checked; document.querySelectorAll('.setting-sub-row.edu-row').forEach(row => { row.style.display = isChecked ? 'flex' : 'none'; }); }
-    function generateSchedule() {
+            function generateSchedule() {
         const tbody = document.getElementById('wb-tbody'); tbody.innerHTML = '';
         const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
         document.getElementById('wb-thead-tr').innerHTML = '<th class="day-header"></th>' + posNames.map(p => `<th>${p}</th>`).join('');
@@ -142,7 +142,11 @@
                 }
 
                 let candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && prevDayAssignments[pos] !== m && memberSkills[m][currentShift]?.includes(pos));
-                candidates.sort((a, b) => weeklyCounts[a] - weeklyCounts[b]);
+                
+                candidates.sort((a, b) => {
+                    if (weeklyCounts[a] !== weeklyCounts[b]) return weeklyCounts[a] - weeklyCounts[b];
+                    return Math.random() - 0.5;
+                });
 
                 let m = candidates[0] || "－";
                 if (m !== "－") { assignedToday.push(m); weeklyCounts[m]++; currentDayAssignments[pos] = m; }
@@ -152,6 +156,24 @@
                 span.onclick = () => swapMagnet(day, pos, 0, m);
                 td.appendChild(span);
             });
+            prevDayAssignments = currentDayAssignments;
+        });
+        document.getElementById('whiteboard').style.display = 'block';
+    }
+
+    let m = candidates[0] || "－";
+                if (m !== "－") { assignedToday.push(m); weeklyCounts[m]++; currentDayAssignments[pos] = m; }
+
+                const span = document.createElement('span');
+                span.id = `mag-${day}-${pos}-0`; span.className = 'magnet-tag'; span.innerText = m;
+                span.onclick = () => swapMagnet(day, pos, 0, m);
+                td.appendChild(span);
+            });
+            prevDayAssignments = currentDayAssignments;
+        });
+        document.getElementById('whiteboard').style.display = 'block';
+    }
+
             prevDayAssignments = currentDayAssignments;
         });
         document.getElementById('whiteboard').style.display = 'block';
