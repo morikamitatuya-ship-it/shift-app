@@ -5,27 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GR TRACK MANAGER</title>
     <style>
-        /* ここには元のCSSをすべて貼り付けてください（元の440行あるコードのもの） */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background: #0b0b0b; color: #fff; padding: 20px; }
+        .app-container { max-width: 500px; margin: 0 auto; }
+        .menu-item { background: #1a1a1a; padding: 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; border: 1px solid #333; }
+        .submit-btn { width: 100%; background: #e60012; color: #fff; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .whiteboard-container { display: none; background: #fff; padding: 10px; border-radius: 8px; margin-top: 20px; color: #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        .magnet-tag { display: block; padding: 5px; background: #eee; border-radius: 4px; font-weight: bold; }
+        .day-cell { background: #e60012; color: #fff; }
+        .select-box { width: 100%; padding: 5px; }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        </div>
+<div class="app-container">
+    <h2>GR TRACK MANAGER</h2>
+    <div class="menu-item" onclick="alert('メンバー管理画面へ')">👥 メンバー管理</div>
+    <button class="submit-btn" onclick="generateSchedule()">⚙️ 自動編成を実行</button>
+    
+    <div id="day-settings-root"></div>
+
+    <div class="whiteboard-container" id="whiteboard">
+        <table>
+            <thead><tr id="wb-thead-tr"></tr></thead>
+            <tbody id="wb-tbody"></tbody>
+        </table>
+    </div>
+</div>
 
 <script>
-    // 既存の変数
-    let currentShift = 1; 
+    let currentShift = 1;
     let members = JSON.parse(localStorage.getItem("gr_members")) || ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     let memberSkills = JSON.parse(localStorage.getItem("gr_skills")) || {};
     members.forEach(m => { if(!memberSkills[m]) memberSkills[m] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] }; });
 
-    // 【重要】ここを差し替えてください！
-    function generateSchedule() {
-        const tbody = document.getElementById('wb-tbody'); 
-        tbody.innerHTML = '';
-        const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
-        document.getElementById('wb-thead-tr').innerHTML = '<th class="day-header"></th>' + posNames.map(p => `<th>${p}</th>`).join('');
+    // 休み設定を表示する関数
+    function renderDaySettings() {
+        const root = document.getElementById('day-settings-root');
+        root.innerHTML = '<h3>曜日別の休み設定</h3>';
+        ["MON", "TUE", "WED", "THU", "FRI"].forEach(day => {
+            root.innerHTML += `<div>${day}: <select class="absent-select" data-day="${day}"><option value="">なし</option>${members.map(m=>`<option value="${m}">${m}</option>`).join('')}</select></div>`;
+        });
+    }
 
+    // 自動編成メインロジック
+    function generateSchedule() {
+        const tbody = document.getElementById('wb-tbody'); tbody.innerHTML = '';
+        const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
+        document.getElementById('wb-thead-tr').innerHTML = '<th>曜日</th>' + posNames.map(p => `<th>${p}</th>`).join('');
+        
         let weeklyCounts = {}; members.forEach(m => weeklyCounts[m] = 0);
 
         ["MON", "TUE", "WED", "THU", "FRI"].forEach(day => {
@@ -33,16 +62,18 @@
             tr.innerHTML = `<td class="day-cell">${day}</td>` + posNames.map(() => "<td></td>").join('');
             tbody.appendChild(tr);
 
-            const absent = [document.querySelector(`.absent-select[data-day="${day}"]`).value];
-            let assignedToday = []; // 重複を防ぐリスト
+            const absent = [document.querySelector(`.absent-select[data-day="${day}"]`)?.value || ""];
+            let assignedToday = []; // ★重複防止用リスト
 
             posNames.forEach((pos, i) => {
+                // 候補：休みではなく、今日まだ割り当てられておらず、スキルがある人
                 let candidates = members.filter(m => 
                     !absent.includes(m) && 
                     !assignedToday.includes(m) && 
                     memberSkills[m][currentShift]?.includes(pos)
                 );
 
+                // 回数が少ない人を優先
                 candidates.sort((a, b) => weeklyCounts[a] - weeklyCounts[b]);
 
                 let m = candidates[0] || "－";
@@ -50,17 +81,13 @@
                     assignedToday.push(m);
                     weeklyCounts[m]++;
                 }
-
-                const td = tr.cells[i+1];
-                const span = document.createElement('span');
-                span.className = 'magnet-tag'; 
-                span.innerText = m;
-                td.appendChild(span);
+                tr.cells[i+1].innerHTML = `<span class="magnet-tag">${m}</span>`;
             });
         });
         document.getElementById('whiteboard').style.display = 'block';
     }
-    // その他の関数（addMember, openModalなど）は、今のコードのまま残してください
+
+    renderDaySettings();
 </script>
 </body>
 </html>
