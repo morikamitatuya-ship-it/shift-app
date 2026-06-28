@@ -131,38 +131,21 @@
             const eduM = document.getElementById('toggle-edu-view').checked ? document.querySelector(`.edu-member[data-day="${day}"]`)?.value : "";
             
             let assignedToday = [];
-            
+            if(eduM) assignedToday.push(eduM);
+
             posNames.forEach((pos, i) => {
                 const td = tr.cells[i+1];
-                let m = "－";
-
-                // 1. まず教育枠を確定
                 if (eduP === pos && eduM) {
-                    m = eduM;
-                    assignedToday.push(m);
-                    weeklyHistory[m].add(pos);
-                    td.innerHTML = `<span class="magnet-tag education">🔰 ${m}</span>`;
+                    td.innerHTML = `<span class="magnet-tag education">🔰 ${eduM}</span>`;
+                    weeklyHistory[eduM].add(pos);
                     return;
                 }
 
-                // 2. 残りの枠をランダム＋重複禁止で埋める
-                let candidates = members.filter(member => 
-                    !absent.includes(member) && 
-                    !assignedToday.includes(member) && 
-                    !weeklyHistory[member].has(pos) && 
-                    memberSkills[member][currentShift]?.includes(pos)
-                );
+                let candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && !weeklyHistory[m].has(pos) && memberSkills[m][currentShift]?.includes(pos));
+                if(candidates.length === 0) candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && memberSkills[m][currentShift]?.includes(pos));
                 
-                if(candidates.length === 0) {
-                   candidates = members.filter(member => !absent.includes(member) && !assignedToday.includes(member) && memberSkills[member][currentShift]?.includes(pos));
-                }
-
-                m = candidates[Math.floor(Math.random() * candidates.length)] || "－";
-                
-                if (m !== "－") { 
-                    assignedToday.push(m); 
-                    weeklyHistory[m].add(pos);
-                }
+                let m = candidates[Math.floor(Math.random() * candidates.length)] || "－";
+                if (m !== "－") { assignedToday.push(m); weeklyHistory[m].add(pos); }
 
                 const span = document.createElement('span');
                 span.id = `mag-${day}-${pos}-0`; span.className = 'magnet-tag'; span.innerText = m;
@@ -178,7 +161,7 @@
     function renderSkillUI() { const container = document.getElementById('skill-list-container'); container.innerHTML = ''; members.forEach(m => { let html = ["A", "B", "C", "D"].map(pos => { if(skillShift===2 && pos==="D") return ""; return `<label class="skill-label"><input type="checkbox" class="skill-checkbox" ${memberSkills[m][skillShift].includes(pos)?"checked":""} onchange="toggleSkill('${m}', '${pos}')"> ${pos}</label>`; }).join(''); container.innerHTML += `<div class="skill-row"><div class="skill-name">${m}</div><div class="skill-checkboxes">${html}</div></div>`; }); }
     function toggleSkill(n, p) { let l = memberSkills[n][skillShift]; memberSkills[n][skillShift] = l.includes(p) ? l.filter(x=>x!==p) : [...l, p]; saveToStorage(); }
     function updateMemberUI() { const tags = document.getElementById('member-tags-container'); tags.innerHTML = ''; members.forEach((m, i) => tags.innerHTML += `<div class="member-tag-item">${m}<button class="member-delete-btn" onclick="removeMember(${i})">×</button></div>`); document.querySelectorAll('.absent-select, .edu-member').forEach(s => { const val = s.value; s.innerHTML = '<option value="">なし</option>' + members.map(m=>`<option value="${m}">${m}</option>`).join(''); s.value = members.includes(val) ? val : ""; }); document.getElementById('wb-member-list').innerText = members.join('・'); }
-    function addMember() { const name = document.getElementById('new-member-name').value.trim(); if(name && !members.includes(name)) { members.push(name); memberSkills[name] = {1:["A","B","C","D"], 2:["A","B","C"]}; document.getElementById('new-member-name').value = ''; updateMemberUI(); saveToStorage(); } }
+    function addMember() { const name = document.getElementById('new-member-name'].value.trim(); if(name && !members.includes(name)) { members.push(name); memberSkills[name] = {1:["A","B","C","D"], 2:["A","B","C"]}; document.getElementById('new-member-name').value = ''; updateMemberUI(); saveToStorage(); } }
     function removeMember(i) { if(members.length > 1) { delete memberSkills[members[i]]; members.splice(i, 1); updateMemberUI(); saveToStorage(); } }
     function selectShift(s) { currentShift = s; document.getElementById('btn-shift1').classList.toggle('active', s===1); document.getElementById('btn-shift2').classList.toggle('active', s===2); document.getElementById('wb-shift-label').innerText = s+"直"; }
     function swapMagnet(day, pos, index, currentName) { const absent = [document.querySelector(`.absent-select[data-day="${day}"][data-index="1"]`).value, document.querySelector(`.absent-select[data-day="${day}"][data-index="2"]`).value]; const candidates = members.filter(m => !absent.includes(m) && m !== currentName); if(candidates.length === 0) return; currentSwapContext = { targetId: `mag-${day}-${pos}-${index}` }; const container = document.getElementById('swap-list-container'); container.innerHTML = candidates.map(m => `<button class="member-tag-item" style="width:100%; justify-content:center;" onclick="executeSwap('${m}')">${m}</button>`).join(''); openModal('swap'); }
