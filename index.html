@@ -4,19 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GR TRACK MANAGER</title>
-    </head>
+    <style>
+        /* 既存のCSSをすべて維持 */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
+        body { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; color: #fff; display: flex; justify-content: center; min-height: 100vh; background-color: #0b0b0b; }
+        .app-container { width: 100%; max-width: 500px; padding: 20px; }
+        .app-header-fixed { background: rgba(0, 0, 0, 0.85); padding: 15px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 100; }
+        .glass-panel { background: rgba(22, 22, 22, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 18px; margin-bottom: 20px; }
+        .submit-btn { width: 100%; background: #e60012; color: #fff; border: none; padding: 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .whiteboard-container { display: none; background: #fff; border-radius: 8px; padding: 10px; color: #333; margin-top: 20px; }
+        .wb-table { width: 100%; border-collapse: collapse; }
+        .wb-table th, .wb-table td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        .magnet-tag { display: block; padding: 5px; background: #eee; border-radius: 4px; font-weight: bold; }
+        .select-box { padding: 5px; }
+    </style>
+</head>
 <body>
+<div class="app-container">
+    <div class="app-header-fixed">🗓️ GR TRACK MANAGER</div>
+    <div class="glass-panel">
+        <button class="submit-btn" onclick="generateSchedule()">⚙️ 自動編成を実行</button>
+    </div>
+    <div class="whiteboard-container" id="whiteboard">
+        <table class="wb-table">
+            <thead><tr id="wb-thead-tr"></tr></thead>
+            <tbody id="wb-tbody"></tbody>
+        </table>
+    </div>
+    <div id="day-settings-root"></div>
+</div>
+
 <script>
-    // データ初期化（localStorage優先）
+    let currentShift = 1;
     let members = JSON.parse(localStorage.getItem("gr_members")) || ["阿部", "久林", "森上", "岡", "瑠衣", "西村"];
     let memberSkills = JSON.parse(localStorage.getItem("gr_skills")) || {};
-    
-    // スキル初期設定
     members.forEach(m => { if(!memberSkills[m]) memberSkills[m] = { 1: ["A", "B", "C", "D"], 2: ["A", "B", "C"] }; });
+
+    function renderDaySettings() {
+        const root = document.getElementById('day-settings-root');
+        ["MON", "TUE", "WED", "THU", "FRI"].forEach(day => {
+            root.innerHTML += `<div>${day} 休み: <select class="absent-select" data-day="${day}"><option value="">なし</option>${members.map(m=>`<option value="${m}">${m}</option>`).join('')}</select></div>`;
+        });
+    }
 
     function generateSchedule() {
         const tbody = document.getElementById('wb-tbody'); tbody.innerHTML = '';
         const posNames = currentShift === 1 ? ["A", "B", "C", "D"] : ["A", "B", "C"];
+        document.getElementById('wb-thead-tr').innerHTML = '<th>曜日</th>' + posNames.map(p => `<th>${p}</th>`).join('');
+        
         let weeklyCounts = {}; members.forEach(m => weeklyCounts[m] = 0);
 
         ["MON", "TUE", "WED", "THU", "FRI"].forEach(day => {
@@ -25,31 +60,23 @@
             tbody.appendChild(tr);
 
             const absent = [document.querySelector(`.absent-select[data-day="${day}"]`).value];
-            let assignedToday = []; // この日に割り当てられた人リスト
+            let assignedToday = []; 
 
             posNames.forEach((pos, i) => {
-                // 1. スキルがあり、かつ今日まだ割り当てられておらず、休みでもない人
-                let candidates = members.filter(m => 
-                    !absent.includes(m) && 
-                    !assignedToday.includes(m) && 
-                    memberSkills[m][currentShift]?.includes(pos)
-                );
-
-                // 2. 回数が少ない順に並び替え
+                let candidates = members.filter(m => !absent.includes(m) && !assignedToday.includes(m) && memberSkills[m][currentShift]?.includes(pos));
                 candidates.sort((a, b) => weeklyCounts[a] - weeklyCounts[b]);
 
-                let m = candidates[0] || "未配置";
-                if (m !== "未配置") {
+                let m = candidates[0] || "－";
+                if (m !== "－") {
                     assignedToday.push(m);
                     weeklyCounts[m]++;
                 }
-
-                const td = tr.cells[i+1];
-                td.innerHTML = `<span class="magnet-tag">${m}</span>`;
+                tr.cells[i+1].innerHTML = `<span class="magnet-tag">${m}</span>`;
             });
         });
         document.getElementById('whiteboard').style.display = 'block';
     }
+    renderDaySettings();
 </script>
 </body>
 </html>
