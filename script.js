@@ -39,14 +39,19 @@ shift2Button.addEventListener("click", () => {
 // ----------------------
 // メンバー管理
 // ----------------------
+const memberButton = document.getElementById("memberButton");
+const memberArea = document.getElementById("memberArea");
 
-document
-.getElementById("memberButton")
-.addEventListener("click",()=>{
+memberButton.addEventListener("click", () => {
 
-    alert("メンバー管理画面（これから作ります😊）");
+    if (memberArea.style.display === "none") {
+        memberArea.style.display = "block";
+    } else {
+        memberArea.style.display = "none";
+    }
 
 });
+
 
 // ----------------------
 // スキル管理
