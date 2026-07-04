@@ -1,3 +1,4 @@
+alert("script.js 読み込み成功");
 // ===============================
 // GR TRACK MANAGER
 // script.js
