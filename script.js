@@ -5,9 +5,29 @@
 
 let currentShift = 1;
 
+// ----------------------
 // ボタン取得
+// ----------------------
+
 const shift1Button = document.getElementById("shift1");
 const shift2Button = document.getElementById("shift2");
+
+const memberButton = document.getElementById("memberButton");
+const memberArea = document.getElementById("memberArea");
+
+const addMemberButton = document.getElementById("addMember");
+const memberName = document.getElementById("memberName");
+const memberList = document.getElementById("memberList");
+
+// ----------------------
+// 保存データ読込
+// ----------------------
+
+let members = JSON.parse(localStorage.getItem("members"));
+
+if (!members) {
+    members = [];
+}
 
 // ----------------------
 // 勤務切替
@@ -20,8 +40,6 @@ shift1Button.addEventListener("click", () => {
     shift1Button.classList.add("active");
     shift2Button.classList.remove("active");
 
-    console.log("1直");
-
 });
 
 shift2Button.addEventListener("click", () => {
@@ -31,26 +49,75 @@ shift2Button.addEventListener("click", () => {
     shift2Button.classList.add("active");
     shift1Button.classList.remove("active");
 
-    console.log("2直");
-
 });
 
 // ----------------------
-// メンバー管理
+// メンバー管理開閉
 // ----------------------
-const memberButton = document.getElementById("memberButton");
-const memberArea = document.getElementById("memberArea");
 
 memberButton.addEventListener("click", () => {
 
     if (memberArea.style.display === "none") {
+
         memberArea.style.display = "block";
+
     } else {
+
         memberArea.style.display = "none";
+
     }
 
 });
 
+// ----------------------
+// メンバー追加
+// ----------------------
+
+addMemberButton.addEventListener("click", () => {
+
+    const name = memberName.value.trim();
+
+    if (name === "") {
+
+        alert("名前を入力してください");
+        return;
+
+    }
+
+    members.push(name);
+
+    localStorage.setItem(
+        "members",
+        JSON.stringify(members)
+    );
+
+    memberName.value = "";
+
+    drawMemberList();
+
+});
+
+// ----------------------
+// 一覧表示
+// ----------------------
+
+function drawMemberList() {
+
+    memberList.innerHTML = "";
+
+    members.forEach((name) => {
+
+        const div = document.createElement("div");
+
+        div.className = "member-row";
+
+        div.textContent = name;
+
+        memberList.appendChild(div);
+
+    });
+
+}
 
 // ----------------------
 // スキル管理
@@ -65,7 +132,7 @@ document
 });
 
 // ----------------------
-// 早出表作成
+// 早出表
 // ----------------------
 
 document
@@ -87,49 +154,9 @@ document
     alert("再抽選します");
 
 });
+
 // ----------------------
-// メンバー追加
+// 起動時
 // ----------------------
-
-const addMemberButton = document.getElementById("addMember");
-const memberName = document.getElementById("memberName");
-const memberList = document.getElementById("memberList");
-
-let members = JSON.parse(localStorage.getItem("members")) || [];
-
-addMemberButton.addEventListener("click", () => {
-
-    const name = memberName.value.trim();
-
-    if (name === "") {
-        alert("名前を入力してください");
-        return;
-    }
-
-    members.push(name);
-
-localStorage.setItem("members", JSON.stringify(members));
-
-memberName.value = "";
 
 drawMemberList();
-
-});
-
-function drawMemberList() {
-
-    memberList.innerHTML = "";
-
-    members.forEach((name) => {
-
-        memberList.innerHTML += `
-            <div class="member-row">
-                ${name}
-            </div>
-        `;
-
-    });
-    localStorage.setItem("members", JSON.stringify(members));
-}
-drawMemberList();
-
