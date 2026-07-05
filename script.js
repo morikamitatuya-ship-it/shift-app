@@ -127,7 +127,7 @@ function drawMemberList() {
         `;
 
     });
-　　　localStorage.setItem("members", JSON.stringify(members));
+    localStorage.setItem("members", JSON.stringify(members));
 }
 drawMemberList();
 
