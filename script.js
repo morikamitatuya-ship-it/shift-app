@@ -105,20 +105,38 @@ function drawMemberList() {
 
     memberList.innerHTML = "";
 
-    members.forEach((name) => {
+    members.forEach((name, index) => {
 
-        const div = document.createElement("div");
+        const row = document.createElement("div");
+        row.className = "member-row";
 
-        div.className = "member-row";
+        const span = document.createElement("span");
+        span.textContent = name;
 
-        div.textContent = name;
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "🗑️";
 
-        memberList.appendChild(div);
+        deleteButton.addEventListener("click", () => {
+
+            members.splice(index, 1);
+
+            localStorage.setItem(
+                "members",
+                JSON.stringify(members)
+            );
+
+            drawMemberList();
+
+        });
+
+        row.appendChild(span);
+        row.appendChild(deleteButton);
+
+        memberList.appendChild(row);
 
     });
 
 }
-
 // ----------------------
 // スキル管理
 // ----------------------
