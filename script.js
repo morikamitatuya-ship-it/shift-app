@@ -88,3 +88,54 @@ document
     alert("再抽選します");
 
 });
+// ----------------------
+// メンバー追加
+// ----------------------
+
+const addMemberButton = document.getElementById("addMember");
+const memberName = document.getElementById("memberName");
+const memberList = document.getElementById("memberList");
+
+let members = [];
+
+addMemberButton.addEventListener("click", () => {
+
+    const name = memberName.value.trim();
+
+    if (name === "") {
+        alert("名前を入力してください");
+        return;
+    }
+
+    members.push(name);
+
+    memberName.value = "";
+
+    drawMemberList();
+
+});
+
+function drawMemberList() {
+
+    memberList.innerHTML = "";
+
+    members.forEach((name) => {
+
+        memberList.innerHTML += `
+            <div class="member-row">
+                ${name}
+            </div>
+        `;
+
+    });
+
+}
+.member-row{
+
+    background:#2b2f36;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+    font-size:18px;
+
+}
