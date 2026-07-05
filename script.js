@@ -130,12 +130,3 @@ function drawMemberList() {
     });
 
 }
-.member-row{
-
-    background:#2b2f36;
-    padding:12px;
-    border-radius:10px;
-    margin-top:10px;
-    font-size:18px;
-
-}
