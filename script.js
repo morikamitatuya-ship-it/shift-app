@@ -95,7 +95,7 @@ const addMemberButton = document.getElementById("addMember");
 const memberName = document.getElementById("memberName");
 const memberList = document.getElementById("memberList");
 
-let members = [];
+let members = JSON.parse(localStorage.getItem("members")) || [];
 
 addMemberButton.addEventListener("click", () => {
 
@@ -127,5 +127,7 @@ function drawMemberList() {
         `;
 
     });
-
+　　　localStorage.setItem("members", JSON.stringify(members));
 }
+drawMemberList();
+
