@@ -122,3 +122,36 @@ input{
     font-size:18px;
 
 }
+.member-row{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#2b2f36;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    margin-top:10px;
+
+}
+
+.member-row button{
+
+    background:#d6001c;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    padding:8px 12px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
