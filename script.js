@@ -108,9 +108,11 @@ addMemberButton.addEventListener("click", () => {
 
     members.push(name);
 
-    memberName.value = "";
+localStorage.setItem("members", JSON.stringify(members));
 
-    drawMemberList();
+memberName.value = "";
+
+drawMemberList();
 
 });
 
