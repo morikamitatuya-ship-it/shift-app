@@ -1,4 +1,5 @@
 alert("script.js 読み込み成功");
+alert(document.getElementById("memberArea"));
 // ===============================
 // GR TRACK MANAGER
 // script.js
