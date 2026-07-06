@@ -141,11 +141,27 @@ function drawMemberList() {
 // スキル管理
 // ----------------------
 
-document
-.getElementById("skillButton")
-.addEventListener("click",()=>{
+// ----------------------
+// スキル管理
+// ----------------------
 
-    alert("スキル管理画面（これから作ります😊）");
+const skillButton = document.getElementById("skillButton");
+const skillArea = document.getElementById("skillArea");
+const skillList = document.getElementById("skillList");
+
+skillButton.addEventListener("click", () => {
+
+    if (skillArea.style.display === "none") {
+
+        skillArea.style.display = "block";
+
+    } else {
+
+        skillArea.style.display = "none";
+
+    }
+
+    drawSkillList();
 
 });
 
