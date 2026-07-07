@@ -169,3 +169,12 @@ input{
     margin-top:8px;
 
 }
+.skill-checks label{
+
+    display:flex;
+    align-items:center;
+    gap:4px;
+    width:auto;
+    margin:0;
+
+}
