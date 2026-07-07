@@ -155,3 +155,10 @@ input{
     font-size:16px;
 
 }
+#skillArea .member-row{
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+
+}
