@@ -193,7 +193,6 @@ document
 
 drawMemberList();
 function drawSkillList() {
-
     skillList.innerHTML = "";
 
     members.forEach((name) => {
