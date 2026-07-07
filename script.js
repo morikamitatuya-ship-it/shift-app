@@ -192,3 +192,36 @@ document
 // ----------------------
 
 drawMemberList();
+function drawSkillList() {
+
+    skillList.innerHTML = "";
+
+    members.forEach((name) => {
+
+        const card = document.createElement("div");
+
+        card.className = "member-row";
+
+        let html = `<strong>${name}</strong><br>`;
+
+        html += `
+        <label><input type="checkbox">A</label>
+        <label><input type="checkbox">B</label>
+        <label><input type="checkbox">C</label>
+        `;
+
+        if(currentShift === 1){
+
+            html += `
+            <label><input type="checkbox">D</label>
+            `;
+
+        }
+
+        card.innerHTML = html;
+
+        skillList.appendChild(card);
+
+    });
+
+}
