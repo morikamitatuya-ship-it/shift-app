@@ -201,7 +201,9 @@ function drawSkillList() {
 
         card.className = "member-row";
 
-        let html = `<strong>${name}</strong><br>`;
+        let html = `<strong>${name}</strong>`;
+
+html += `<div class="skill-checks">`;
 
         html += `
         <label><input type="checkbox">A</label>
@@ -216,7 +218,7 @@ function drawSkillList() {
             `;
 
         }
-
+html += `</div>`;
         card.innerHTML = html;
 
         skillList.appendChild(card);
