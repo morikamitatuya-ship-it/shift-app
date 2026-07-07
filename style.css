@@ -162,3 +162,10 @@ input{
     align-items:flex-start;
 
 }
+.skill-checks{
+
+    display:flex;
+    gap:18px;
+    margin-top:8px;
+
+}
