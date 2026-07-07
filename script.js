@@ -141,9 +141,7 @@ function drawMemberList() {
 // スキル管理
 // ----------------------
 
-// ----------------------
-// スキル管理
-// ----------------------
+
 
 const skillButton = document.getElementById("skillButton");
 const skillArea = document.getElementById("skillArea");
