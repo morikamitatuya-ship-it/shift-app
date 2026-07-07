@@ -206,16 +206,16 @@ function drawSkillList() {
 html += `<div class="skill-checks">`;
 
         html += `
-        <label><input type="checkbox">A</label>
-        <label><input type="checkbox">B</label>
-        <label><input type="checkbox">C</label>
-        `;
+<label><input type="checkbox"><span>A</span></label>
+<label><input type="checkbox"><span>B</span></label>
+<label><input type="checkbox"><span>C</span></label>
+`;
 
         if(currentShift === 1){
 
             html += `
-            <label><input type="checkbox">D</label>
-            `;
+<label><input type="checkbox"><span>D</span></label>
+`;
 
         }
 html += `</div>`;
