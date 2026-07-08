@@ -28,7 +28,11 @@ let members = JSON.parse(localStorage.getItem("members"));
 if (!members) {
     members = [];
 }
+let skills = JSON.parse(localStorage.getItem("skills"));
 
+if (!skills) {
+    skills = {};
+}
 // ----------------------
 // 勤務切替
 // ----------------------
