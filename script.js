@@ -19,20 +19,7 @@ const addMemberButton = document.getElementById("addMember");
 const memberName = document.getElementById("memberName");
 const memberList = document.getElementById("memberList");
 
-// ----------------------
-// 保存データ読込
-// ----------------------
 
-let members = JSON.parse(localStorage.getItem("members"));
-
-if (!members) {
-    members = [];
-}
-let skills = JSON.parse(localStorage.getItem("skills"));
-
-if (!skills) {
-    skills = {};
-}
 // ----------------------
 // 勤務切替
 // ----------------------
@@ -54,7 +41,27 @@ shift2Button.addEventListener("click", () => {
     shift1Button.classList.remove("active");
 
 });
+// ----------------------
+// 保存データ読込
+// ----------------------
 
+let members = JSON.parse(localStorage.getItem("members")) || [];
+
+let skills = JSON.parse(localStorage.getItem("skills")) || {};
+
+function saveMembers() {
+    localStorage.setItem(
+        "members",
+        JSON.stringify(members)
+    );
+}
+
+function saveSkills() {
+    localStorage.setItem(
+        "skills",
+        JSON.stringify(skills)
+    );
+}
 // ----------------------
 // メンバー管理開閉
 // ----------------------
@@ -90,14 +97,12 @@ addMemberButton.addEventListener("click", () => {
 
     members.push(name);
 
-    localStorage.setItem(
-        "members",
-        JSON.stringify(members)
-    );
+saveMembers();
 
-    memberName.value = "";
+memberName.value = "";
 
-    drawMemberList();
+drawMemberList();
+drawSkillList();
 
 });
 
@@ -122,14 +127,15 @@ function drawMemberList() {
 
         deleteButton.addEventListener("click", () => {
 
-            members.splice(index, 1);
+        members.splice(index, 1);
 
-            localStorage.setItem(
-                "members",
-                JSON.stringify(members)
-            );
+delete skills[name];
 
-            drawMemberList();
+saveMembers();
+saveSkills();
+
+drawMemberList();
+drawSkillList();    
 
         });
 
