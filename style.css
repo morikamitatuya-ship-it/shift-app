@@ -165,8 +165,9 @@ input{
 .skill-checks{
 
     display:flex;
-    gap:18px;
-    margin-top:8px;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-top:10px;
 
 }
 .skill-checks label{
@@ -181,5 +182,14 @@ input{
 .skill-checks input{
 
     margin:0;
+
+}
+#skillArea strong,
+#holidayArea strong{
+
+    display:block;
+    width:100%;
+    margin-bottom:8px;
+    white-space:nowrap;
 
 }
