@@ -19,7 +19,7 @@ const addMemberButton = document.getElementById("addMember");
 const memberName = document.getElementById("memberName");
 const memberList = document.getElementById("memberList");
 
-
+const holidayArea = document.getElementById("holidayArea");
 // ----------------------
 // 勤務切替
 // ----------------------
@@ -48,7 +48,14 @@ shift2Button.addEventListener("click", () => {
 let members = JSON.parse(localStorage.getItem("members")) || [];
 
 let skills = JSON.parse(localStorage.getItem("skills")) || {};
+let holidays = JSON.parse(localStorage.getItem("holidays")) || {};
 
+function saveHolidays() {
+    localStorage.setItem(
+        "holidays",
+        JSON.stringify(holidays)
+    );
+}
 function saveMembers() {
     localStorage.setItem(
         "members",
@@ -202,6 +209,55 @@ document
 // ----------------------
 
 drawMemberList();
+
+drawHolidayList();
+function drawHolidayList() {
+
+    holidayArea.innerHTML = "";
+
+    const days = ["月", "火", "水", "木", "金"];
+
+    members.forEach((name) => {
+
+        const card = document.createElement("div");
+        card.className = "member-row";
+
+        let html = `<strong>${name}</strong>`;
+        html += `<div class="skill-checks">`;
+
+        days.forEach((day) => {
+
+            if (!holidays[name]) {
+                holidays[name] = {};
+            }
+
+            const checked = holidays[name][day]
+                ? "checked"
+                : "";
+
+            html += `
+<label>
+<input
+type="checkbox"
+class="holiday-checkbox"
+data-name="${name}"
+data-day="${day}"
+${checked}>
+<span>${day}</span>
+</label>
+`;
+
+        });
+
+        html += `</div>`;
+
+        card.innerHTML = html;
+
+        holidayArea.appendChild(card);
+
+    });
+
+}
 function drawSkillList() {
 
     skillList.innerHTML = "";
