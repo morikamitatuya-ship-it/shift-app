@@ -20,6 +20,7 @@ const memberName = document.getElementById("memberName");
 const memberList = document.getElementById("memberList");
 
 const holidayArea = document.getElementById("holidayArea");
+const holidayButton = document.getElementById("holidayButton");
 // ----------------------
 // 勤務切替
 // ----------------------
@@ -154,6 +155,25 @@ drawSkillList();
     });
 
 }
+// ----------------------
+// 休み入力開閉
+// ----------------------
+
+holidayButton.addEventListener("click", () => {
+
+    if (holidayArea.style.display === "none") {
+
+        holidayArea.style.display = "block";
+
+    } else {
+
+        holidayArea.style.display = "none";
+
+    }
+
+    drawHolidayList();
+
+});
 // ----------------------
 // スキル管理
 // ----------------------
