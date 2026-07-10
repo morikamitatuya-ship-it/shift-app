@@ -203,35 +203,70 @@ document
 
 drawMemberList();
 function drawSkillList() {
+
     skillList.innerHTML = "";
 
     members.forEach((name) => {
 
         const card = document.createElement("div");
-
         card.className = "member-row";
 
         let html = `<strong>${name}</strong>`;
+        html += `<div class="skill-checks">`;
 
-html += `<div class="skill-checks">`;
+        const skillListForShift =
+            currentShift === 1
+                ? ["A","B","C","D"]
+                : ["A","B","C"];
 
-        html += `
-<label><input type="checkbox"><span>A</span></label>
-<label><input type="checkbox"><span>B</span></label>
-<label><input type="checkbox"><span>C</span></label>
-`;
+        skillListForShift.forEach((skill) => {
 
-        if(currentShift === 1){
+            if (!skills[name]) skills[name] = {};
+            if (!skills[name][currentShift]) skills[name][currentShift] = {};
+
+            const checked =
+                skills[name][currentShift][skill]
+                    ? "checked"
+                    : "";
 
             html += `
-<label><input type="checkbox"><span>D</span></label>
+<label>
+<input
+type="checkbox"
+class="skill-checkbox"
+data-name="${name}"
+data-shift="${currentShift}"
+data-skill="${skill}"
+${checked}>
+<span>${skill}</span>
+</label>
 `;
 
-        }
-html += `</div>`;
-        card.innerHTML = html;
+        });
 
+        html += `</div>`;
+
+        card.innerHTML = html;
         skillList.appendChild(card);
+
+    });
+
+    document.querySelectorAll(".skill-checkbox").forEach((box) => {
+
+        box.addEventListener("change", () => {
+
+            const name = box.dataset.name;
+            const shift = box.dataset.shift;
+            const skill = box.dataset.skill;
+
+            if (!skills[name]) skills[name] = {};
+            if (!skills[name][shift]) skills[name][shift] = {};
+
+            skills[name][shift][skill] = box.checked;
+
+            saveSkills();
+
+        });
 
     });
 
