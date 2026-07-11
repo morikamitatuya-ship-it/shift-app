@@ -243,7 +243,7 @@ function drawHolidayList() {
         card.className = "member-row";
 
         let html = `<strong>${name}</strong>`;
-        html += `<div class="skill-checks">`;
+        html += `<div class="holiday-checks">`;
 
         days.forEach((day) => {
 
