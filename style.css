@@ -170,6 +170,26 @@ input{
     margin-top:10px;
 
 }
+/* ===== 休み入力 ===== */
+
+.holiday-checks{
+
+    display:flex;
+    gap:16px;
+    margin-top:10px;
+    flex-wrap:wrap;
+
+}
+
+.holiday-checks label{
+
+    display:flex;
+    align-items:center;
+    gap:4px;
+    width:auto;
+    margin:0;
+
+}
 .skill-checks label{
 
     display:flex;
