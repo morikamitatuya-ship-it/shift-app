@@ -255,7 +255,7 @@ function drawHolidayList() {
                 ? "checked"
                 : "";
 
-            html += `？
+            html += `
 <label>
 <input
 type="checkbox"
