@@ -102,14 +102,15 @@ label{
 }
 
 select,
-input{
+input:not([type="checkbox"]){
+
     width:100%;
     padding:10px;
     border-radius:8px;
     border:none;
     margin-top:8px;
-}
 
+}
 #whiteboard{
     margin-top:25px;
 }
