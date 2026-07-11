@@ -162,6 +162,13 @@ input{
     align-items:flex-start;
 
 }
+#holidayArea .member-row{
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+
+}
 .skill-checks{
 
     display:flex;
