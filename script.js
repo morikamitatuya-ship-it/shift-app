@@ -215,33 +215,19 @@ whiteboard.innerHTML = `
 
 <p>${currentShift}直</p>
 
-<h3>月</h3>
-<p>A　　　B</p>
-<p>C　　　D</p>
+${days.map(day => `
+<h3>${day}</h3>
+
+<p>
+A　${members[0] || "-"}　　　B　${members[1] || "-"}
+</p>
+
+<p>
+C　${members[2] || "-"}${currentShift === 1 ? `　　　D　${members[3] || "-"}` : ""}
+</p>
 
 <hr>
-
-<h3>火</h3>
-<p>A　　　B</p>
-<p>C　　　D</p>
-
-<hr>
-
-<h3>水</h3>
-<p>A　　　B</p>
-<p>C　　　D</p>
-
-<hr>
-
-<h3>木</h3>
-<p>A　　　B</p>
-<p>C　　　D</p>
-
-<hr>
-
-<h3>金</h3>
-<p>A　　　B</p>
-<p>C　　　D</p>
+`).join("")}
 `;
 });
 
