@@ -209,13 +209,38 @@ document
 .addEventListener("click",()=>{
 
     const whiteboard = document.getElementById("whiteboard");
-　　 console.log(whiteboard);
+
 whiteboard.innerHTML = `
 <h2>早出表</h2>
 
-<p>ここに早出表が表示されます。</p>
-`;
+<h3>月</h3>
+<p>A　　　B</p>
+<p>C　　　D</p>
 
+<hr>
+
+<h3>火</h3>
+<p>A　　　B</p>
+<p>C　　　D</p>
+
+<hr>
+
+<h3>水</h3>
+<p>A　　　B</p>
+<p>C　　　D</p>
+
+<hr>
+
+<h3>木</h3>
+<p>A　　　B</p>
+<p>C　　　D</p>
+
+<hr>
+
+<h3>金</h3>
+<p>A　　　B</p>
+<p>C　　　D</p>
+`;
 });
 
 // ----------------------
