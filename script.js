@@ -218,7 +218,19 @@ days.forEach(day => {
     schedule[day] = {};
 
     weekMembers[day] = [...members].sort(() => Math.random() - 0.5);
+schedule[day].A = weekMembers[day][0] || "-";
+schedule[day].B = weekMembers[day][1] || "-";
 
+if (currentShift === 1) {
+
+    schedule[day].C = weekMembers[day][2] || "-";
+    schedule[day].D = weekMembers[day][3] || "-";
+
+} else {
+
+    schedule[day].C = weekMembers[day][2] || "-";
+
+}
 });
     whiteboard.innerHTML = `
 <h2>早出表</h2>
