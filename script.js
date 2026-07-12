@@ -208,7 +208,13 @@ document
 .getElementById("createButton")
 .addEventListener("click",()=>{
 
-    alert("早出表を作成します");
+    const whiteboard = document.getElementById("whiteboard");
+
+whiteboard.innerHTML = `
+<h2>早出表</h2>
+
+<p>ここに早出表が表示されます。</p>
+`;
 
 });
 
