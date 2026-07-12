@@ -217,7 +217,13 @@ const weekMembers = {};
 days.forEach(day => {
     schedule[day] = {};
 
-const shuffled = [...members].sort(() => Math.random() - 0.5);
+const availableMembers = members.filter(name => {
+
+    return !holidays[name] || !holidays[name][day];
+
+});
+
+const shuffled = [...availableMembers].sort(() => Math.random() - 0.5);
 
 const needCount = currentShift === 1 ? 4 : 3;
 
