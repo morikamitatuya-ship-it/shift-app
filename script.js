@@ -211,9 +211,11 @@ document
 
     const whiteboard = document.getElementById("whiteboard");
 const days = ["月", "火", "水", "木", "金"];
+    schedule = {};
 const weekMembers = {};
 
 days.forEach(day => {
+    schedule[day] = {};
 
     weekMembers[day] = [...members].sort(() => Math.random() - 0.5);
 
