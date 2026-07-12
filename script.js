@@ -217,7 +217,11 @@ const weekMembers = {};
 days.forEach(day => {
     schedule[day] = {};
 
-    weekMembers[day] = [...members].sort(() => Math.random() - 0.5);
+const shuffled = [...members].sort(() => Math.random() - 0.5);
+
+const needCount = currentShift === 1 ? 4 : 3;
+
+weekMembers[day] = shuffled.slice(0, needCount);    
 schedule[day].A = weekMembers[day][0] || "-";
 schedule[day].B = weekMembers[day][1] || "-";
 
