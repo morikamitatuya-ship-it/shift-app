@@ -241,11 +241,11 @@ ${days.map(day => `
 <h3>${day}</h3>
 
 <p>
-A　${weekMembers[day][0] || "-"}　　　B　${weekMembers[day][1] || "-"}
+A　${schedule[day].A}　　　B　${schedule[day].B}
 </p>
 
 <p>
-C　${weekMembers[day][2] || "-"}${currentShift === 1 ? `　　　D　${weekMembers[day][3] || "-"}` : ""}
+C　${schedule[day].C}${currentShift === 1 ? `　　　D　${schedule[day].D}` : ""}
 </p>
 
 <hr>
