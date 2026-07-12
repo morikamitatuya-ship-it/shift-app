@@ -210,7 +210,13 @@ document
 
     const whiteboard = document.getElementById("whiteboard");
 const days = ["月", "火", "水", "木", "金"];
-const shuffledMembers = [...members].sort(() => Math.random() - 0.5);
+const weekMembers = {};
+
+days.forEach(day => {
+
+    weekMembers[day] = [...members].sort(() => Math.random() - 0.5);
+
+});
     whiteboard.innerHTML = `
 <h2>早出表</h2>
 
@@ -220,11 +226,11 @@ ${days.map(day => `
 <h3>${day}</h3>
 
 <p>
-A　${shuffledMembers[0] || "-"}　　　B　${shuffledMembers[1] || "-"}
+A　${weekMembers[day][0] || "-"}　　　B　${weekMembers[day][1] || "-"}
 </p>
 
 <p>
-C　${shuffledMembers[2] || "-"}${currentShift === 1 ? `　　　D　${shuffledMembers[3] || "-"}` : ""}
+C　${weekMembers[day][2] || "-"}${currentShift === 1 ? `　　　D　${weekMembers[day][3] || "-"}` : ""}
 </p>
 
 <hr>
