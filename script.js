@@ -276,7 +276,24 @@ ${checked}>
         holidayArea.appendChild(card);
 
     });
+    document.querySelectorAll(".holiday-checkbox").forEach((box) => {
 
+        box.addEventListener("change", () => {
+
+            const name = box.dataset.name;
+            const day = box.dataset.day;
+
+            if (!holidays[name]) {
+                holidays[name] = {};
+            }
+
+            holidays[name][day] = box.checked;
+
+            saveHolidays();
+
+        });
+
+    });
 }
 function drawSkillList() {
 
