@@ -209,7 +209,7 @@ document
 .addEventListener("click",()=>{
 
     const whiteboard = document.getElementById("whiteboard");
-
+　　 console.log(whiteboard);
 whiteboard.innerHTML = `
 <h2>早出表</h2>
 
