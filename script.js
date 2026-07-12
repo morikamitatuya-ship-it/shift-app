@@ -213,6 +213,8 @@ document
 whiteboard.innerHTML = `
 <h2>早出表</h2>
 
+<p>${currentShift}直</p>
+
 <h3>月</h3>
 <p>A　　　B</p>
 <p>C　　　D</p>
