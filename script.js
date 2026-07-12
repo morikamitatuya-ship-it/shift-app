@@ -209,7 +209,7 @@ document
 .addEventListener("click",()=>{
 
     const whiteboard = document.getElementById("whiteboard");
-
+const days = ["月", "火", "水", "木", "金"];
 whiteboard.innerHTML = `
 <h2>早出表</h2>
 
