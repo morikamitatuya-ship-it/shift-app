@@ -1,4 +1,3 @@
-alert("scheduler OK");
 // ===============================
 // GR TRACK MANAGER
 // Scheduler Engine
@@ -10,9 +9,45 @@ function createSchedule() {
 
     const days = ["月", "火", "水", "木", "金"];
 
-    whiteboard.innerHTML = `
-        <h2>Scheduler OK!</h2>
-        <p>エンジンから表示しています。</p>
+    const schedule = {};
+
+    days.forEach(day => {
+
+        schedule[day] = {
+
+            A: "-",
+            B: "-",
+            C: "-",
+            D: "-"
+
+        };
+
+    });
+
+    let html = `
+        <h2>早出表</h2>
+        <p>${currentShift}直</p>
     `;
-return true;
+
+    days.forEach(day => {
+
+        html += `
+            <h3>${day}</h3>
+
+            <p>
+                A　${schedule[day].A}　　　B　${schedule[day].B}
+            </p>
+
+            <p>
+                C　${schedule[day].C}
+                ${currentShift === 1 ? `　　　D　${schedule[day].D}` : ""}
+            </p>
+
+            <hr>
+        `;
+
+    });
+
+    whiteboard.innerHTML = html;
+
 }
