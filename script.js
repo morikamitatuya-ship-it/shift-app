@@ -208,7 +208,8 @@ skillButton.addEventListener("click", () => {
 document
 .getElementById("createButton")
 .addEventListener("click",()=>{
-
+createSchedule();
+return;
     const whiteboard = document.getElementById("whiteboard");
 const days = ["月", "火", "水", "木", "金"];
     schedule = {};
