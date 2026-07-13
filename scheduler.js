@@ -13,5 +13,5 @@ function createSchedule() {
         <h2>Scheduler OK!</h2>
         <p>エンジンから表示しています。</p>
     `;
-
+return true;
 }
