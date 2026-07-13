@@ -213,8 +213,14 @@ document
 const days = ["月", "火", "水", "木", "金"];
     schedule = {};
 const weekMembers = {};
+    const dayCounts = {};
 
 days.forEach(day => {
+    members.forEach(name => {
+
+    if (dayCounts[name] === undefined) dayCounts[name] = 0;
+
+});
     schedule[day] = {};
 
 const availableMembers = members.filter(name => {
