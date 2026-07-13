@@ -1,3 +1,4 @@
+alert("scheduler OK");
 // ===============================
 // GR TRACK MANAGER
 // Scheduler Engine
