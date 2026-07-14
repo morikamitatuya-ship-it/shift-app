@@ -13,14 +13,22 @@ function createSchedule() {
 
     days.forEach(day => {
 
-    const shuffled = [...members].sort(() => Math.random() - 0.5);
+    let availableMembers = members.filter(name => {
+
+    if (!holidays[name]) return true;
+
+    return !holidays[name][day];
+
+});
+
+availableMembers.sort(() => Math.random() - 0.5);
 
     schedule[day] = {
 
-        A: shuffled[0] || "-",
-        B: shuffled[1] || "-",
-        C: shuffled[2] || "-",
-        D: currentShift === 1 ? (shuffled[3] || "-") : "-"
+        A: availableMembers[0] || "-",
+B: availableMembers[1] || "-",
+C: availableMembers[2] || "-",
+D: currentShift === 1 ? (availableMembers[3] || "-") : "-"
 
     };
 
