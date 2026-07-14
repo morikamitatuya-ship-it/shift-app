@@ -21,7 +21,27 @@ function createSchedule() {
 
 });
 
-availableMembers.sort(() => Math.random() - 0.5);
+availableMembers.forEach(name => {
+
+    if (dayCounts[name] === undefined) {
+
+        dayCounts[name] = 0;
+
+    }
+
+});
+
+availableMembers.sort((a, b) => {
+
+    if (dayCounts[a] !== dayCounts[b]) {
+
+        return dayCounts[a] - dayCounts[b];
+
+    }
+
+    return Math.random() - 0.5;
+
+});
 
     schedule[day] = {
 
@@ -31,7 +51,17 @@ C: availableMembers[2] || "-",
 D: currentShift === 1 ? (availableMembers[3] || "-") : "-"
 
     };
+const needCount = currentShift === 1 ? 4 : 3;
 
+for (let i = 0; i < needCount; i++) {
+
+    if (availableMembers[i]) {
+
+        dayCounts[availableMembers[i]]++;
+
+    }
+
+}
 });
 
     let html = `
