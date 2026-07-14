@@ -13,16 +13,18 @@ function createSchedule() {
 
     days.forEach(day => {
 
-        schedule[day] = {
+    const shuffled = [...members].sort(() => Math.random() - 0.5);
 
-            A: "-",
-            B: "-",
-            C: "-",
-            D: "-"
+    schedule[day] = {
 
-        };
+        A: shuffled[0] || "-",
+        B: shuffled[1] || "-",
+        C: shuffled[2] || "-",
+        D: currentShift === 1 ? (shuffled[3] || "-") : "-"
 
-    });
+    };
+
+});
 
     let html = `
         <h2>早出表</h2>
