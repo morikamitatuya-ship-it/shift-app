@@ -173,9 +173,10 @@ input:not([type="checkbox"]){
 .skill-checks{
 
     display:flex;
-    flex-wrap:wrap;
-    gap:16px;
-    margin-top:10px;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:8px;
+    margin-top:0;
 
 }
 /* ===== 休み入力 ===== */
