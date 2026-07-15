@@ -359,21 +359,22 @@ function drawSkillList() {
 
     members.forEach((name) => {
 
-        const card = document.createElement("div");
-        card.className = "member-row";
+        if (!skills[name]) skills[name] = {};
+        if (!skills[name][currentShift]) skills[name][currentShift] = {};
 
-        let html = `<strong>${name}</strong>`;
-        html += `<div class="skill-checks">`;
+        const row = document.createElement("div");
+        row.className = "member-row";
+
+        let html = `<span class="member-name">${name}</span>`;
 
         const skillListForShift =
             currentShift === 1
                 ? ["A","B","C","D"]
                 : ["A","B","C"];
 
-        skillListForShift.forEach((skill) => {
+        html += `<div class="skill-checks">`;
 
-            if (!skills[name]) skills[name] = {};
-            if (!skills[name][currentShift]) skills[name][currentShift] = {};
+        skillListForShift.forEach((skill) => {
 
             const checked =
                 skills[name][currentShift][skill]
@@ -382,6 +383,7 @@ function drawSkillList() {
 
             html += `
 <label>
+${skill}
 <input
 type="checkbox"
 class="skill-checkbox"
@@ -389,16 +391,16 @@ data-name="${name}"
 data-shift="${currentShift}"
 data-skill="${skill}"
 ${checked}>
-<span>${skill}</span>
 </label>
 `;
 
-    });
+        });
 
         html += `</div>`;
 
-        card.innerHTML = html;
-        skillList.appendChild(card);
+        row.innerHTML = html;
+
+        skillList.appendChild(row);
 
     });
 
