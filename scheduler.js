@@ -43,37 +43,12 @@ availableMembers.sort((a, b) => {
 
 });
 
-const usedMembers = [];
-
-function pickMember(position) {
-
-    const candidate = availableMembers.find(name => {
-
-        if (usedMembers.includes(name)) return false;
-
-        if (!skills[name]) return true;
-        if (!skills[name][currentShift]) return true;
-
-        return skills[name][currentShift][position];
-
-    });
-
-    if (candidate) {
-
-        usedMembers.push(candidate);
-
-    }
-
-    return candidate || "-";
-
-}
-
 schedule[day] = {
 
-    A: pickMember("A"),
-    B: pickMember("B"),
-    C: pickMember("C"),
-    D: currentShift === 1 ? pickMember("D") : "-"
+    A: availableMembers[0] || "-",
+    B: availableMembers[1] || "-",
+    C: availableMembers[2] || "-",
+    D: currentShift === 1 ? (availableMembers[3] || "-") : "-"
 
 };
 const needCount = currentShift === 1 ? 4 : 3;
