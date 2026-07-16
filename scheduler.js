@@ -9,7 +9,8 @@ function createSchedule() {
 
     const days = ["月", "火", "水", "木", "金"];
 
-    const schedule = {};
+const schedule = {};
+const dayCounts = {};
 
     days.forEach(day => {
 
