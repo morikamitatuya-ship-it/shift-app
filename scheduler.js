@@ -2,6 +2,22 @@
 // GR TRACK MANAGER
 // Scheduler Engine
 // ===============================
+function isTraining(member) {
+
+    if (!skills[member]) return true;
+
+    const shiftSkills = skills[member][currentShift];
+
+    if (!shiftSkills) return true;
+
+    const positions =
+        currentShift === 1
+            ? ["A","B","C","D"]
+            : ["A","B","C"];
+
+    return positions.some(position => !shiftSkills[position]);
+
+}
 function canDo(member, position) {
 
     if (!skills[member]) return false;
