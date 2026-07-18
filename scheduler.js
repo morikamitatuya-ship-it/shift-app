@@ -201,8 +201,9 @@ days.forEach(day => {
 });
 
 html += `
-<p style="font-size:14px;color:#ff9800;">
-🟠＝教育中
+<p style="font-size:14px;line-height:1.6;">
+🟠＝教育中<br>
+👨‍🏫＝教育担当
 </p>
 `;
 
