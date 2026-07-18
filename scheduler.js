@@ -2,7 +2,15 @@
 // GR TRACK MANAGER
 // Scheduler Engine
 // ===============================
+function canDo(member, position) {
 
+    if (!skills[member]) return false;
+
+    if (!skills[member][currentShift]) return false;
+
+    return skills[member][currentShift][position] === true;
+
+}
 function createSchedule() {
 
     const whiteboard = document.getElementById("whiteboard");
@@ -52,6 +60,7 @@ schedule[day] = {
     D: currentShift === 1 ? (availableMembers[3] || "-") : "-"
 
 };
+
 const needCount = currentShift === 1 ? 4 : 3;
 
 for (let i = 0; i < needCount; i++) {
