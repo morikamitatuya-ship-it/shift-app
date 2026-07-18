@@ -11,6 +11,48 @@ function canDo(member, position) {
     return skills[member][currentShift][position] === true;
 
 }
+
+function getCandidates(memberList, position, usedMembers) {
+
+    return memberList.filter(member => {
+
+        if (usedMembers.includes(member)) return false;
+
+        return canDo(member, position);
+
+    });
+
+}
+
+function pickMember(candidates, dayCounts, usedMembers) {
+
+    if (candidates.length === 0) {
+
+        return "-";
+
+    }
+
+    candidates.sort((a, b) => {
+
+        if (dayCounts[a] !== dayCounts[b]) {
+
+            return dayCounts[a] - dayCounts[b];
+
+        }
+
+        return Math.random() - 0.5;
+
+    });
+
+    const member = candidates[0];
+
+    usedMembers.push(member);
+
+    dayCounts[member]++;
+
+    return member;
+
+}
 function createSchedule() {
 
     const whiteboard = document.getElementById("whiteboard");
