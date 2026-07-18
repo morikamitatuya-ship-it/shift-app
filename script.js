@@ -104,15 +104,36 @@ addMemberButton.addEventListener("click", () => {
 
     }
 
-    members.push(name);
+members.push(name);
+
+if (!skills[name]) {
+
+    skills[name] = {
+
+        1: {
+            A: false,
+            B: false,
+            C: false,
+            D: false
+        },
+
+        2: {
+            A: false,
+            B: false,
+            C: false
+        }
+
+    };
+
+}
 
 saveMembers();
+saveSkills();
 
 memberName.value = "";
 
 drawMemberList();
 drawSkillList();
-
 });
 
 // ----------------------
