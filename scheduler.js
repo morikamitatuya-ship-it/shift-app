@@ -171,24 +171,40 @@ for (let i = 0; i < needCount; i++) {
         <p>${currentShift}直</p>
     `;
 
-    days.forEach(day => {
+days.forEach(day => {
 
-        html += `
-            <h3>${day}</h3>
+    const A = schedule[day].A;
+    const B = schedule[day].B;
+    const C = schedule[day].C;
+    const D = schedule[day].D;
 
-            <p>
-                A　${schedule[day].A}　　　B　${schedule[day].B}
-            </p>
+    html += `
+        <h3>${day}</h3>
 
-            <p>
-                C　${schedule[day].C}
-                ${currentShift === 1 ? `　　　D　${schedule[day].D}` : ""}
-            </p>
+        <p>
+            A　${A}${A !== "-" && isTraining(A) ? "🟠" : ""}
+            　　　B　${B}${B !== "-" && isTraining(B) ? "🟠" : ""}
+        </p>
 
-            <hr>
-        `;
+        <p>
+            C　${C}${C !== "-" && isTraining(C) ? "🟠" : ""}
+            ${
+                currentShift === 1
+                    ? `　　　D　${D}${D !== "-" && isTraining(D) ? "🟠" : ""}`
+                    : ""
+            }
+        </p>
 
-    });
+        <hr>
+    `;
+
+});
+
+html += `
+<p style="font-size:14px;color:#ff9800;">
+🟠＝教育中
+</p>
+`;
 
     whiteboard.innerHTML = html;
 
