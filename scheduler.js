@@ -153,17 +153,7 @@ if (currentShift === 2) {
 
 }
 
-const needCount = currentShift === 1 ? 4 : 3;
 
-for (let i = 0; i < needCount; i++) {
-
-    if (availableMembers[i]) {
-
-        dayCounts[availableMembers[i]]++;
-
-    }
-
-}
 });
 
     let html = `
