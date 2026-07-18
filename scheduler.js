@@ -94,14 +94,48 @@ availableMembers.sort((a, b) => {
 
 });
 
-schedule[day] = {
+const usedMembers = [];
 
-    A: availableMembers[0] || "-",
-    B: availableMembers[1] || "-",
-    C: availableMembers[2] || "-",
-    D: currentShift === 1 ? (availableMembers[3] || "-") : "-"
+const positions =
+    currentShift === 1
+        ? ["A","B","C","D"]
+        : ["A","B","C"];
 
-};
+// できる人が少ない工程から並べる
+positions.sort((a, b) => {
+
+    const countA = getCandidates(availableMembers, a, []).length;
+    const countB = getCandidates(availableMembers, b, []).length;
+
+    return countA - countB;
+
+});
+
+schedule[day] = {};
+
+positions.forEach(position => {
+
+    const candidates =
+        getCandidates(
+            availableMembers,
+            position,
+            usedMembers
+        );
+
+    schedule[day][position] =
+        pickMember(
+            candidates,
+            dayCounts,
+            usedMembers
+        );
+
+});
+
+if (currentShift === 2) {
+
+    schedule[day].D = "-";
+
+}
 
 const needCount = currentShift === 1 ? 4 : 3;
 
