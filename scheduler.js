@@ -408,7 +408,7 @@ function createDaySchedule(
 
 
 
-        result[position] =
+result[position] =
     pickMember(
         candidates,
         counts,
