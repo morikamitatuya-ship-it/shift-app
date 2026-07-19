@@ -413,7 +413,7 @@ function createDaySchedule(
         candidates,
         counts,
         day,
-        schedule,
+        result,
         usedMembers
     );
 
