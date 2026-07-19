@@ -221,8 +221,55 @@ function sortPositions(
 
 
 // -------------------------------
-// 公平選択
+// 前日担当確認
 // -------------------------------
+
+function wasYesterdayMember(
+    member,
+    day,
+    schedule
+) {
+
+    const days = [
+        "月",
+        "火",
+        "水",
+        "木",
+        "金"
+    ];
+
+
+    const index =
+        days.indexOf(day);
+
+
+    if (index <= 0) {
+
+        return false;
+
+    }
+
+
+    const yesterday =
+        days[index - 1];
+
+
+    const positions =
+        currentShift === 1
+            ? ["A","B","C","D"]
+            : ["A","B","C"];
+
+
+    return positions.some(position => {
+
+        return schedule[yesterday]
+            &&
+            schedule[yesterday][position]
+            === member;
+
+    });
+
+}
 // -------------------------------
 // 公平選択 Version2
 // -------------------------------
