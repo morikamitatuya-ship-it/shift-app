@@ -223,10 +223,15 @@ function sortPositions(
 // -------------------------------
 // 公平選択
 // -------------------------------
+// -------------------------------
+// 公平選択 Version2
+// -------------------------------
 
 function pickMember(
     candidates,
     counts,
+    day,
+    schedule,
     usedMembers
 ) {
 
@@ -243,6 +248,8 @@ function pickMember(
     candidates.sort((a,b)=>{
 
 
+        // ①担当回数が少ない人優先
+
         if (
             counts[a] !== counts[b]
         ) {
@@ -251,6 +258,38 @@ function pickMember(
 
         }
 
+
+
+        // ②前日担当を避ける
+
+        const aYesterday =
+            wasYesterdayMember(
+                a,
+                day,
+                schedule
+            );
+
+
+        const bYesterday =
+            wasYesterdayMember(
+                b,
+                day,
+                schedule
+            );
+
+
+
+        if (
+            aYesterday !== bYesterday
+        ) {
+
+            return aYesterday ? 1 : -1;
+
+        }
+
+
+
+        // ③同条件ならランダム
 
         return Math.random() - 0.5;
 
@@ -261,6 +300,7 @@ function pickMember(
 
     const selected =
         candidates[0];
+
 
 
     usedMembers.push(
@@ -274,6 +314,7 @@ function pickMember(
     return selected;
 
 }
+
 // ===============================
 // Scheduler Engine Version2
 // Part2
