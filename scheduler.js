@@ -159,7 +159,28 @@ function createCountTable() {
     return counts;
 
 }
+// -------------------------------
+// 工程別担当回数
+// -------------------------------
 
+function createPositionCountTable() {
+
+    const positionCounts = {};
+
+    members.forEach(member => {
+
+        positionCounts[member] = {
+            A: 0,
+            B: 0,
+            C: 0,
+            D: 0
+        };
+
+    });
+
+    return positionCounts;
+
+}
 
 // -------------------------------
 // 候補人数確認
