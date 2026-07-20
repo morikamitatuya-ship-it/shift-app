@@ -476,12 +476,13 @@ function buildSchedule() {
     ];
 
 
-    const counts =
+const counts =
         createCountTable();
+const positionCounts =
+    createPositionCountTable();
 
 
-
-    const schedule =
+const schedule =
         {};
 
 
