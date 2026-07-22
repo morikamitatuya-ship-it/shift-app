@@ -506,6 +506,7 @@ const schedule =
     return {
         schedule,
         counts
+        positionCounts
     };
 
 
