@@ -492,9 +492,10 @@ const schedule =
 
         schedule[day] =
             createDaySchedule(
-                day,
-                counts
-            );
+    day,
+    counts,
+    positionCounts
+);
 
 
     });
