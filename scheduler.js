@@ -396,7 +396,8 @@ function pickMember(
 
 function createDaySchedule(
     day,
-    counts
+    counts,
+    positionCounts
 ) {
 
 
