@@ -504,10 +504,10 @@ const schedule =
 
 
     return {
-        schedule,
-        counts
-        positionCounts
-    };
+    schedule,
+    counts,
+    positionCounts
+};
 
 
 }
