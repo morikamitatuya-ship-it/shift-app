@@ -369,21 +369,23 @@ function pickMember(
 
 
     const selected =
-        candidates[0];
+    candidates[0];
 
+usedMembers.push(
+    selected
+);
 
-
-    usedMembers.push(
-        selected
-    );
-
+if (selected !== "-") {
 
     counts[selected]++;
 
-
-    return selected;
+    positionCounts[selected][position]++;
 
 }
+
+return selected;
+}
+
 
 // ===============================
 // Scheduler Engine Version2
