@@ -434,12 +434,14 @@ function createDaySchedule(
 
 result[position] =
     pickMember(
-        candidates,
-        counts,
-        day,
-        result,
-        usedMembers
-    );
+    candidates,
+    counts,
+    positionCounts,
+    position,
+    day,
+    result,
+    usedMembers
+);
 
 
     });
