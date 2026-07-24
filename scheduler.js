@@ -298,6 +298,8 @@ function wasYesterdayMember(
 function pickMember(
     candidates,
     counts,
+    positionCounts,
+    position,
     day,
     schedule,
     usedMembers
