@@ -301,7 +301,19 @@ function calculateScore(
 ) {
 
     let score = 0;
+members.forEach(member => {
 
+    const counts = positionCounts[member];
+
+    const uniquePositions =
+        Object.values(counts)
+            .filter(count => count > 0)
+            .length;
+
+    score +=
+        (4 - uniquePositions) * 10;
+
+});
     return score;
 
 }
