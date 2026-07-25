@@ -774,7 +774,19 @@ function createSchedule() {
 
     const counts =
         data.counts;
+const positionCounts =
+    data.positionCounts;
 
+const score =
+    calculateScore(
+        schedule,
+        positionCounts
+    );
+
+console.log(
+    "Score:",
+    score
+);
 
 
     const education =
