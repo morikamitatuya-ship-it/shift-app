@@ -770,25 +770,38 @@ let bestData = null;
 let bestScore =
     Infinity;
 
-   const data =
-    buildSchedule();
+   for (let i = 0; i < 2; i++) {
 
-bestData =
-    data;
+    const data =
+        buildSchedule();
 
-bestScore =
-    data.score; 
+    if (
+        data.score < bestScore
+    ) {
+
+        bestScore =
+            data.score;
+
+        bestData =
+            data;
+
+    }
+
+}
 
 
 
     const schedule =
-        data.schedule;
+    bestData.schedule;
 
+const counts =
+    bestData.counts;
 
-    const counts =
-        data.counts;
 const positionCounts =
-    data.positionCounts;
+    bestData.positionCounts;
+
+const score =
+    bestData.score;
 
 const score =
     data.score;
