@@ -803,12 +803,16 @@ const positionCounts =
 
 const score =
     bestData.score;
-
+console.log(
+    "Best Score:",
+    bestScore
+);
 
 console.log(
-    "Score:",
+    "Selected Score:",
     score
 );
+
 
 
     const education =
