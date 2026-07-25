@@ -782,10 +782,7 @@ const positionCounts =
     data.positionCounts;
 
 const score =
-    calculateScore(
-        schedule,
-        positionCounts
-    );
+    data.score;
 
 console.log(
     "Score:",
