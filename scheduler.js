@@ -765,7 +765,10 @@ function getEducationMark(
 // -------------------------------
 
 function createSchedule() {
+let bestData = null;
 
+let bestScore =
+    Infinity;
 
     const data =
         buildSchedule();
