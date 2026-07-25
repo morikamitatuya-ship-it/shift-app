@@ -327,7 +327,19 @@ function pickMember(
             return counts[a] - counts[b];
 
         }
+// ①-2 同じ工程の担当回数が少ない人優先
 
+if (
+    positionCounts[a][position] !==
+    positionCounts[b][position]
+) {
+
+    return (
+        positionCounts[a][position] -
+        positionCounts[b][position]
+    );
+
+}
 
 
         // ②前日担当を避ける
