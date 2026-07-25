@@ -312,7 +312,16 @@ members.forEach(member => {
 
     score +=
         (4 - uniquePositions) * 10;
+Object.values(counts).forEach(count => {
 
+    if (count >= 2) {
+
+        score +=
+            (count - 1) * 30;
+
+    }
+
+});
 });
     return score;
 
