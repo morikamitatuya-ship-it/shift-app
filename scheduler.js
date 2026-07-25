@@ -770,8 +770,14 @@ let bestData = null;
 let bestScore =
     Infinity;
 
-    const data =
-        buildSchedule();
+   const data =
+    buildSchedule();
+
+bestData =
+    data;
+
+bestScore =
+    data.score; 
 
 
 
