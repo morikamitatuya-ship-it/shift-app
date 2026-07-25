@@ -771,7 +771,7 @@ let bestData = null;
 let bestScore =
     Infinity;
 
-   for (let i = 0; i < 2; i++) {
+   for (let i = 0; i < 5; i++) {
 
     const data =
         buildSchedule();
