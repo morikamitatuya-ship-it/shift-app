@@ -803,8 +803,6 @@ const positionCounts =
 const score =
     bestData.score;
 
-const score =
-    data.score;
 
 console.log(
     "Score:",
