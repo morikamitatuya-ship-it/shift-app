@@ -554,7 +554,8 @@ const score =
     return {
     schedule,
     counts,
-    positionCounts
+    positionCounts,
+    score
 };
 
 
