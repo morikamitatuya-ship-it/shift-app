@@ -546,7 +546,11 @@ const schedule =
     });
 
 
-
+const score =
+    calculateScore(
+        schedule,
+        positionCounts
+    );
     return {
     schedule,
     counts,
