@@ -292,6 +292,20 @@ function wasYesterdayMember(
 
 }
 // -------------------------------
+// スケジュール採点
+// -------------------------------
+
+function calculateScore(
+    schedule,
+    positionCounts
+) {
+
+    let score = 0;
+
+    return score;
+
+}
+// -------------------------------
 // 公平選択 Version2
 // -------------------------------
 
