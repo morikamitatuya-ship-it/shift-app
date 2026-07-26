@@ -22,6 +22,9 @@ const memberList = document.getElementById("memberList");
 
 const holidayArea = document.getElementById("holidayArea");
 const holidayButton = document.getElementById("holidayButton");
+
+const educationButton = document.getElementById("educationButton");
+const educationArea = document.getElementById("educationArea");
 // ----------------------
 // 勤務切替
 // ----------------------
