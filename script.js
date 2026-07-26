@@ -94,7 +94,17 @@ memberButton.addEventListener("click", () => {
     }
 
 });
+addEducationButton.addEventListener("click", () => {
 
+    educationList.innerHTML += `
+        <div class="educationCard">
+
+            教育カード
+
+        </div>
+    `;
+
+});
 educationButton.addEventListener("click", () => {
 
     if (educationArea.style.display === "none") {
