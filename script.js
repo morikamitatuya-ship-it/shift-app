@@ -114,6 +114,38 @@ ${member}
 
 </select>
 
+
+<br><br>
+
+<b>教育工程</b><br>
+
+<label>
+<input
+type="radio"
+name="position">
+A
+</label>
+
+<label>
+<input
+type="radio"
+name="position">
+B
+</label>
+
+<label>
+<input
+type="radio"
+name="position">
+C
+</label>
+
+<label>
+<input
+type="radio"
+name="position">
+D
+</label>
 </div>
 `;
 
