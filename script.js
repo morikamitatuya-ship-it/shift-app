@@ -92,6 +92,20 @@ memberButton.addEventListener("click", () => {
 
 });
 
+educationButton.addEventListener("click", () => {
+
+    if (educationArea.style.display === "none") {
+
+        educationArea.style.display = "block";
+
+    } else {
+
+        educationArea.style.display = "none";
+
+    }
+
+});
+
 // ----------------------
 // メンバー追加
 // ----------------------
