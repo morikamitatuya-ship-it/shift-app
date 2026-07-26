@@ -103,7 +103,13 @@ addEducationButton.addEventListener("click", () => {
 
 <select>
 
-<option>選択してください</option>
+<option value="">選択してください</option>
+
+${members.map(member => `
+<option value="${member}">
+${member}
+</option>
+`).join("")}
 
 </select>
 
