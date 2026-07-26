@@ -97,12 +97,18 @@ memberButton.addEventListener("click", () => {
 addEducationButton.addEventListener("click", () => {
 
     educationList.innerHTML += `
-        <div class="educationCard">
+<div class="educationCard">
 
-            教育カード
+<b>名前</b><br>
 
-        </div>
-    `;
+<select>
+
+<option>選択してください</option>
+
+</select>
+
+</div>
+`;
 
 });
 educationButton.addEventListener("click", () => {
