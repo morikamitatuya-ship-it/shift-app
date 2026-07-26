@@ -96,6 +96,7 @@ memberButton.addEventListener("click", () => {
 });
 addEducationButton.addEventListener("click", () => {
 
+    alert(members.length);
     educationList.innerHTML += `
 <div class="educationCard">
 
