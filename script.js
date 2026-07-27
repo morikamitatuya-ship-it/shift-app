@@ -123,7 +123,7 @@ ${member}
 <input
 type="radio"
 name="position">
-A
+<span>A</span>
 </label>
 
 <label>
