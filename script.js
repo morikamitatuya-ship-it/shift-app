@@ -179,6 +179,23 @@ type="checkbox">
 type="checkbox">
 金
 </label>
+<br><br>
+
+<b>教育担当</b><br>
+
+<label>
+<input
+type="radio"
+name="trainerMode">
+自動
+</label>
+
+<label>
+<input
+type="radio"
+name="trainerMode">
+固定
+</label>
 </div>
 `;
 
