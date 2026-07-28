@@ -271,7 +271,11 @@ educationButton.addEventListener("click", () => {
     }
 
 });
+saveEducationButton.addEventListener("click", () => {
 
+    alert("保存ボタンが押されました");
+
+});
 // ----------------------
 // メンバー追加
 // ----------------------
