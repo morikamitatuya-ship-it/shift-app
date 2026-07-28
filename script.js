@@ -188,14 +188,17 @@ type="checkbox">
 <label>
 <input
 type="radio"
-name="trainerMode">
+name="trainerMode"
+value="auto"
+checked>
 自動
 </label>
 
 <label>
 <input
 type="radio"
-name="trainerMode">
+name="trainerMode"
+value="fixed">
 固定
 </label>
 <br><br>
