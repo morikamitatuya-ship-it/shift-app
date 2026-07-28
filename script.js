@@ -28,6 +28,8 @@ const educationArea = document.getElementById("educationArea");
 
 const addEducationButton = document.getElementById("addEducation");
 const educationList = document.getElementById("educationList");
+const fixedTrainerArea =
+    document.querySelector(".fixedTrainerArea");
 // ----------------------
 // 勤務切替
 // ----------------------
