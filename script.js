@@ -198,6 +198,8 @@ name="trainerMode">
 </label>
 <br><br>
 
+<div class="fixedTrainerArea">
+
 <b>固定担当</b><br>
 
 <select>
@@ -211,6 +213,8 @@ ${member}
 `).join("")}
 
 </select>
+
+</div>
 </div>
 `;
 
