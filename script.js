@@ -219,7 +219,10 @@ ${member}
 </div>
 </div>
 `;
+const fixedTrainerArea =
+    educationList.lastElementChild.querySelector(".fixedTrainerArea");
 
+fixedTrainerArea.style.display = "none";
 });
 educationButton.addEventListener("click", () => {
 
