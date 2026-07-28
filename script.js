@@ -82,6 +82,14 @@ function saveSkills() {
         JSON.stringify(skills)
     );
 }
+function saveEducations() {
+
+    localStorage.setItem(
+        "educations",
+        JSON.stringify(educations)
+    );
+
+}
 // ----------------------
 // メンバー管理開閉
 // ----------------------
