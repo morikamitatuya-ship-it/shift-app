@@ -226,6 +226,23 @@ const fixedTrainerArea =
     educationList.lastElementChild.querySelector(".fixedTrainerArea");
 
 fixedTrainerArea.style.display = "none";
+const trainerRadios =
+    educationList.lastElementChild.querySelectorAll(
+        'input[name="trainerMode"]'
+    );
+
+trainerRadios.forEach(radio => {
+
+    radio.addEventListener("change", () => {
+
+        fixedTrainerArea.style.display =
+            radio.value === "fixed"
+                ? "block"
+                : "none";
+
+    });
+
+});
 });
 educationButton.addEventListener("click", () => {
 
