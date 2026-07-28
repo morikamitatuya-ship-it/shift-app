@@ -59,7 +59,10 @@ let members = JSON.parse(localStorage.getItem("members")) || [];
 
 let skills = JSON.parse(localStorage.getItem("skills")) || {};
 let holidays = JSON.parse(localStorage.getItem("holidays")) || {};
-
+let educations =
+    JSON.parse(
+        localStorage.getItem("educations")
+    ) || [];
 function saveHolidays() {
     localStorage.setItem(
         "holidays",
