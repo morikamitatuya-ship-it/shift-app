@@ -28,6 +28,9 @@ const educationArea = document.getElementById("educationArea");
 
 const addEducationButton = document.getElementById("addEducation");
 const educationList = document.getElementById("educationList");
+
+const saveEducationButton =
+    document.getElementById("saveEducation");
 const fixedTrainerArea =
     document.querySelector(".fixedTrainerArea");
 // ----------------------
