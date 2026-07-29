@@ -279,7 +279,10 @@ saveEducationButton.addEventListener("click", () => {
 alert(cards.length);
 cards.forEach(card => {
 
-    console.log(card);
+    const member =
+    card.querySelector("select").value;
+
+console.log(member);
 
 });
 });
