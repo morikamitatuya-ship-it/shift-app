@@ -275,7 +275,7 @@ saveEducationButton.addEventListener("click", () => {
 
     const cards =
     document.querySelectorAll(".educationCard");
-
+educations = [];
 cards.forEach(card => {
 
     const member =
