@@ -273,7 +273,10 @@ educationButton.addEventListener("click", () => {
 });
 saveEducationButton.addEventListener("click", () => {
 
-    alert("保存ボタンが押されました");
+    const cards =
+    document.querySelectorAll(".educationCard");
+
+alert(cards.length);
 
 });
 // ----------------------
