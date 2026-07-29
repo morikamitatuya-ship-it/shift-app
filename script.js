@@ -277,7 +277,11 @@ saveEducationButton.addEventListener("click", () => {
     document.querySelectorAll(".educationCard");
 
 alert(cards.length);
+cards.forEach(card => {
 
+    console.log(card);
+
+});
 });
 // ----------------------
 // メンバー追加
