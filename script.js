@@ -276,13 +276,12 @@ saveEducationButton.addEventListener("click", () => {
     const cards =
     document.querySelectorAll(".educationCard");
 
-alert(cards.length);
 cards.forEach(card => {
 
     const member =
     card.querySelector("select").value;
 
-console.log(member);
+alert(member);
 
 });
 });
