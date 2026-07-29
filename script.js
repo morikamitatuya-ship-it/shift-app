@@ -282,6 +282,11 @@ cards.forEach(card => {
     card.querySelector("select").value;
 
 alert(member);
+    educations.push({
+
+    member: member
+
+});
 
 });
 });
