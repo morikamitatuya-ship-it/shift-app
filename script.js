@@ -283,7 +283,7 @@ cards.forEach(card => {
 const position =
     card.querySelector('input[name="position"]:checked')
     ?.parentNode.textContent.trim();
-alert(member);
+
     educations.push({
 
     member: member,
