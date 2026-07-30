@@ -296,7 +296,9 @@ card.querySelectorAll('input[type="checkbox"]').forEach(day => {
     }
 
 });
-
+const trainerMode =
+    card.querySelector('input[name="trainerMode"]:checked')
+    ?.value;
     educations.push({
 
     member: member,
