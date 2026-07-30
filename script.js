@@ -303,7 +303,8 @@ const trainerMode =
 
     member: member,
     position: position,
-    days: days
+    days: days,
+    trainerMode: trainerMode
 
 });
 
