@@ -300,7 +300,8 @@ card.querySelectorAll('input[type="checkbox"]').forEach(day => {
     educations.push({
 
     member: member,
-    position: position
+    position: position,
+    days: days
 
 });
 
