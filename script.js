@@ -299,12 +299,16 @@ card.querySelectorAll('input[type="checkbox"]').forEach(day => {
 const trainerMode =
     card.querySelector('input[name="trainerMode"]:checked')
     ?.value;
+    const trainer =
+    card.querySelector(".fixedTrainerArea select")
+    ?.value;
     educations.push({
 
     member: member,
     position: position,
     days: days,
-    trainerMode: trainerMode
+    trainerMode: trainerMode,
+    trainer: trainer
 
 });
 
