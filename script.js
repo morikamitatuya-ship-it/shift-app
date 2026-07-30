@@ -283,6 +283,19 @@ cards.forEach(card => {
 const position =
     card.querySelector('input[name="position"]:checked')
     ?.parentNode.textContent.trim();
+    const days = [];
+
+card.querySelectorAll('input[type="checkbox"]').forEach(day => {
+
+    if (day.checked) {
+
+        days.push(
+            day.parentNode.textContent.trim()
+        );
+
+    }
+
+});
 
     educations.push({
 
