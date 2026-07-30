@@ -775,6 +775,10 @@ function getEducationMark(
 // -------------------------------
 
 function createSchedule() {
+    const educations =
+    JSON.parse(
+        localStorage.getItem("educations")
+    ) || [];
 let bestData = null;
 
 let bestScore =
