@@ -286,7 +286,8 @@ const position =
 alert(member);
     educations.push({
 
-    member: member
+    member: member,
+    position: position
 
 });
 
