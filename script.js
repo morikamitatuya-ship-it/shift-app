@@ -315,7 +315,9 @@ const trainerMode =
 });
     saveEducations();
 
-alert("教育設定を保存しました");
+alert(
+    JSON.stringify(educations, null, 2)
+);
 });
 // ----------------------
 // メンバー追加
