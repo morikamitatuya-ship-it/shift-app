@@ -459,8 +459,17 @@ function createDaySchedule(
 
     const availableMembers =
         getAvailableMembers(day);
-
-
+    const educations =
+    JSON.parse(
+        localStorage.getItem("educations")
+    ) || [];
+const todayEducations =
+    educations.filter(education =>
+        education.days.includes(day)
+    );
+const education =
+    todayEducations[0];
+    
 
     const positions =
         sortPositions(
