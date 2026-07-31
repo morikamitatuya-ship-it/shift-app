@@ -788,6 +788,10 @@ let bestScore =
 
     const data =
         buildSchedule();
+       const todayEducations =
+    educations.filter(education =>
+        education.days.includes(data.day)
+    );
 
     if (
         data.score < bestScore
