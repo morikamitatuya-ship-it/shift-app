@@ -469,7 +469,11 @@ const todayEducations =
     );
 const education =
     todayEducations[0];
-    
+    const trainee =
+    education?.member;
+
+const trainingPosition =
+    education?.position;
 
     const positions =
         sortPositions(
