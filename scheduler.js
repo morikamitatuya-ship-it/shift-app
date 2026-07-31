@@ -794,6 +794,14 @@ let bestScore =
     );
        const education =
     todayEducations[0];
+       if (education) {
+           const trainee =
+    education.member;
+           const trainingPosition =
+    education.position;
+           
+
+}
 if (todayEducations.length > 0) {
 
     console.log(todayEducations);
