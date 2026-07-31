@@ -792,6 +792,8 @@ let bestScore =
     educations.filter(education =>
         education.days.includes(data.day)
     );
+       const education =
+    todayEducations[0];
 if (todayEducations.length > 0) {
 
     console.log(todayEducations);
