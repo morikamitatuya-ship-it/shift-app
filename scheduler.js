@@ -501,6 +501,7 @@ const trainingPosition =
     position === trainingPosition &&
     candidates.includes(trainee)
 ) {
+    alert("教育処理に入りました");        
 
     result[position] = trainee;
 
