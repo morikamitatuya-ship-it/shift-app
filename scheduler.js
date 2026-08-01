@@ -528,7 +528,11 @@ const trainingPosition =
 }
 
 
-
+alert(
+    position + " / " +
+    trainingPosition + " / " +
+    candidates.includes(trainee)
+);
 result[position] =
     pickMember(
     candidates,
