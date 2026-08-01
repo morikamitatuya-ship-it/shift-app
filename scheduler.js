@@ -491,6 +491,23 @@ const trainingPosition =
                 position,
                 usedMembers
             );
+        if (
+    education &&
+    position === trainingPosition &&
+    candidates.includes(trainee)
+) {
+
+    result[position] = trainee;
+
+    usedMembers.push(trainee);
+
+    counts[trainee]++;
+
+    positionCounts[trainee][position]++;
+
+    return;
+
+}
 
 
 
