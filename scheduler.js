@@ -469,7 +469,7 @@ const todayEducations =
     );
 const education =
     todayEducations[0];
-    alert(JSON.stringify(education));
+    
     const trainee =
     education?.member;
 
