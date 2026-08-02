@@ -231,10 +231,7 @@ function sortPositions(
                 memberList,
                 b
             );
-        alert(
-    a + ":" + countA + " / " +
-    b + ":" + countB
-);
+        
 
 
         return countA - countB;
