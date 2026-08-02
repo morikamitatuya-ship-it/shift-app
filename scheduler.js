@@ -481,7 +481,7 @@ const trainingPosition =
         sortPositions(
             availableMembers
         );
-    alert(JSON.stringify(positions));
+    
 
 
 
