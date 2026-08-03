@@ -823,30 +823,7 @@ let bestScore =
 
     const data =
         buildSchedule();
-       const todayEducations =
-    educations.filter(education =>
-        education.days.includes(data.day)
-    );
-       const education =
-    todayEducations[0];
-       const trainee =
-    education?.member;
-
-const trainingPosition =
-    education?.position;
-       if (education) {
-           const trainee =
-    education.member;
-           const trainingPosition =
-    education.position;
-           
-
-}
-if (todayEducations.length > 0) {
-
-    console.log(todayEducations);
-
-}
+       
     if (
         data.score < bestScore
     ) {
