@@ -519,17 +519,7 @@ C　${schedule[day].C}${currentShift === 1 ? `　　　D　${schedule[day].D}` :
 `;
 });
 
-// ----------------------
-// 再抽選
-// ----------------------
 
-document
-.getElementById("rerollButton")
-.addEventListener("click",()=>{
-
-    alert("再抽選します");
-
-});
 
 // ----------------------
 // 起動時
