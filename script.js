@@ -458,65 +458,7 @@ document
 .getElementById("createButton")
 .addEventListener("click",()=>{
 createSchedule();
-return;
-    const whiteboard = document.getElementById("whiteboard");
-const days = ["月", "火", "水", "木", "金"];
-    schedule = {};
-const weekMembers = {};
-    const dayCounts = {};
-
-days.forEach(day => {
-    members.forEach(name => {
-
-    if (dayCounts[name] === undefined) dayCounts[name] = 0;
-
-});
-    schedule[day] = {};
-
-const availableMembers = members.filter(name => {
-
-    return !holidays[name] || !holidays[name][day];
-
-});
-
-const shuffled = [...availableMembers].sort(() => Math.random() - 0.5);
-
-const needCount = currentShift === 1 ? 4 : 3;
-
-weekMembers[day] = shuffled.slice(0, needCount);    
-schedule[day].A = weekMembers[day][0] || "-";
-schedule[day].B = weekMembers[day][1] || "-";
-
-if (currentShift === 1) {
-
-    schedule[day].C = weekMembers[day][2] || "-";
-    schedule[day].D = weekMembers[day][3] || "-";
-
-} else {
-
-    schedule[day].C = weekMembers[day][2] || "-";
-
-}
-});
-    whiteboard.innerHTML = `
-<h2>早出表</h2>
-
-<p>${currentShift}直</p>
-
-${days.map(day => `
-<h3>${day}</h3>
-
-<p>
-A　${schedule[day].A}　　　B　${schedule[day].B}
-</p>
-
-<p>
-C　${schedule[day].C}${currentShift === 1 ? `　　　D　${schedule[day].D}` : ""}
-</p>
-
-<hr>
-`).join("")}
-`;
+    
 });
 
 
