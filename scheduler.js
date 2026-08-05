@@ -1027,3 +1027,17 @@ function renderSchedule(
 
 
 }
+function changeMember(
+    day,
+    position,
+    member
+) {
+
+    currentSchedule[day][position] = member;
+
+    renderSchedule(
+        currentSchedule,
+        currentEducation
+    );
+
+}
