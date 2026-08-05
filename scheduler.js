@@ -871,7 +871,8 @@ console.log(
         );
 
 
-
+currentSchedule = schedule;
+currentEducation = education;
     renderSchedule(
         schedule,
         education
