@@ -8,7 +8,8 @@
 // -------------------------------
 // ポジション取得
 // -------------------------------
-
+let currentSchedule = null;
+let currentEducation = null;
 function getPositions() {
 
     return currentShift === 1
