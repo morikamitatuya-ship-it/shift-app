@@ -1225,3 +1225,30 @@ function changeMember(
     );
 
 }
+function changeTrainer(
+    day,
+    position,
+    trainer
+) {
+
+    if (
+        !currentEducation ||
+        !currentEducation[day] ||
+        !currentEducation[day][position]
+    ) {
+
+        return;
+
+    }
+
+
+    currentEducation[day][position].trainer =
+        trainer;
+
+
+    renderSchedule(
+        currentSchedule,
+        currentEducation
+    );
+
+}
