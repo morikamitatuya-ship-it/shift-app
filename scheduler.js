@@ -899,13 +899,13 @@ function renderSchedule(
     education
 ) {
 
+    currentSchedule = schedule;
+    currentEducation = education;
 
     const whiteboard =
         document.getElementById(
             "whiteboard"
         );
-
-
 
     const days = [
         "月",
@@ -916,115 +916,299 @@ function renderSchedule(
     ];
 
 
+    // -------------------------------
+    // ポジション表示作成
+    // -------------------------------
+
+    function createPositionHTML(
+        day,
+        position
+    ) {
+
+        const member =
+            schedule[day][position];
+
+
+        if (
+            member === undefined ||
+            member === "-"
+        ) {
+
+            return `
+                <div class="position-box">
+
+                    <div class="position-title">
+                        ${position}
+                    </div>
+
+                </div>
+            `;
+
+        }
+
+
+        // 伊達は通常担当として選択不可
+        const selectableMembers =
+            members.filter(name =>
+                name !== "伊達"
+            );
+
+
+        let options = "";
+
+
+        selectableMembers.forEach(
+            name => {
+
+                options += `
+                    <option
+                        value="${name}"
+                        ${
+                            name === member
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        ${name}
+                    </option>
+                `;
+
+            }
+        );
+
+
+        // 現在の担当が伊達だった場合
+        // 教育時などのため表示だけ維持
+        if (
+            member === "伊達"
+        ) {
+
+            options = `
+                <option
+                    value="伊達"
+                    selected
+                >
+                    伊達
+                </option>
+            ` + options;
+
+        }
+
+
+        let html = `
+
+            <div class="position-box">
+
+                <div class="position-title">
+                    ${position}
+                </div>
+
+                <select
+                    class="member-select"
+                    onchange="
+                        changeMember(
+                            '${day}',
+                            '${position}',
+                            this.value
+                        )
+                    "
+                >
+
+                    ${options}
+
+                </select>
+
+        `;
+
+
+        // -------------------------------
+        // 教育表示
+        // -------------------------------
+
+        if (
+            education &&
+            education[day] &&
+            education[day][position]
+        ) {
+
+            const educationData =
+                education[day][position];
+
+
+            const trainee =
+                educationData.trainee;
+
+
+            const trainer =
+                educationData.trainer;
+
+
+            let trainerOptions = "";
+
+
+            members.forEach(
+                name => {
+
+                    trainerOptions += `
+                        <option
+                            value="${name}"
+                            ${
+                                name === trainer
+                                ? "selected"
+                                : ""
+                            }
+                        >
+                            ${name}
+                        </option>
+                    `;
+
+                }
+            );
+
+
+            html += `
+
+                <div class="education-box">
+
+                    <div class="education-trainee">
+                        🟠 ${trainee}
+                    </div>
+
+                    <div class="education-trainer">
+
+                        👨‍🏫
+
+                        <select
+                            class="trainer-select"
+                            onchange="
+                                changeTrainer(
+                                    '${day}',
+                                    '${position}',
+                                    this.value
+                                )
+                            "
+                        >
+
+                            ${trainerOptions}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+        html += `
+
+            </div>
+
+        `;
+
+
+        return html;
+
+    }
+
+
+
+    // -------------------------------
+    // 表全体
+    // -------------------------------
 
     let html = `
 
         <h2>早出表</h2>
 
-        <p>${currentShift}直</p>
-
-    `;
-
-
-
-    days.forEach(day=>{
-
-
-        html += `
-
-            <h3>${day}</h3>
-
-        `;
-
-
-
-        getPositions()
-        .forEach(position=>{
-
-
-            const member =
-                schedule[day][position];
-
-
-
-            let mark = "";
-
-
-
-            if (
-                education[day] &&
-                education[day][position]
-            ) {
-
-
-                mark += "🟠";
-
-
-
-                const trainer =
-                    education[day][position]
-                    .trainer;
-
-
-
-                if (
-                    trainer !== "-"
-                ) {
-
-                    mark +=
-                    ` 👨‍🏫(${trainer})`;
-
-                }
-
-
-            }
-
-
-
-            html += `
-
-                <p>
-
-                ${position}　${member}${mark}
-
-                </p>
-
-            `;
-
-
-
-        });
-
-
-
-        html += "<hr>";
-
-
-
-    });
-
-
-
-    html += `
-
-        <p style="
-        font-size:14px;
-        line-height:1.6;
-        ">
-
-        🟠＝教育中<br>
-
-        👨‍🏫＝教育担当
-
+        <p>
+            ${currentShift}直
         </p>
 
     `;
 
 
+    days.forEach(
+        day => {
+
+            html += `
+
+                <div class="day-box">
+
+                    <h3>
+                        ${day}
+                    </h3>
+
+                    <div class="schedule-grid">
+
+                        <div class="left-column">
+
+                            ${createPositionHTML(
+                                day,
+                                "A"
+                            )}
+
+                            ${createPositionHTML(
+                                day,
+                                "B"
+                            )}
+
+                        </div>
+
+
+                        <div class="right-column">
+
+                            ${createPositionHTML(
+                                day,
+                                "C"
+                            )}
+
+                            ${
+                                currentShift === 1
+                                ?
+                                createPositionHTML(
+                                    day,
+                                    "D"
+                                )
+                                :
+                                ""
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    // -------------------------------
+    // 凡例
+    // -------------------------------
+
+    html += `
+
+        <div class="education-legend">
+
+            🟠＝教育中
+
+            <br>
+
+            👨‍🏫＝教育担当
+
+        </div>
+
+    `;
+
 
     whiteboard.innerHTML =
         html;
-
 
 }
 function changeMember(
