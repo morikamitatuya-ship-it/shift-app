@@ -811,57 +811,66 @@ function getEducationMark(
 // -------------------------------
 
 function createSchedule() {
+
     const educations =
-    JSON.parse(
-        localStorage.getItem("educations")
-    ) || [];
-let bestData = null;
+        JSON.parse(
+            localStorage.getItem("educations")
+        ) || [];
 
-let bestScore =
-    Infinity;
 
-   for (let i = 0; i < 50; i++) {
+    let bestData = null;
 
-    const data =
-        buildSchedule();
-       
-    if (
-        data.score < bestScore
+    let bestScore =
+        Infinity;
+
+
+    for (
+        let i = 0;
+        i < 50;
+        i++
     ) {
 
-        bestScore =
-            data.score;
+        const data =
+            buildSchedule();
 
-        bestData =
-            data;
+
+        if (
+            data.score < bestScore
+        ) {
+
+            bestScore =
+                data.score;
+
+            bestData =
+                data;
+
+        }
 
     }
 
-}
-
-
 
     const schedule =
-    bestData.schedule;
+        bestData.schedule;
 
-const counts =
-    bestData.counts;
+    const counts =
+        bestData.counts;
 
-const positionCounts =
-    bestData.positionCounts;
+    const positionCounts =
+        bestData.positionCounts;
 
-const score =
-    bestData.score;
-console.log(
-    "Best Score:",
-    bestScore
-);
+    const score =
+        bestData.score;
 
-console.log(
-    "Selected Score:",
-    score
-);
 
+    console.log(
+        "Best Score:",
+        bestScore
+    );
+
+    console.log(
+        "Selected Score:",
+        score
+    );
 
 
     const education =
@@ -871,13 +880,31 @@ console.log(
         );
 
 
-currentSchedule = schedule;
-currentEducation = education;
+    currentSchedule =
+        schedule;
+
+    currentEducation =
+        education;
+
+
     renderSchedule(
         schedule,
         education
     );
 
+
+    // -------------------------------
+    // 年休チェックをリセット
+    // -------------------------------
+
+    holidays = {};
+
+    localStorage.setItem(
+        "holidays",
+        JSON.stringify(
+            holidays
+        )
+    );
 
 
     return schedule;
