@@ -688,7 +688,9 @@ function createEducationInfo(
 
     const educations =
         JSON.parse(
-            localStorage.getItem("educations")
+            localStorage.getItem(
+                "educations"
+            )
         ) || [];
 
 
@@ -697,10 +699,6 @@ function createEducationInfo(
 
         education[day] = {};
 
-
-        // --------------------------------
-        // この曜日に教育設定があるか確認
-        // --------------------------------
 
         const todayEducations =
             educations.filter(
@@ -720,24 +718,18 @@ function createEducationInfo(
                     setting.position;
 
 
-                // --------------------------------
                 // 教育設定された人が
                 // 実際にそのポジションにいるか確認
-                // --------------------------------
-
                 if (
                     !schedule[day] ||
-                    schedule[day][position] !== trainee
+                    schedule[day][position]
+                        !== trainee
                 ) {
 
                     return;
 
                 }
 
-
-                // --------------------------------
-                // 教育担当を決定
-                // --------------------------------
 
                 const trainer =
                     findTrainer(
@@ -766,8 +758,6 @@ function createEducationInfo(
     return education;
 
 }
-
-
 // -------------------------------
 // マーク取得
 // -------------------------------
