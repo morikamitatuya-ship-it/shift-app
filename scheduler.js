@@ -914,6 +914,13 @@ function renderSchedule(
     education
 ) {
 
+    currentSchedule =
+        schedule;
+
+    currentEducation =
+        education;
+
+
     const whiteboard =
         document.getElementById(
             "whiteboard"
@@ -962,7 +969,8 @@ function renderSchedule(
 
         const selectableMembers =
             members.filter(
-                name => name !== "伊達"
+                name =>
+                    name !== "伊達"
             );
 
 
@@ -989,6 +997,7 @@ function renderSchedule(
         );
 
 
+        // 伊達が現在の担当の場合
         if (
             member === "伊達"
         ) {
@@ -1013,26 +1022,28 @@ function renderSchedule(
                     ${position}
                 </div>
 
-                <select
-                    class="member-select"
-                    onchange="
-                        changeMember(
-                            '${day}',
-                            '${position}',
-                            this.value
-                        )
-                    "
-                >
+                <div class="member-row">
 
-                    ${options}
+                    <select
+                        class="member-select"
+                        onchange="
+                            changeMember(
+                                '${day}',
+                                '${position}',
+                                this.value
+                            )
+                        "
+                    >
 
-                </select>
+                        ${options}
+
+                    </select>
 
         `;
 
 
         // -------------------------------
-        // 🟠 未習得表示
+        // 🟠 未習得スキル
         // -------------------------------
 
         if (
@@ -1041,9 +1052,11 @@ function renderSchedule(
 
             html += `
 
-                <div class="training-mark">
-                    🟠
-                </div>
+                    <span
+                        class="training-mark"
+                    >
+                        🟠
+                    </span>
 
             `;
 
@@ -1051,8 +1064,7 @@ function renderSchedule(
 
 
         // -------------------------------
-        // 教育設定がある場合だけ
-        // 教育担当を表示
+        // 👨‍🏫 教育設定がある場合だけ
         // -------------------------------
 
         if (
@@ -1061,15 +1073,13 @@ function renderSchedule(
             education[day][position]
         ) {
 
-            const educationData =
-                education[day][position];
-
-
             const trainer =
-                educationData.trainer;
+                education[day][position]
+                .trainer;
 
 
-            let trainerOptions = "";
+            let trainerOptions =
+                "";
 
 
             members.forEach(
@@ -1094,26 +1104,28 @@ function renderSchedule(
 
             html += `
 
-                <div class="education-trainer">
-
-                    👨‍🏫
-
-                    <select
-                        class="trainer-select"
-                        onchange="
-                            changeTrainer(
-                                '${day}',
-                                '${position}',
-                                this.value
-                            )
-                        "
+                    <div
+                        class="education-trainer"
                     >
 
-                        ${trainerOptions}
+                        👨‍🏫
 
-                    </select>
+                        <select
+                            class="trainer-select"
+                            onchange="
+                                changeTrainer(
+                                    '${day}',
+                                    '${position}',
+                                    this.value
+                                )
+                            "
+                        >
 
-                </div>
+                            ${trainerOptions}
+
+                        </select>
+
+                    </div>
 
             `;
 
@@ -1121,6 +1133,8 @@ function renderSchedule(
 
 
         html += `
+
+                </div>
 
             </div>
 
@@ -1213,7 +1227,7 @@ function renderSchedule(
 
             <br>
 
-            👨‍🏫＝本日の教育担当
+            👨‍🏫＝教育設定あり
 
         </div>
 
