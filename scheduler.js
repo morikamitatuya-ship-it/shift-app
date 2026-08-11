@@ -926,13 +926,11 @@ function renderSchedule(
     education
 ) {
 
-    currentSchedule = schedule;
-    currentEducation = education;
-
     const whiteboard =
         document.getElementById(
             "whiteboard"
         );
+
 
     const days = [
         "月",
@@ -942,10 +940,6 @@ function renderSchedule(
         "金"
     ];
 
-
-    // -------------------------------
-    // ポジション表示作成
-    // -------------------------------
 
     function createPositionHTML(
         day,
@@ -974,10 +968,13 @@ function renderSchedule(
         }
 
 
-        // 伊達は通常担当として選択不可
+        // -------------------------------
+        // 担当者プルダウン
+        // -------------------------------
+
         const selectableMembers =
-            members.filter(name =>
-                name !== "伊達"
+            members.filter(
+                name => name !== "伊達"
             );
 
 
@@ -1004,8 +1001,6 @@ function renderSchedule(
         );
 
 
-        // 現在の担当が伊達だった場合
-        // 教育時などのため表示だけ維持
         if (
             member === "伊達"
         ) {
@@ -1049,7 +1044,27 @@ function renderSchedule(
 
 
         // -------------------------------
-        // 教育表示
+        // 🟠 未習得表示
+        // -------------------------------
+
+        if (
+            isTraining(member)
+        ) {
+
+            html += `
+
+                <div class="training-mark">
+                    🟠
+                </div>
+
+            `;
+
+        }
+
+
+        // -------------------------------
+        // 教育設定がある場合だけ
+        // 教育担当を表示
         // -------------------------------
 
         if (
@@ -1060,10 +1075,6 @@ function renderSchedule(
 
             const educationData =
                 education[day][position];
-
-
-            const trainee =
-                educationData.trainee;
 
 
             const trainer =
@@ -1095,32 +1106,24 @@ function renderSchedule(
 
             html += `
 
-                <div class="education-box">
+                <div class="education-trainer">
 
-                    <div class="education-trainee">
-                        🟠 ${trainee}
-                    </div>
+                    👨‍🏫
 
-                    <div class="education-trainer">
+                    <select
+                        class="trainer-select"
+                        onchange="
+                            changeTrainer(
+                                '${day}',
+                                '${position}',
+                                this.value
+                            )
+                        "
+                    >
 
-                        👨‍🏫
+                        ${trainerOptions}
 
-                        <select
-                            class="trainer-select"
-                            onchange="
-                                changeTrainer(
-                                    '${day}',
-                                    '${position}',
-                                    this.value
-                                )
-                            "
-                        >
-
-                            ${trainerOptions}
-
-                        </select>
-
-                    </div>
+                    </select>
 
                 </div>
 
@@ -1139,7 +1142,6 @@ function renderSchedule(
         return html;
 
     }
-
 
 
     // -------------------------------
@@ -1215,19 +1217,15 @@ function renderSchedule(
     );
 
 
-    // -------------------------------
-    // 凡例
-    // -------------------------------
-
     html += `
 
         <div class="education-legend">
 
-            🟠＝教育中
+            🟠＝未習得スキルあり
 
             <br>
 
-            👨‍🏫＝教育担当
+            👨‍🏫＝本日の教育担当
 
         </div>
 
