@@ -683,86 +683,84 @@ function createEducationInfo(
     counts
 ) {
 
-
     const education = {};
 
 
+    const educations =
+        JSON.parse(
+            localStorage.getItem("educations")
+        ) || [];
+
 
     Object.keys(schedule)
-    .forEach(day=>{
-
+    .forEach(day => {
 
         education[day] = {};
 
 
+        // --------------------------------
+        // この曜日に教育設定があるか確認
+        // --------------------------------
 
-        const usedTrainer = [];
-
-
-
-        getPositions()
-        .forEach(position=>{
-
-
-            const member =
-                schedule[day][position];
-
+        const todayEducations =
+            educations.filter(
+                item =>
+                    item.days &&
+                    item.days.includes(day)
+            );
 
 
-            if (
-                member === "-"
-            ) {
+        todayEducations.forEach(
+            setting => {
 
-                return;
+                const trainee =
+                    setting.member;
 
-            }
-
-
-
-            if (
-                isTraining(member)
-            ) {
+                const position =
+                    setting.position;
 
 
-                const trainer =
-                    findTrainer(
-                        member,
-                        counts,
-                        usedTrainer
-                    );
-
-
-
-                education[day][position] = {
-
-                    trainee: member,
-
-                    trainer: trainer
-
-                };
-
-
+                // --------------------------------
+                // 教育設定された人が
+                // 実際にそのポジションにいるか確認
+                // --------------------------------
 
                 if (
-                    trainer !== "-"
+                    !schedule[day] ||
+                    schedule[day][position] !== trainee
                 ) {
 
-                    usedTrainer.push(
-                        trainer
-                    );
+                    return;
 
                 }
 
 
+                // --------------------------------
+                // 教育担当を決定
+                // --------------------------------
+
+                const trainer =
+                    findTrainer(
+                        trainee,
+                        counts,
+                        []
+                    );
+
+
+                education[day][position] = {
+
+                    trainee:
+                        trainee,
+
+                    trainer:
+                        trainer
+
+                };
+
             }
-
-
-
-        });
-
+        );
 
     });
-
 
 
     return education;
