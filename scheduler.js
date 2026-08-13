@@ -861,24 +861,14 @@ function createSchedule() {
     );
 
 
-    const education =
-        createEducationInfo(
-            schedule,
-            counts
-        );
+    currentSchedule = schedule;
 
+currentEducation = {};
 
-    currentSchedule =
-        schedule;
-
-    currentEducation =
-        education;
-
-
-    renderSchedule(
-        schedule,
-        education
-    );
+renderSchedule(
+    schedule,
+    {}
+);
 
 
     // -------------------------------
