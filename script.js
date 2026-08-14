@@ -258,19 +258,42 @@ trainerRadios.forEach(radio => {
 
 });
 });
-educationButton.addEventListener("click", () => {
+educationButton.addEventListener(
+    "click",
+    () => {
 
-    if (educationArea.style.display === "none") {
+        if (
+            !currentSchedule
+        ) {
 
-        educationArea.style.display = "block";
+            alert(
+                "先に早出表を作成してください"
+            );
 
-    } else {
+            return;
 
-        educationArea.style.display = "none";
+        }
+
+
+        if (
+            educationArea.style.display ===
+            "none"
+        ) {
+
+            educationArea.style.display =
+                "block";
+
+            showEducationMode();
+
+        } else {
+
+            educationArea.style.display =
+                "none";
+
+        }
 
     }
-
-});
+);
 saveEducationButton.addEventListener("click", () => {
 
     const cards =
