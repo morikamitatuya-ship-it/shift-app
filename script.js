@@ -294,6 +294,130 @@ educationButton.addEventListener(
 
     }
 );
+function showEducationMode() {
+
+    const educationList =
+        document.getElementById(
+            "educationList"
+        );
+
+
+    educationList.innerHTML = "";
+
+
+    if (
+        !currentSchedule
+    ) {
+
+        return;
+
+    }
+
+
+    const days = [
+        "月",
+        "火",
+        "水",
+        "木",
+        "金"
+    ];
+
+
+    days.forEach(day => {
+
+        const daySchedule =
+            currentSchedule[day];
+
+
+        if (
+            !daySchedule
+        ) {
+
+            return;
+
+        }
+
+
+        getPositions()
+        .forEach(position => {
+
+            const member =
+                daySchedule[position];
+
+
+            if (
+                !member ||
+                member === "-"
+            ) {
+
+                return;
+
+            }
+
+
+            // 未習得スキルがある人だけ
+            if (
+                !isTraining(member)
+            ) {
+
+                return;
+
+            }
+
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "education-row";
+
+
+            row.innerHTML = `
+
+                <span>
+                    ${day}
+                </span>
+
+                <span>
+                    ${position}
+                </span>
+
+                <span>
+                    ${member}
+                </span>
+
+                <span>
+                    🟠
+                </span>
+
+            `;
+
+
+            educationList.appendChild(
+                row
+            );
+
+        });
+
+    });
+
+
+    if (
+        educationList.children.length === 0
+    ) {
+
+        educationList.innerHTML = `
+            <p>
+                教育対象者はいません
+            </p>
+        `;
+
+    }
+
+}
 saveEducationButton.addEventListener("click", () => {
 
     const cards =
